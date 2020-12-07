@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Owl Repository</title>
+
+    <link rel="icon" type="image/png" href="/favicon.png?v=1" />
+    <link rel="stylesheet" href="/build/bundle.css" />
+    <link rel="stylesheet" href="/global.css?v=3" />
+
+    <!--These modules need to be fetched from a mirror because d3 has issues
+    with es6 imports.-->
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+    <script
+      type="text/javascript"
+      src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdn.plot.ly/plotly-latest.min.js"
+    ></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-172155429-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+    </script>
+
+    <script defer src="/build/bundle.js"></script>
+  </head>
+
+  <body></body>
+</html>

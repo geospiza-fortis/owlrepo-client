@@ -1,0 +1,93 @@
+<script>
+  import { onMount } from "svelte";
+  import { columns as search_item_index_columns } from "../components/SearchItemIndex.svelte";
+  import Tabulator from "tabulator-tables";
+
+  onMount(() => {
+    let table = new Tabulator("#search_item_columns_table", {
+      data: search_item_index_columns,
+      layout: "fitDataFill",
+      responsiveLayout: "collapse",
+      columns: [
+        { title: "Name", field: "title" },
+        { title: "Description", field: "headerTooltip" }
+      ]
+    });
+    // https://stackoverflow.com/a/55796936
+    // NOTE: this doesnt work because the event handler needs to be on the collapsible element.
+    document
+      .getElementById("searchItemCollapse")
+      .addEventListener("show.bs.collapse", _ => {
+        table.redraw(true);
+        console.log("hm");
+      });
+  });
+</script>
+
+### How is the data in table populated?
+
+Data enters the table from the [upload page](/upload). Anyone can upload in-game
+screenshots. The data for the table is then generated once an hour through an
+automated system. See the [forum post][forum_post] for technical details.
+
+The most recent upload for each item is chosen for summarization. The data is
+cleaned to remove entries that might skew the results such as auction auto-win
+(A/W) prices or errors from converting screenshots to text. This cleaning
+process removes prices that are 3
+[MAD](https://en.wikipedia.org/wiki/Median_absolute_deviation) from the median,
+and entries with corrupted values. Then, statistics like a [five-number
+summary](https://en.wikipedia.org/wiki/Five-number_summary) are computed using
+the cleaned data.
+
+### How do I read the table?
+
+Hover over each column to see a description. The descriptions are also found
+here:
+
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each search_item_index_columns as row}
+      <tr>
+        <td>{row.title}</td>
+        <td>{row.headerTooltip}
+      </tr>
+    {/each}
+  </tbody>
+</table>
+
+### Can I trust this data?
+
+For the most part, yes. There is validation and cleaning to ensure the quality
+of the data is acceptable for general use.
+
+You may notice typos and unusual values when looking at the listing page. You
+can get a good sense of market prices by sticking to to reliable fields like the
+search result count (`Listed`), the 1st quartile (`p25`), or the median (`p50`).
+
+The sum of bundles (`Bundle`) is generally unreliable due to an issue with text
+overflow from the price column into the bundle column in the owl interface. For
+example, if you look at the count history of `Brown Work Gloves` in the charting
+page, you'll notice that `sum_bundle` is greater than the `search_results`! This
+is because gloves are often sold at prices greater than 10 billion mesos. The
+minimum suffers similar problems due to occasional errors reading the
+screenshot.
+
+There are also issues that lie with the market data itself. Some items don't
+have very many results, or suffer from a bias of not being sold. Another is the
+inability to see the stats on an item, which makes weapon and armor data less
+valuable for pricing. If there's any doubt, just owl it.
+
+### How do I actually price my items?
+
+Use the statistics to guide your pricing. For scrolls, I usually set my price to
+the 25th percentile or lower depending on my patience. This value tends to
+reliable in spite of wild variations in prices and errors when reading
+screenshots, as long as there are more than a few items on the market.
+
+[forum_post]: https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/

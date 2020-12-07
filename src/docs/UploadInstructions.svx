@@ -1,0 +1,25 @@
+## Upload Instructions
+
+Anyone playing MapleLegends can upload owl screenshots to OwlRepo. Screenshots
+should be taken in-game using the `Prt Sc` button. Navigate to
+`C:\MapleLegendsHD\Screenshots` and select all of the uncropped images
+containing the search results. On MacOS, press `Cmd + Shift + 4` followed by
+`Space` . Click on the MapleLegends window to save a screenshot to the desktop.
+For best results, avoid moving the owl window from its original position and
+keep the mouse cursor on the page turn buttons.
+
+Click on `Browse...` or drag files onto the page to crop and submit screenshots.
+Include all of the results in a single upload. If you forget any pages, reupload
+all of the pages together in a single batch. Do not crop images beforehand or
+they will fail to validate. If you select images that do not include owl
+searches, the uploader will ignore them while cropping.
+
+The site can handle about 100 screenshots at a time. The easiest way to
+contribute is to owl a few items at a time, sort your screenshot folder
+(right-click, `Sort by > Date > Descending`), and upload after you're done. A
+separate folder to organize owl screenshots goes a long way. Feel free to wait
+several days before uploading if you do not want to share current prices -- the
+value in this tool is keeping track of history and watching supply and demand in
+action.
+
+Thank you for contributing and happy mapling!
