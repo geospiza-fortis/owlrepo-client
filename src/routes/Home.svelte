@@ -5,6 +5,7 @@
   import SearchItemIndex from "../components/SearchItemIndex.svelte";
   import FrontMatter from "../docs/FrontMatter.svx";
   import IndexDescription from "../docs/IndexDescription.svx";
+  import References from "../docs/References.svx";
   import { Stretch } from "svelte-loading-spinners";
 
   const BG_RED = "#ffaebf";
@@ -78,3 +79,5 @@
 <div>
   <IndexView limit={5} />
 </div>
+
+<References />

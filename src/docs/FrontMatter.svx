@@ -5,11 +5,11 @@
 <img src="/fredrick.png" align="right" alt="Merchant." width="200"
   style="padding: 30px" />
 
-This a site to browse and share search results from the Owl of Minerva in
-MapleLegends. In-game screenshots are cropped and machine-read to create a
-repository of owl search results. Please refer to the [MapleLegends
-forum post][forum_post] or contact [`geospiza`](https://geospiza.me/) if you'd
-like to leave feedback or suggestions.
+This is a site to browse and share Owl of Minerva search results from
+[MapleLegends](https://maplelegends.com/). Screenshots are cropped and
+machine-read to create a repository of owl search results. Please see the
+[forum post][forum_post] or contact [`geospiza`](https://geospiza.me/) to leave
+feedback.
 
 Try the [scroll guide](/guide) for a simpler experience.
 

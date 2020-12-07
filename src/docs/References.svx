@@ -1,0 +1,11 @@
+## References
+
+The website is open-source on GitHub at
+[geospiza-fortis/owlrepo-client](https://github.com/geospiza-fortis/owlrepo-client).
+The server source code is currently not public, but please reach out if you
+have interest in contributing outside of uploading owl searches.
+
+The datasets for uploads and presentation are public via BigQuery at
+`owlrepo.owlrepo`. See this [starter
+notebook](https://colab.research.google.com/drive/1SXryriKyZR42uLJC5VO84Z7PdSP7BO3v?usp=sharing)
+for more details.
