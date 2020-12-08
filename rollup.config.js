@@ -9,6 +9,8 @@ import replace from "@rollup/plugin-replace";
 import globals from "rollup-plugin-node-globals";
 import inject from "@rollup/plugin-inject";
 import { mdsvex } from "mdsvex";
+import dotenv from "dotenv";
+dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -38,6 +40,16 @@ export default {
       "process.env.NODE_ENV": JSON.stringify(
         production ? "production" : "development"
       ),
+    }),
+    // There are instances of double quotes and backticks, so there needs to be
+    // a rule for each one.
+    replace({
+      "/api": production ? "/api" : `"${process.env.OWLREPO_URL}/api`,
+      delimiters: ['"', ""],
+    }),
+    replace({
+      "/api": production ? "/api" : `\`${process.env.OWLREPO_URL}/api`,
+      delimiters: ["`", ""],
     }),
     // fix missing moment import inside of tabulator
     inject({
