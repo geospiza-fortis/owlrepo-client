@@ -21,9 +21,13 @@ Navigate to [localhost:5000](http://localhost:5000). You should see your app
 running. Edit a component file in `src`, save it, and reload the page to see
 your changes.
 
-By default, the server will only respond to requests from localhost. To allow
-connections from other computers, edit the `sirv` commands in package.json to
-include the option `--host 0.0.0.0`.
+Use a browser addon like [CORS
+Everywhere](https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/) in
+Firefox or [Allow
+CORS](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en)
+in Chrome during development. This is required because the client will be making
+cross-origin requests. API calls may be relative to root (e.g. `/api`) in
+production.
 
 ## Building and running in production mode
 
