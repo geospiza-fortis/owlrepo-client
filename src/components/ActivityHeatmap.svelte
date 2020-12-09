@@ -3,9 +3,9 @@
   import { Stretch } from "svelte-loading-spinners";
   import moment from "moment";
 
+  export let data;
   export let max_range = 14;
   let cal;
-  let data;
   let heatmapReady = false;
   let resizeTimeout;
 
@@ -13,11 +13,6 @@
   // changes on resize events. There's a few more tricks to make this a bit nicer
   // to use.
   // https://github.com/wa0x6e/cal-heatmap/issues/100#issue-38507180
-
-  async function fetchData() {
-    let resp = await fetch("/api/v1/query/heatmap");
-    data = await resp.json();
-  }
 
   function transformData(data) {
     let res = {};
@@ -62,7 +57,6 @@
   }
 
   onMount(async () => {
-    await fetchData();
     await loadHeatmap(getRange(max_range));
     heatmapReady = true;
   });

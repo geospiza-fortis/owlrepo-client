@@ -65,7 +65,10 @@
 </p>
 
 <h3>Upload Activity</h3>
-<ActivityHeatmap max_range={14} />
+{#await fetch('/api/v1/query/heatmap').then(resp => resp.json()) then data}
+  <ActivityHeatmap {data} max_range={14} />
+{/await}
+
 <br />
 
 <h3>Recent Uploads</h3>
