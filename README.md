@@ -29,6 +29,18 @@ in Chrome during development. This is required because the client will be making
 cross-origin requests. API calls may be relative to root (e.g. `/api`) in
 production.
 
+To run the tests:
+
+```bash
+npm run test
+```
+
+To run the storybooks:
+
+```bash
+npm run storybook
+```
+
 ## Building and running in production mode
 
 To create an optimised version of the app:
