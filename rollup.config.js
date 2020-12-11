@@ -44,11 +44,11 @@ export default {
     // There are instances of double quotes and backticks, so there needs to be
     // a rule for each one.
     replace({
-      "/api": production ? "/api" : `"${process.env.OWLREPO_URL}/api`,
+      "/api": production ? '"/api' : `"${process.env.OWLREPO_URL}/api`,
       delimiters: ['"', ""],
     }),
     replace({
-      "/api": production ? "/api" : `\`${process.env.OWLREPO_URL}/api`,
+      "/api": production ? "`/api" : `\`${process.env.OWLREPO_URL}/api`,
       delimiters: ["`", ""],
     }),
     // fix missing moment import inside of tabulator
