@@ -2,20 +2,16 @@
   import { onMount } from "svelte";
   import localforage from "localforage";
   import Tabulator from "tabulator-tables";
-  import { getOrCreateJWK, getThumbprint } from "../token.js";
+  import PublicKey from "../docs/PublicKey.svelte";
 
   let uploads = [];
   let curations = [];
   let contributor_id;
-  let client_thumbprint;
-  let client_public_key;
 
   onMount(async () => {
     uploads = (await localforage.getItem("personal-uploads")) || [];
     curations = (await localforage.getItem("personal-curations")) || [];
     contributor_id = await localforage.getItem("contributor-id");
-    client_thumbprint = await getThumbprint();
-    client_public_key = await getOrCreateJWK("contributor-keys", true);
 
     if (uploads.length > 0) {
       new Tabulator("#uploads", {
@@ -82,21 +78,7 @@
   you use a different browser.
 </p>
 
-{#if client_public_key}
-  <p>
-    Your public key thumbprint is
-    <code>{client_thumbprint}</code>
-    . Your full
-    <a href="https://tools.ietf.org/html/rfc7517">JWK public key</a>
-    is:
-    <code>
-      <pre>{JSON.stringify(client_public_key.toJSON(), null, 4)}</pre>
-    </code>
-    This is a cryptographic key that can be used to prove your identity. Feel
-    free to share your public key as you see fit. For the technically savvy, do
-    not share your private key (available in IndexedDB) with others.
-  </p>
-{/if}
+<PublicKey />
 
 <h2>Upload History</h2>
 
