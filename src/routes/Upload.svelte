@@ -19,7 +19,10 @@
 
 <h2>Top Uploaders</h2>
 
-<p>These are the top uploaders for the past week.</p>
+<p>
+  These are the top uploaders for the past week. Your upload position is
+  highlighted.
+</p>
 
 <CollapseInfo
   component={PublicKey}
