@@ -1,0 +1,28 @@
+<script>
+  import { onMount } from "svelte";
+  import { getOrCreateJWK, getThumbprint } from "../token.js";
+
+  let client_thumbprint;
+  let client_public_key;
+
+  onMount(async () => {
+    client_thumbprint = await getThumbprint();
+    client_public_key = await getOrCreateJWK("contributor-keys", true);
+  });
+</script>
+
+{#if client_thumbprint && client_public_key}
+  <p>
+    Your public key thumbprint is
+    <code>{client_thumbprint}</code>
+    . Your full
+    <a href="https://tools.ietf.org/html/rfc7517">JWK public key</a>
+    is:
+    <code>
+      <pre>{JSON.stringify(client_public_key.toJSON(), null, 4)}</pre>
+    </code>
+    This is a cryptographic key that can be used to prove your identity. Feel
+    free to share your public key as you see fit. For the technically savvy, do
+    not share your private key (available in IndexedDB) with others.
+  </p>
+{/if}

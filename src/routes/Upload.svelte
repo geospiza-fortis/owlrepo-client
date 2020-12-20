@@ -1,6 +1,10 @@
 <script>
   import Uploader from "../components/Uploader.svelte";
   import IndexView from "../components/IndexView.svelte";
+  import CollapseInfo from "../components/CollapseInfo.svelte";
+  import TopUploaders from "../components/TopUploaders.svelte";
+  import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
+  import PublicKey from "../docs/PublicKey.svelte";
   import UploadInstructions from "../docs/UploadInstructions.svx";
 </script>
 
@@ -8,21 +12,24 @@
 
 <Uploader />
 
-<p style="justify-content: center">
-  <button
-    class="btn btn-info"
-    type="button"
-    data-toggle="collapse"
-    data-target="#uploadInstructions"
-    aria-expanded="false"
-    aria-controls="uploadInstructions">
-    How do I upload?
-  </button>
+<CollapseInfo
+  component={UploadInstructions}
+  componentId="uploadInstructions"
+  text="How do I upload?" />
+
+<h2>Top Uploaders</h2>
+
+<p>
+  These are the top uploaders for the past week. Your upload position is
+  highlighted.
 </p>
 
-<div class="collapse" id="uploadInstructions">
-  <UploadInstructions />
-</div>
+<CollapseInfo
+  component={PublicKey}
+  componentId="publicKey"
+  text="What is a thumbprint?" />
+
+<TopUploaders />
 
 <h2>Recent Uploads</h2>
 <p>
@@ -31,3 +38,7 @@
 </p>
 
 <IndexView limit={8} />
+
+{#await fetch('/api/v1/query/heatmap').then(resp => resp.json()) then data}
+  <ActivityHeatmap {data} max_range={14} />
+{/await}

@@ -3,10 +3,10 @@
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
   import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
   import SearchItemIndex from "../components/SearchItemIndex.svelte";
-  import TopUploaders from "../components/TopUploaders.svelte";
   import FrontMatter from "../docs/FrontMatter.svx";
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
+  import CollapseInfo from "../components/CollapseInfo.svelte";
   import { Stretch } from "svelte-loading-spinners";
 
   const BG_RED = "#ffaebf";
@@ -16,21 +16,10 @@
 
 <FrontMatter />
 
-<p>
-  <button
-    class="btn btn-info"
-    type="button"
-    data-toggle="collapse"
-    data-target="#searchItemCollapse"
-    aria-expanded="false"
-    aria-controls="searchItemCollapse">
-    Tell me more!
-  </button>
-</p>
-
-<div class="collapse" id="searchItemCollapse">
-  <IndexDescription />
-</div>
+<CollapseInfo
+  component={IndexDescription}
+  componentId="searchItemCollapse"
+  text="Tell me more!" />
 <br />
 
 <SearchItemIndex />
@@ -70,11 +59,6 @@
   <ActivityHeatmap {data} max_range={14} />
 {/await}
 
-<br />
-
-<h3>Top Uploaders</h3>
-
-<TopUploaders />
 <br />
 
 <h3>Recent Uploads</h3>

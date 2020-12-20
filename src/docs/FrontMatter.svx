@@ -2,7 +2,7 @@
 
 <!-- Sourced from https://maplelegends.com/lib/npc?id=9030000 -->
 
-<img src="/fredrick.png" align="right" alt="Merchant." width="200"
+<img src="/christmas_balrog.png" align="right" alt="Merry Christmas" width="200"
   style="padding: 30px" />
 
 This is a site to browse and share Owl of Minerva search results from
