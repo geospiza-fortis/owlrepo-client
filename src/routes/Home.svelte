@@ -3,7 +3,6 @@
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
   import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
   import SearchItemIndex from "../components/SearchItemIndex.svelte";
-  import TopUploaders from "../components/TopUploaders.svelte";
   import FrontMatter from "../docs/FrontMatter.svx";
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
@@ -60,11 +59,6 @@
   <ActivityHeatmap {data} max_range={14} />
 {/await}
 
-<br />
-
-<h3>Top Uploaders</h3>
-
-<TopUploaders />
 <br />
 
 <h3>Recent Uploads</h3>
