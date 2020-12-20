@@ -1,6 +1,7 @@
 <script>
   import Uploader from "../components/Uploader.svelte";
   import IndexView from "../components/IndexView.svelte";
+  import CollapseInfo from "../components/CollapseInfo.svelte";
   import UploadInstructions from "../docs/UploadInstructions.svx";
 </script>
 
@@ -8,21 +9,10 @@
 
 <Uploader />
 
-<p style="justify-content: center">
-  <button
-    class="btn btn-info"
-    type="button"
-    data-toggle="collapse"
-    data-target="#uploadInstructions"
-    aria-expanded="false"
-    aria-controls="uploadInstructions">
-    How do I upload?
-  </button>
-</p>
-
-<div class="collapse" id="uploadInstructions">
-  <UploadInstructions />
-</div>
+<CollapseInfo
+  component={UploadInstructions}
+  componentId="uploadInstructions"
+  text="How do I upload?" />
 
 <h2>Recent Uploads</h2>
 <p>
