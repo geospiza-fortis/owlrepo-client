@@ -66,6 +66,4 @@
 <TabulatorSearchBox {itemData} {table} keys={['search_item']} {initialSort} />
 <div bind:this={tableElement} />
 
-{#if listingData.length > 0}
-  <PriceQuantityCharts data={listingData} {search_item_name} />
-{/if}
+<PriceQuantityCharts data={listingData} {search_item_name} />
