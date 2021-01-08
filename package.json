@@ -7,8 +7,6 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --single",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
     "test": "jest --watchAll"
   },
   "jest": {
@@ -30,8 +28,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/build/",
-      "/storybook-static/"
+      "/build/"
     ]
   },
   "devDependencies": {
@@ -41,10 +38,6 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-replace": "^2.3.4",
-    "@storybook/addon-actions": "^6.1.10",
-    "@storybook/addon-essentials": "^6.1.10",
-    "@storybook/addon-links": "^6.1.10",
-    "@storybook/svelte": "^6.1.10",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/svelte": "^3.0.0",
     "babel-loader": "^8.2.2",
