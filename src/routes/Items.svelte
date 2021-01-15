@@ -120,4 +120,6 @@
     <i>Last updated {lastModified}</i>
   </p>
 {/if}
-<PriceQuantityCharts {data} {search_item_name} {is_chartable} />
+{#if data && is_chartable}
+  <PriceQuantityCharts {data} {search_item_name} />
+{/if}
