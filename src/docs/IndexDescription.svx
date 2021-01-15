@@ -1,27 +1,5 @@
 <script>
-  import { onMount } from "svelte";
   import { columns as search_item_index_columns } from "../components/SearchItemIndex.svelte";
-  import Tabulator from "tabulator-tables";
-
-  onMount(() => {
-    let table = new Tabulator("#search_item_columns_table", {
-      data: search_item_index_columns,
-      layout: "fitDataFill",
-      responsiveLayout: "collapse",
-      columns: [
-        { title: "Name", field: "title" },
-        { title: "Description", field: "headerTooltip" }
-      ]
-    });
-    // https://stackoverflow.com/a/55796936
-    // NOTE: this doesnt work because the event handler needs to be on the collapsible element.
-    document
-      .getElementById("searchItemCollapse")
-      .addEventListener("show.bs.collapse", _ => {
-        table.redraw(true);
-        console.log("hm");
-      });
-  });
 </script>
 
 ### How is the data in table populated?

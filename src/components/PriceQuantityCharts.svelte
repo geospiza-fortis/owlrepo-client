@@ -1,13 +1,39 @@
 <script>
-  import { onMount } from "svelte";
-  export let data;
+  export let data = [];
   export let search_item_name;
   export let is_chartable = true;
 
-  // for state management
-  let plot_exists = false;
-
-  $: plot_exists && updateChart(search_item_name);
+  let chartElement;
+  $: chartElement &&
+    data &&
+    data.length &&
+    Plotly.newPlot(
+      chartElement,
+      transform(data, search_item_name),
+      {
+        title: `${search_item_name} over time`,
+        legend: { orientation: "h" },
+        yaxis: {
+          title: "price"
+        },
+        yaxis2: {
+          title: "count"
+        },
+        grid: {
+          rows: 2,
+          columns: 1,
+          subplots: ["xy", "xy2"],
+          roworder: "top to bottom"
+        },
+        margin: {
+          l: 50,
+          r: 0,
+          b: 0,
+          t: 100
+        }
+      },
+      { responsive: true }
+    );
 
   function transform(data, search_item) {
     let items = data.filter(
@@ -42,40 +68,6 @@
         }
       ]);
   }
-
-  function updateChart(search_item_name) {
-    Plotly.newPlot(
-      "priceChart",
-      transform(data, search_item_name),
-      {
-        title: `${search_item_name} over time`,
-        legend: { orientation: "h" },
-        yaxis: {
-          title: "price"
-        },
-        yaxis2: {
-          title: "count"
-        },
-        grid: {
-          rows: 2,
-          columns: 1,
-          subplots: ["xy", "xy2"],
-          roworder: "top to bottom"
-        },
-        margin: {
-          l: 50,
-          r: 0,
-          b: 0,
-          t: 100
-        }
-      },
-      { responsive: true }
-    );
-    plot_exists = true;
-  }
-
-  // initialize the charts
-  onMount(() => updateChart(search_item_name));
 </script>
 
 <style>
@@ -84,4 +76,4 @@
   }
 </style>
 
-<div id="priceChart" class={is_chartable ? 'visible' : 'invisible'} />
+<div bind:this={chartElement} class={is_chartable ? 'visible' : 'invisible'} />

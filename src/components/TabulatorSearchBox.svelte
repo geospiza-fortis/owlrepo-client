@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import Fuse from "fuse.js";
 
   // Do I really need to provide the itemData alongside the table?
@@ -8,19 +7,14 @@
   export let keys;
   export let initialSort = [];
 
-  let fuse;
-  let results;
+  $: fuse = new Fuse(itemData, {
+    includeScore: true,
+    keys: keys
+  });
+  $: results = itemData.length;
 
   // for our debounce callback
   let timeout = null;
-
-  onMount(() => {
-    fuse = new Fuse(itemData, {
-      includeScore: true,
-      keys: keys
-    });
-    results = itemData.length;
-  });
 
   async function updateTable(value) {
     if (!table) {

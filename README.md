@@ -11,7 +11,8 @@ cd owlrepo-client
 npm install
 ```
 
-...then start [Rollup](https://rollupjs.org):
+Copy over the `.env.template` to `.env` to define the testing server. Then start
+[Rollup](https://rollupjs.org):
 
 ```bash
 npm run dev
@@ -33,12 +34,6 @@ To run the tests:
 
 ```bash
 npm run test
-```
-
-To run the storybooks:
-
-```bash
-npm run storybook
 ```
 
 ## Building and running in production mode
