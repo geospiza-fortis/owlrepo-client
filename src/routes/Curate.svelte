@@ -7,9 +7,16 @@
   import stringify from "json-stable-stringify";
   import * as Diff from "diff";
   import { validate } from "jsonschema";
+  import TopContributors from "../components/TopContributors.svelte";
 
+  let contributor_id;
   let show_candidates = false;
   let data;
+  let top_contributors_data;
+
+  $: total_contributions = top_contributors_data
+    ? top_contributors_data.map(x => x.n).reduce((a, b) => a + b)
+    : 0;
 
   let task_data;
   let task_old_entries;
@@ -75,6 +82,13 @@
   onMount(async () => {
     let resp = await fetch("/api/v1/query/curation_candidate");
     data = await resp.json();
+
+    contributor_id = await localforage.getItem("contributor-id");
+    if (!contributor_id) {
+      contributor_id = uuid4();
+      console.log(`setting new contributor id: ${contributor_id}`);
+      await localforage.setItem("contributor-id", contributor_id);
+    }
 
     if (show_candidates) {
       candidate = new Tabulator("#candidate", {
@@ -184,12 +198,6 @@
   }
 
   async function submitTask() {
-    let contributor_id = await localforage.getItem("contributor-id");
-    if (!contributor_id) {
-      contributor_id = uuid4();
-      console.log(`setting new contributor id: ${contributor_id}`);
-      await localforage.setItem("contributor-id", contributor_id);
-    }
     let submission = {
       submission_timestamp: new Date().toISOString(),
       request_timestamp: task_start.toISOString(),
@@ -239,9 +247,22 @@
   for fine-tuning the OCR model.
 </p>
 
+{#if data}
+  <p>
+    Your contributor id is
+    <code>{contributor_id}</code>
+    . There are currently {data.length} candidate tasks in the current batch,
+    with {total_contributions} tasks completed so far.
+  </p>
+{/if}
+
+<TopContributors bind:data={top_contributors_data} />
+
 {#if show_candidates}
   <div id="candidate" />
 {/if}
+
+<br />
 
 {#if data}
   {#if !task_start}
