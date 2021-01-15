@@ -70,10 +70,4 @@
   }
 </script>
 
-<style>
-  .invisible {
-    display: none;
-  }
-</style>
-
-<div bind:this={chartElement} class={is_chartable ? 'visible' : 'invisible'} />
+<div bind:this={chartElement} />
