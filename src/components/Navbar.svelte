@@ -43,10 +43,13 @@
 </script>
 
 <Navbar color="light" light expand="md">
-  <NavbarBrand href="/">owlrepo</NavbarBrand>
-  <NavbarToggler on:click={() => (isOpen = !isOpen)} />
+  {#if !isOpen}
+    <NavbarBrand href="/">owlrepo</NavbarBrand>
+  {/if}
+  <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-    <Nav class="mr-auto" tabs>
+    <Nav class="mx-auto" tabs>
+      <NavbarBrand href="/">owlrepo</NavbarBrand>
       {#each items as item, index}
         {#if index < breakpoint}
           <NavItem>

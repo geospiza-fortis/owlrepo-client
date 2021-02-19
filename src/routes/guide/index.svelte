@@ -134,6 +134,32 @@
   });
 </script>
 
+<style>
+  @media (min-width: 550px) {
+    .card-columns {
+      column-count: 2;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .card-columns {
+      column-count: 2;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .card-columns {
+      column-count: 3;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .card-columns {
+      column-count: 4;
+    }
+  }
+</style>
+
 <h1>Scroll Guide</h1>
 
 <p>
