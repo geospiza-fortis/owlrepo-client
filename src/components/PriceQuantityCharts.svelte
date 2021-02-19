@@ -46,7 +46,8 @@
           x: x,
           y: items.map(item => item[label]),
           name: label === "p0" ? "min" : label === "p100" ? "max" : label,
-          mode: "lines+markers"
+          mode: "lines+markers",
+          visible: label == "p50" ? true : "legendonly"
         };
       })
       .concat([
@@ -64,7 +65,8 @@
           name: "sum_bundle",
           mode: "lines+markers",
           xaxis: "x",
-          yaxis: "y2"
+          yaxis: "y2",
+          visible: "legendonly"
         }
       ]);
   }
