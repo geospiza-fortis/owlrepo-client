@@ -2,7 +2,7 @@
   import Tabulator from "tabulator-tables";
   import { onMount } from "svelte";
   import moment from "moment";
-  import sortBy from "lodash.sortby";
+  import { sortBy } from "lodash";
 
   let last_modified;
 

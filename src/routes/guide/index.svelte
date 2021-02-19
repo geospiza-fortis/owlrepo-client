@@ -2,8 +2,7 @@
   import { onMount } from "svelte";
   // tabulator is a misnomer for a module name
   import { formatPrice } from "../../tabulator.js";
-  import sortBy from "lodash.sortby";
-  import groupBy from "lodash.groupby";
+  import { groupBy, sortBy } from "lodash";
   import moment from "moment";
 
   let category_data;
