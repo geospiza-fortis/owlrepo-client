@@ -11,7 +11,10 @@ machine-read to create a repository of owl search results. Please see the
 [forum post][forum_post] or contact [`geospiza`](https://geospiza.me/) to leave
 feedback.
 
-Try the [scroll guide](/guide) for a simpler experience.
+<div style="text-align:center;">
+<a href="guide" class="btn btn-info" type="button">Click here for the scroll guide.</a>
+</div>
+<br />
 
 The most recent [upload](/upload) for each item is summarized here. Click on the
 item name to see its history and plots. Click on a row to update the box plot

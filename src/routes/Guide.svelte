@@ -38,19 +38,84 @@
       10: `rgba(163, 195, 176, ${opacity})`,
       30: `rgba(234, 210, 184, ${opacity})`,
       60: `rgba(157, 151, 188, ${opacity})`,
-      70: `rgba(222, 167, 161, ${opacity})`
+      70: `rgba(222, 167, 161, ${opacity})`,
+      etc: `rgba(174, 188, 110, ${opacity})`,
+      mastery: `rgba(103, 154, 125, ${opacity})`
     }[percent];
   }
 
   onMount(async () => {
+    // TODO: I wish I had some documentation on the schema of these...
     let index = await getData("/api/v1/query/search_item_index");
     let category = await getData("/api/v1/query/mllib_scrolls_category");
 
+    console.log(category);
     // only keep scrolls that are categoriezed and exist in the database
     category_data = {};
     for (let i = 0; i < category.length; i++) {
       category_data[category[i].name] = category[i];
     }
+
+    // also include some other things that are not necessarily scrolls
+    let masterybooks = index.filter(row =>
+      row.search_item.includes("Mastery Book")
+    );
+    for (let item of masterybooks) {
+      category_data[item.search_item] = {
+        percent: "mastery",
+        category: item.search_item
+          .split("]")[1]
+          .trim()
+          .toLowerCase(),
+        // could be better...
+        stat: item.search_item.includes("20") ? "20" : "30"
+      };
+    }
+
+    category_data = {
+      ...category_data,
+      "Clean Slate Scroll 20%": {
+        percent: "etc",
+        category: "css",
+        stat: "20%"
+      },
+      "Clean Slate Scroll 1%": {
+        percent: "etc",
+        category: "css",
+        stat: "1%"
+      },
+      "Chaos Scroll 60%": {
+        percent: "etc",
+        category: "chaos scroll",
+        stat: ""
+      },
+      "White Scroll": {
+        percent: "etc",
+        category: "white scroll",
+        stat: ""
+      },
+      "Onyx Apple": {
+        percent: "etc",
+        category: "onyx apple",
+        stat: ""
+      },
+      "Zombie's Lost Gold Tooth": {
+        percent: "etc",
+        category: "gold tooth",
+        stat: ""
+      },
+      "Dragon Scale": {
+        percent: "etc",
+        category: "dragon scale",
+        stat: ""
+      },
+      "Piece of Time": {
+        percent: "etc",
+        category: "piece of time",
+        stat: ""
+      }
+    };
+
     price_data = [];
     // we need a method of matching items
     for (let i = 0; i < index.length; i++) {
@@ -71,23 +136,40 @@
 </script>
 
 <h1>Scroll Guide</h1>
+
 <p>
   Only scrolls worth more than 350k median. Prices more than 1 month old are
   greyed out.
 </p>
+
+<details>
+  <summary>Click here for changelog</summary>
+  <b>Update 2021-02-18</b>
+  <ul>
+    <li>added etc and mastery books</li>
+    <li>list prices are now p50 instead of p25</li>
+    <li>rows are clickable</li>
+  </ul>
+</details>
+<br />
+
 {#if price_data}
   <div class="container full-width guide">
     <div class="card-columns">
       {#each Object.keys(price_data).sort() as key}
-        {#each chunkList(sortBy(price_data[key].filter(x => x.p25 > 350000), [
-            'category',
-            'stat'
-          ]), 15) as chunk, i}
+        {#each chunkList(sortBy(
+            price_data[key].filter(x => x.p50 > 350000 || x.percent == 'etc'),
+            ['category', 'stat']
+          ), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};">
             <div class="card-header">
-              <h5>{key}% Scrolls</h5>
+              {#if parseInt(key)}
+                <h5>{key}% Scrolls</h5>
+              {:else}
+                <h5>{{ mastery: 'Mastery Book', etc: 'Et cetera' }[key]}</h5>
+              {/if}
             </div>
 
             <div class="card-body">
@@ -97,7 +179,10 @@
                     <tr
                       data-toggle="tooltip"
                       data-placement="top"
-                      title="Updated {row.search_item_timestamp.slice(0, 10)}">
+                      title="Updated {row.search_item_timestamp.slice(0, 10)}"
+                      on:click={() => {
+                        window.location = `/items?keyword=${encodeURIComponent(row.search_item)}`;
+                      }}>
                       <td>
                         {row.category
                           .replace('one-handed', '1h')
@@ -107,10 +192,9 @@
                       <td>
                         <span
                           style="background-color: {row.days_since_update > 7 * 4 ? BG_BLACK : 'none'}">
-                          {formatPrice(row.p25)}
+                          {formatPrice(row.p50)}
                         </span>
                       </td>
-
                     </tr>
                   {/each}
                 </tbody>
