@@ -136,16 +136,29 @@
 </script>
 
 <h1>Scroll Guide</h1>
+
 <p>
   Only scrolls worth more than 350k median. Prices more than 1 month old are
   greyed out.
 </p>
+
+<details>
+  <summary>Click here for changelog</summary>
+  <b>Update 2021-02-18</b>
+  <ul>
+    <li>added etc and mastery books</li>
+    <li>list prices are now p50 instead of p25</li>
+    <li>rows are clickable</li>
+  </ul>
+</details>
+<br />
+
 {#if price_data}
   <div class="container full-width guide">
     <div class="card-columns">
       {#each Object.keys(price_data).sort() as key}
         {#each chunkList(sortBy(
-            price_data[key].filter(x => x.p25 > 350000 || x.percent == 'etc'),
+            price_data[key].filter(x => x.p50 > 350000 || x.percent == 'etc'),
             ['category', 'stat']
           ), 15) as chunk, i}
           <div
@@ -179,7 +192,7 @@
                       <td>
                         <span
                           style="background-color: {row.days_since_update > 7 * 4 ? BG_BLACK : 'none'}">
-                          {formatPrice(row.p25)}
+                          {formatPrice(row.p50)}
                         </span>
                       </td>
                     </tr>
