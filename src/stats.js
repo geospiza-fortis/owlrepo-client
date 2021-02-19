@@ -1,9 +1,9 @@
-import * as ss from "simple-statistics";
+import { median, medianAbsoluteDeviation } from "simple-statistics";
 
 // https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/
 function calculateModifiedZScore(data, constant = 2 * Math.sqrt(3)) {
-  let med = ss.median(data);
-  let mad = constant * ss.medianAbsoluteDeviation(data);
+  let med = median(data);
+  let mad = constant * medianAbsoluteDeviation(data);
   let scores = data.map((item) => Math.abs(item - med) / mad);
   return scores;
 }

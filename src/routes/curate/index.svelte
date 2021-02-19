@@ -5,9 +5,10 @@
   import { v4 as uuid4 } from "uuid";
   import levenshtein from "fast-levenshtein";
   import stringify from "json-stable-stringify";
-  import * as Diff from "diff";
+  import { diffWords } from "diff";
   import { validate } from "jsonschema";
   import TopContributors from "../../components/TopContributors.svelte";
+  import { schema } from "./schema";
 
   let contributor_id;
   let show_candidates = false;
@@ -27,57 +28,6 @@
   let task_diff;
   let task_diff_table;
   let task_validator;
-
-  let schema = {
-    type: "object",
-    properties: {
-      diff: {
-        type: "object",
-        properties: {
-          distance: {
-            type: "integer",
-            minimum: 1
-          },
-          characters: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                type: { type: "string" },
-                count: { type: "integer", minimum: 1 },
-                value: { type: "string" }
-              },
-              required: ["type", "count", "value"]
-            }
-          }
-        }
-      },
-      payload: {
-        type: "object",
-        properties: {
-          entries: {
-            type: "array",
-            minItems: 1,
-            maxItems: 8,
-            items: {
-              type: "object",
-              properties: {
-                id: { type: "string" },
-                store_name: { type: "string" },
-                bundle: { type: "integer", minimum: 0 },
-                price: { type: "integer", minimum: 0 },
-                quantity: { type: "integer", minimum: 0 }
-              },
-              required: ["id", "store_name", "bundle", "price", "quantity"]
-            },
-            is_missing_rows: { type: "boolean" }
-          }
-        },
-        required: ["entries"]
-      }
-    },
-    required: ["diff", "payload"]
-  };
 
   onMount(async () => {
     let resp = await fetch("/api/v1/query/curation_candidate");
@@ -175,7 +125,7 @@
     let old = stringify(task_old_entries);
     let mod = stringify(task_table.getData());
     let distance = levenshtein.get(old, mod);
-    let diff = Diff.diffWords(old, mod).map(entry => ({
+    let diff = diffWords(old, mod).map(entry => ({
       count: entry.count,
       type: entry.removed ? "removed" : entry.added ? "added" : "unchanged",
       value: entry.value

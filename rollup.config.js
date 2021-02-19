@@ -28,6 +28,16 @@ export default {
     output: config.client.output(),
     plugins: [
       replace({
+        // very brittle: helpers.nodeCrypto.getHashes is not a function
+        // ecdsaSignFN
+        "helpers.nodeCrypto": "(false",
+        delimiters: ["(", " "],
+      }),
+      replace({
+        "helpers.nodeCrypto.createHash(md)": "return;",
+        delimiters: ["var digest = ", ";"],
+      }),
+      replace({
         values: {
           // "process.browser": true,
           "process.env.NODE_ENV": JSON.stringify(mode),
@@ -61,9 +71,7 @@ export default {
         moment: "moment",
         url: "url",
       }),
-      commonjs({
-        requireReturnsDefault: true,
-      }),
+      commonjs(),
       globals(),
 
       legacy &&
