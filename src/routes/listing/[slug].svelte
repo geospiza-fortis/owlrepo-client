@@ -3,9 +3,12 @@
   import SummaryView from "../../components/SummaryView.svelte";
   import { Stretch } from "svelte-loading-spinners/src";
   import Tabulator from "tabulator-tables";
-  export let params;
 
-  let uid = params.listing_id;
+  import { stores } from "@sapper/app";
+  const { page } = stores();
+  const { slug } = $page.params;
+
+  let uid = slug;
   let url = `/api/v1/data/${uid}/slim.json`;
 
   let flattened = null;
