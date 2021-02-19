@@ -168,7 +168,7 @@
               {#if parseInt(key)}
                 <h5>{key}% Scrolls</h5>
               {:else}
-                <h5>{{ mastery: 'Mastery Book', etc: 'Etcetera' }[key]}</h5>
+                <h5>{{ mastery: 'Mastery Book', etc: 'Et cetera' }[key]}</h5>
               {/if}
             </div>
 
