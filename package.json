@@ -35,11 +35,9 @@
     "svelte-loader": "^3.0.0"
   },
   "dependencies": {
-    "compression": "^1.7.4",
-    "polka": "next",
-    "sirv": "^1.0.11",
     "bootstrap": "^4.6.0",
     "buffer": "^6.0.3",
+    "compression": "^1.7.4",
     "convolve": "^0.1.0",
     "diff": "^5.0.0",
     "fast-levenshtein": "^3.0.0",
@@ -56,8 +54,10 @@
     "p-retry": "^4.4.0",
     "p-timeout": "^4.1.0",
     "page": "^1.11.6",
+    "polka": "next",
     "popper.js": "^1.16.1",
     "simple-statistics": "^7.4.1",
+    "sirv": "^1.0.11",
     "sirv-cli": "^1.0.11",
     "svelte-loading-spinners": "^0.1.4",
     "sveltestrap": "^3.13.0",

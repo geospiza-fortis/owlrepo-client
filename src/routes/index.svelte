@@ -8,10 +8,23 @@
   import References from "../docs/References.svx";
   import CollapseInfo from "../components/CollapseInfo.svelte";
   import { Stretch } from "svelte-loading-spinners/src";
+  import { onMount } from "svelte";
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
   const BG_YELLOW = "#ffefae";
+  let random_listing;
+  let heatmap;
+
+  async function fetchData(url) {
+    let resp = await fetch(url);
+    return await resp.json();
+  }
+
+  onMount(async () => {
+    random_listing = await fetchData("/api/v1/query/random_listing");
+    heatmap = await fetchData("/api/v1/query/heatmap");
+  });
 </script>
 
 <FrontMatter />
@@ -32,11 +45,11 @@
   to see more plots this this.
 </p>
 
-{#await fetch('/api/v1/query/random_listing').then(resp =>
-  resp.json()
-) then data}
-  <PriceQuantityCharts {data} search_item_name={data[0].search_item} />
-{/await}
+{#if random_listing}
+  <PriceQuantityCharts
+    data={random_listing}
+    search_item_name={random_listing[0].search_item} />
+{/if}
 
 <h2>Contributions</h2>
 <p>
@@ -55,9 +68,9 @@
 </p>
 
 <h3>Upload Activity</h3>
-{#await fetch('/api/v1/query/heatmap').then(resp => resp.json()) then data}
-  <ActivityHeatmap {data} max_range={14} />
-{/await}
+{#if heatmap}
+  <ActivityHeatmap data={heatmap} max_range={14} />
+{/if}
 
 <br />
 
