@@ -166,7 +166,10 @@
                     <tr
                       data-toggle="tooltip"
                       data-placement="top"
-                      title="Updated {row.search_item_timestamp.slice(0, 10)}">
+                      title="Updated {row.search_item_timestamp.slice(0, 10)}"
+                      on:click={() => {
+                        window.location = `/items?keyword=${encodeURIComponent(row.search_item)}`;
+                      }}>
                       <td>
                         {row.category
                           .replace('one-handed', '1h')
@@ -179,7 +182,6 @@
                           {formatPrice(row.p25)}
                         </span>
                       </td>
-
                     </tr>
                   {/each}
                 </tbody>
