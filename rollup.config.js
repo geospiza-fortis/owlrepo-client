@@ -3,13 +3,12 @@ import replace from "@rollup/plugin-replace";
 import commonjs from "@rollup/plugin-commonjs";
 import svelte from "rollup-plugin-svelte";
 import babel from "@rollup/plugin-babel";
-import inject from "@rollup/plugin-inject";
+// import inject from "@rollup/plugin-inject";
 import { terser } from "rollup-plugin-terser";
 import config from "sapper/config/rollup.js";
 import pkg from "./package.json";
 import { mdsvex } from "mdsvex";
 import dotenv from "dotenv";
-import globals from "rollup-plugin-node-globals";
 dotenv.config();
 
 const mode = process.env.NODE_ENV;
@@ -28,8 +27,10 @@ export default {
     output: config.client.output(),
     plugins: [
       replace({
-        "process.browser": true,
-        "process.env.NODE_ENV": JSON.stringify(mode),
+        values: {
+          // "process.browser": true,
+          "process.env.NODE_ENV": JSON.stringify(mode),
+        },
       }),
       svelte({
         compilerOptions: {
@@ -55,14 +56,13 @@ export default {
         delimiters: ["`", ""],
       }),
       // fix missing moment import inside of tabulator
-      inject({
-        moment: "moment",
-        url: "url",
-      }),
+      // inject({
+      //   moment: "moment",
+      //   url: "url",
+      // }),
       commonjs({
         requireReturnsDefault: true,
       }),
-      globals(),
 
       legacy &&
         babel({
@@ -103,8 +103,10 @@ export default {
     output: config.server.output(),
     plugins: [
       replace({
-        "process.browser": false,
-        "process.env.NODE_ENV": JSON.stringify(mode),
+        values: {
+          // "process.browser": false,
+          "process.env.NODE_ENV": JSON.stringify(mode),
+        },
       }),
       svelte({
         compilerOptions: {
@@ -136,8 +138,10 @@ export default {
     plugins: [
       resolve(),
       replace({
-        "process.browser": true,
-        "process.env.NODE_ENV": JSON.stringify(mode),
+        values: {
+          // "process.browser": true,
+          "process.env.NODE_ENV": JSON.stringify(mode),
+        },
       }),
       commonjs(),
       !dev && terser(),

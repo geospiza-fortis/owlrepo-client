@@ -49,7 +49,7 @@
     DropdownToggle,
     DropdownMenu,
     DropdownItem
-  } from "sveltestrap";
+  } from "sveltestrap/src";
   let isOpen = false;
 
   function handleUpdate(event) {
