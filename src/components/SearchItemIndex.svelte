@@ -91,7 +91,7 @@
   import Tabulator from "tabulator-tables";
   import moment from "moment";
   import localforage from "localforage";
-  import { Stretch } from "svelte-loading-spinners";
+  import { Stretch } from "svelte-loading-spinners/src";
   import TabulatorSearchBox from "./TabulatorSearchBox.svelte";
   import { shortFormatter } from "../tabulator.js";
 
