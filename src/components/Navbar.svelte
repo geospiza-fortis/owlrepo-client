@@ -15,8 +15,6 @@
         "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/"
     }
   ];
-
-  let breakpoint = 5;
 </script>
 
 <script>
@@ -33,6 +31,8 @@
     DropdownMenu,
     DropdownItem
   } from "sveltestrap/src";
+
+  const breakpoint = 5;
   let isOpen = false;
 
   export let segment;
@@ -40,7 +40,6 @@
   function handleUpdate(event) {
     isOpen = event.detail.isOpen;
   }
-  $: console.log(segment);
 </script>
 
 <Navbar color="light" light expand="md">

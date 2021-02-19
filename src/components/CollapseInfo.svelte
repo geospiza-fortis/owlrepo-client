@@ -3,6 +3,11 @@
   export let params;
   export let componentId;
   export let text;
+  import { onMount } from "svelte";
+
+  onMount(async () => {
+    await import("bootstrap");
+  });
 </script>
 
 {#if component}

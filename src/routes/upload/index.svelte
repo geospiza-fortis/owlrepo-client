@@ -6,6 +6,18 @@
   import ActivityHeatmap from "../../components/ActivityHeatmap.svelte";
   import PublicKey from "../../docs/PublicKey.svelte";
   import UploadInstructions from "../../docs/UploadInstructions.svx";
+  import { onMount } from "svelte";
+
+  let heatmap;
+
+  async function fetchData(url) {
+    let resp = await fetch(url);
+    return await resp.json();
+  }
+
+  onMount(async () => {
+    heatmap = await fetchData("/api/v1/query/heatmap");
+  });
 </script>
 
 <h1>Upload Owls</h1>
@@ -39,6 +51,6 @@
 
 <IndexView limit={8} />
 
-{#await fetch('/api/v1/query/heatmap').then(resp => resp.json()) then data}
-  <ActivityHeatmap {data} max_range={14} />
-{/await}
+{#if heatmap}
+  <ActivityHeatmap data={heatmap} max_range={14} />
+{/if}
