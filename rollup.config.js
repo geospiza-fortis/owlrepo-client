@@ -1,102 +1,149 @@
-import svelte from "rollup-plugin-svelte";
-import json from "@rollup/plugin-json";
-import nodeResolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import css from "rollup-plugin-css-only";
-import livereload from "rollup-plugin-livereload";
-import { terser } from "rollup-plugin-terser";
+import resolve from "@rollup/plugin-node-resolve";
 import replace from "@rollup/plugin-replace";
-import globals from "rollup-plugin-node-globals";
+import commonjs from "@rollup/plugin-commonjs";
+import svelte from "rollup-plugin-svelte";
+import babel from "@rollup/plugin-babel";
 import inject from "@rollup/plugin-inject";
+import { terser } from "rollup-plugin-terser";
+import config from "sapper/config/rollup.js";
+import pkg from "./package.json";
 import { mdsvex } from "mdsvex";
 import dotenv from "dotenv";
+import globals from "rollup-plugin-node-globals";
 dotenv.config();
 
-const production = !process.env.ROLLUP_WATCH;
+const mode = process.env.NODE_ENV;
+const dev = mode === "development";
+const legacy = !!process.env.SAPPER_LEGACY_BUILD;
+
+const onwarn = (warning, onwarn) =>
+  (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
+  (warning.code === "CIRCULAR_DEPENDENCY" &&
+    /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  onwarn(warning);
 
 export default {
-  input: "src/main.js",
-  output: {
-    sourcemap: true,
-    format: "iife",
-    name: "app",
-    file: "public/build/bundle.js",
+  client: {
+    input: config.client.input(),
+    output: config.client.output(),
+    plugins: [
+      replace({
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
+      }),
+      svelte({
+        compilerOptions: {
+          dev,
+          hydratable: true,
+        },
+        extensions: [".svelte", ".svx"],
+        preprocess: mdsvex(),
+      }),
+      resolve({
+        browser: true,
+        dedupe: ["svelte"],
+        preferBuiltins: false,
+      }),
+      // There are instances of double quotes and backticks, so there needs to be
+      // a rule for each one.
+      replace({
+        "/api": !dev ? '"/api' : `"${process.env.OWLREPO_URL}/api`,
+        delimiters: ['"', ""],
+      }),
+      replace({
+        "/api": !dev ? "`/api" : `\`${process.env.OWLREPO_URL}/api`,
+        delimiters: ["`", ""],
+      }),
+      // fix missing moment import inside of tabulator
+      inject({
+        moment: "moment",
+        url: "url",
+      }),
+      commonjs({
+        requireReturnsDefault: true,
+      }),
+      globals(),
+
+      legacy &&
+        babel({
+          extensions: [".js", ".mjs", ".html", ".svelte"],
+          babelHelpers: "runtime",
+          exclude: ["node_modules/@babel/**"],
+          presets: [
+            [
+              "@babel/preset-env",
+              {
+                targets: "> 0.25%, not dead",
+              },
+            ],
+          ],
+          plugins: [
+            "@babel/plugin-syntax-dynamic-import",
+            [
+              "@babel/plugin-transform-runtime",
+              {
+                useESModules: true,
+              },
+            ],
+          ],
+        }),
+
+      !dev &&
+        terser({
+          module: true,
+        }),
+    ],
+
+    preserveEntrySignatures: false,
+    onwarn,
   },
-  plugins: [
-    svelte({
-      compilerOptions: {
-        // enable run-time checks when not in production
-        dev: !production,
-      },
-      extensions: [".svelte", ".svx"],
-      preprocess: mdsvex(),
-    }),
-    // we'll extract any component CSS out into
-    // a separate file - better for performance
-    css({ output: "bundle.css" }),
-    // https://github.com/rollup/rollup/issues/487
-    // deal with the environment
-    replace({
-      "process.env.NODE_ENV": JSON.stringify(
-        production ? "production" : "development"
-      ),
-    }),
-    // There are instances of double quotes and backticks, so there needs to be
-    // a rule for each one.
-    replace({
-      "/api": production ? '"/api' : `"${process.env.OWLREPO_URL}/api`,
-      delimiters: ['"', ""],
-    }),
-    replace({
-      "/api": production ? "`/api" : `\`${process.env.OWLREPO_URL}/api`,
-      delimiters: ["`", ""],
-    }),
-    // fix missing moment import inside of tabulator
-    inject({
-      moment: "moment",
-      url: "url",
-    }),
-    json(),
-    nodeResolve({
-      browser: true,
-      dedupe: ["svelte"],
-      preferBuiltins: false,
-    }),
-    commonjs({
-      requireReturnsDefault: true,
-    }),
-    globals(),
 
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
-    !production && serve(),
+  server: {
+    input: config.server.input(),
+    output: config.server.output(),
+    plugins: [
+      replace({
+        "process.browser": false,
+        "process.env.NODE_ENV": JSON.stringify(mode),
+      }),
+      svelte({
+        compilerOptions: {
+          dev,
+          generate: "ssr",
+          hydratable: true,
+        },
+        emitCss: false,
+        extensions: [".svelte", ".svx"],
+        preprocess: mdsvex(),
+      }),
 
-    // Watch the `public` directory and refresh the
-    // browser on changes when not in production
-    !production && livereload("public"),
+      resolve({
+        dedupe: ["svelte"],
+      }),
+      commonjs(),
+    ],
+    external: Object.keys(pkg.dependencies).concat(
+      require("module").builtinModules
+    ),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser(),
-  ],
-  watch: {
-    clearScreen: false,
+    preserveEntrySignatures: "strict",
+    onwarn,
+  },
+
+  serviceworker: {
+    input: config.serviceworker.input(),
+    output: config.serviceworker.output(),
+    plugins: [
+      resolve(),
+      replace({
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
+      }),
+      commonjs(),
+      !dev && terser(),
+    ],
+
+    preserveEntrySignatures: false,
+    onwarn,
   },
 };
-
-function serve() {
-  let started = false;
-
-  return {
-    writeBundle() {
-      if (!started) {
-        started = true;
-
-        require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
-          stdio: ["ignore", "inherit", "inherit"],
-          shell: true,
-        });
-      }
-    },
-  };
-}
