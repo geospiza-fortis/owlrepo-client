@@ -1,7 +1,6 @@
 <script>
   export let data = [];
   export let search_item_name;
-  export let is_chartable = true;
 
   let chartElement;
   $: chartElement &&
