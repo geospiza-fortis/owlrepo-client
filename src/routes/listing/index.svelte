@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import SummaryView from "../components/SummaryView.svelte";
+  import SummaryView from "../../components/SummaryView.svelte";
   import { Stretch } from "svelte-loading-spinners/src";
   import Tabulator from "tabulator-tables";
   export let params;

@@ -1,11 +1,11 @@
 <script>
-  import Uploader from "../components/Uploader.svelte";
-  import IndexView from "../components/IndexView.svelte";
-  import CollapseInfo from "../components/CollapseInfo.svelte";
-  import TopUploaders from "../components/TopUploaders.svelte";
-  import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
-  import PublicKey from "../docs/PublicKey.svelte";
-  import UploadInstructions from "../docs/UploadInstructions.svx";
+  import Uploader from "../../components/Uploader.svelte";
+  import IndexView from "../../components/IndexView.svelte";
+  import CollapseInfo from "../../components/CollapseInfo.svelte";
+  import TopUploaders from "../../components/TopUploaders.svelte";
+  import ActivityHeatmap from "../../components/ActivityHeatmap.svelte";
+  import PublicKey from "../../docs/PublicKey.svelte";
+  import UploadInstructions from "../../docs/UploadInstructions.svx";
 </script>
 
 <h1>Upload Owls</h1>

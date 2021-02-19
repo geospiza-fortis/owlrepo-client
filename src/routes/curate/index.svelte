@@ -7,7 +7,7 @@
   import stringify from "json-stable-stringify";
   import * as Diff from "diff";
   import { validate } from "jsonschema";
-  import TopContributors from "../components/TopContributors.svelte";
+  import TopContributors from "../../components/TopContributors.svelte";
 
   let contributor_id;
   let show_candidates = false;

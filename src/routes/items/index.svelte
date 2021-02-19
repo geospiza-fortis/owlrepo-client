@@ -1,8 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import Tabulator from "tabulator-tables";
-  import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
-  import { shortFormatter } from "../tabulator.js";
+  import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
+  import { shortFormatter } from "../../tabulator.js";
 
   let lastModified;
 

@@ -1,16 +1,14 @@
 <script context="module">
-  import { navbarIndex } from "../store.js";
-
-  let items = [
-    { text: "Home", href: "/" },
-    { text: "Items", href: "/items" },
-    { text: "Guide", href: "/guide" },
-    { text: "Charts", href: "/charts" },
-    { text: "Upload", href: "/upload" },
-    { text: "Recommendation", href: "/recommendation" },
-    { text: "Merchants", href: "/merchants" },
-    { text: "Curate", href: "/curate" },
-    { text: "Personal", href: "/personal" },
+  const items = [
+    { text: "Home", href: "" },
+    { text: "Items", href: "items" },
+    { text: "Guide", href: "guide" },
+    { text: "Charts", href: "charts" },
+    { text: "Upload", href: "upload" },
+    { text: "Recommendation", href: "recommendation" },
+    { text: "Merchants", href: "merchants" },
+    { text: "Curate", href: "curate" },
+    { text: "Personal", href: "personal" },
     {
       text: "Forum",
       href:
@@ -19,21 +17,6 @@
   ];
 
   let breakpoint = 5;
-
-  export function setNavbarIndex(href) {
-    let index = -1;
-    for (let i = 0; i < items.length; i++) {
-      if (href === items[i].href) {
-        index = i;
-        break;
-      }
-    }
-    if (index < 0) {
-      console.log(`index for ${href} was not found`);
-      return;
-    }
-    navbarIndex.set(index);
-  }
 </script>
 
 <script>
@@ -52,9 +35,12 @@
   } from "sveltestrap/src";
   let isOpen = false;
 
+  export let segment;
+
   function handleUpdate(event) {
     isOpen = event.detail.isOpen;
   }
+  $: console.log(segment);
 </script>
 
 <Navbar color="light" light expand="md">
@@ -65,7 +51,9 @@
       {#each items as item, index}
         {#if index < breakpoint}
           <NavItem>
-            <NavLink href={item.href} active={$navbarIndex == index}>
+            <NavLink
+              href={item.href}
+              active={!segment ? '' == item.href : segment == item.href}>
               {item.text}
             </NavLink>
           </NavItem>

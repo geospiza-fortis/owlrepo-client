@@ -1,8 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import Tabulator from "tabulator-tables";
-  import TabulatorSearchBox from "../components/TabulatorSearchBox.svelte";
-  import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
+  import TabulatorSearchBox from "../../components/TabulatorSearchBox.svelte";
+  import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
 
   let search_item_name = "Scroll for Gloves for ATT 60%";
   let initialSort = [{ column: "num_owls", dir: "desc" }];

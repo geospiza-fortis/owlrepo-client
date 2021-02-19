@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import localforage from "localforage";
   import Tabulator from "tabulator-tables";
-  import PublicKey from "../docs/PublicKey.svelte";
+  import PublicKey from "../../docs/PublicKey.svelte";
 
   let uploads = [];
   let curations = [];

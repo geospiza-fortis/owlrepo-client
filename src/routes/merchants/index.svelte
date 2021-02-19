@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Tabulator from "tabulator-tables";
-  import TabulatorSearchBox from "../components/TabulatorSearchBox.svelte";
+  import TabulatorSearchBox from "../../components/TabulatorSearchBox.svelte";
 
   let summaryTable;
   let initialSort = [{ column: "num_listed", dir: "desc" }];
