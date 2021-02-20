@@ -1,5 +1,5 @@
 <script>
-  import { Stretch } from "svelte-loading-spinners";
+  import { Stretch } from "svelte-loading-spinners/src";
   import { onMount } from "svelte";
 
   let listings = [];
@@ -89,6 +89,7 @@
 
   {#if offset > 0}
     <button
+      class="btn btn-info"
       on:click={async () => {
         offset -= listings.length;
         if (offset < 0) {
@@ -99,12 +100,13 @@
       Previous
     </button>
   {:else}
-    <button disabled>Previous</button>
+    <button class="btn btn-info" disabled>Previous</button>
   {/if}
   {#if max_offset > 0 && offset + limit > max_offset}
-    <button disabled>Next</button>
+    <button class="btn btn-info" disabled>Next</button>
   {:else}
     <button
+      class="btn btn-info"
       on:click={async () => {
         offset += limit;
         await update();

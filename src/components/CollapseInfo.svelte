@@ -1,24 +1,25 @@
 <script>
   export let component;
   export let params;
-  export let componentId;
   export let text;
+  import { Collapse } from "sveltestrap/src";
+
+  let open = false;
 </script>
 
-{#if component}
-  <p>
-    <button
-      class="btn btn-info"
-      type="button"
-      data-toggle="collapse"
-      data-target="#{componentId}"
-      aria-expanded="false"
-      aria-controls="searchItemCollapse">
-      {text}
-    </button>
-  </p>
+<style>
+  div {
+    padding-bottom: 1em;
+  }
+</style>
 
-  <div class="collapse" id={componentId}>
+<div>
+  <button class="btn btn-info" type="button" on:click={() => (open = !open)}>
+    {text}
+  </button>
+</div>
+<div>
+  <Collapse isOpen={open}>
     <svelte:component this={component} bind:params />
-  </div>
-{/if}
+  </Collapse>
+</div>

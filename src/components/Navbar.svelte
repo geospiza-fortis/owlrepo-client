@@ -1,39 +1,20 @@
 <script context="module">
-  import { navbarIndex } from "../store.js";
-
-  let items = [
-    { text: "Home", href: "/" },
-    { text: "Items", href: "/items" },
-    { text: "Guide", href: "/guide" },
-    { text: "Charts", href: "/charts" },
-    { text: "Upload", href: "/upload" },
-    { text: "Recommendation", href: "/recommendation" },
-    { text: "Merchants", href: "/merchants" },
-    { text: "Curate", href: "/curate" },
-    { text: "Personal", href: "/personal" },
+  const items = [
+    { text: "Home", href: "" },
+    { text: "Items", href: "items" },
+    { text: "Guide", href: "guide" },
+    { text: "Charts", href: "charts" },
+    { text: "Upload", href: "upload" },
+    { text: "Recommendation", href: "recommendation" },
+    { text: "Merchants", href: "merchants" },
+    { text: "Curate", href: "curate" },
+    { text: "Personal", href: "personal" },
     {
       text: "Forum",
       href:
         "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/"
     }
   ];
-
-  let breakpoint = 5;
-
-  export function setNavbarIndex(href) {
-    let index = -1;
-    for (let i = 0; i < items.length; i++) {
-      if (href === items[i].href) {
-        index = i;
-        break;
-      }
-    }
-    if (index < 0) {
-      console.log(`index for ${href} was not found`);
-      return;
-    }
-    navbarIndex.set(index);
-  }
 </script>
 
 <script>
@@ -49,8 +30,12 @@
     DropdownToggle,
     DropdownMenu,
     DropdownItem
-  } from "sveltestrap";
+  } from "sveltestrap/src";
+
+  const breakpoint = 5;
   let isOpen = false;
+
+  export let segment;
 
   function handleUpdate(event) {
     isOpen = event.detail.isOpen;
@@ -58,14 +43,19 @@
 </script>
 
 <Navbar color="light" light expand="md">
-  <NavbarBrand href="/">owlrepo</NavbarBrand>
-  <NavbarToggler on:click={() => (isOpen = !isOpen)} />
+  {#if !isOpen}
+    <NavbarBrand href="/">owlrepo</NavbarBrand>
+  {/if}
+  <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-    <Nav class="mr-auto" tabs>
+    <Nav class="mx-auto" tabs>
+      <NavbarBrand href="/">owlrepo</NavbarBrand>
       {#each items as item, index}
         {#if index < breakpoint}
           <NavItem>
-            <NavLink href={item.href} active={$navbarIndex == index}>
+            <NavLink
+              href={item.href}
+              active={!segment ? '' == item.href : segment == item.href}>
               {item.text}
             </NavLink>
           </NavItem>

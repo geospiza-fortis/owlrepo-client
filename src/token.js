@@ -1,5 +1,5 @@
 import localforage from "localforage";
-import * as jose from "node-jose";
+import { JWS, JWK, util } from "node-jose";
 import moment from "moment";
 
 async function getOrCreateCryptoKey(
@@ -46,7 +46,7 @@ async function getOrCreateJWK(path = "contributor-keys", is_public = false) {
   // approach should make sense.
   let storage = await localforage.getItem(path);
   if (storage) {
-    return await jose.JWK.asKey(storage[is_public ? "public" : "private"]);
+    return await JWK.asKey(storage[is_public ? "public" : "private"]);
   } else {
     // create the key and ignore the output
     await getOrCreateCryptoKey(path, is_public);
@@ -56,7 +56,7 @@ async function getOrCreateJWK(path = "contributor-keys", is_public = false) {
 
 async function getThumbprint() {
   let public_jwk = await getOrCreateJWK("contributor-keys", true);
-  return jose.util.base64url.encode(await public_jwk.thumbprint("SHA-256"));
+  return util.base64url.encode(await public_jwk.thumbprint("SHA-256"));
 }
 
 async function requestUploadToken() {
@@ -69,7 +69,7 @@ async function requestUploadToken() {
     // 32 bit string?
     thumbprint: await getThumbprint(),
   };
-  let sig = await jose.JWS.createSign(private_jwk)
+  let sig = await JWS.createSign(private_jwk)
     .update(JSON.stringify(data))
     .final();
   let resp = await fetch("/api/v1/token", {

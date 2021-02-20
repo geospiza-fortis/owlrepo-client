@@ -6,12 +6,8 @@
 
     <title>Owl Repository</title>
 
-    <link rel="icon" type="image/png" href="/favicon.png?v=1" />
-    <link rel="stylesheet" href="/build/bundle.css" />
-    <link rel="stylesheet" href="/global.css?v=4" />
-
     <!--These modules need to be fetched from a mirror because d3 has issues
-    with es6 imports.-->
+        with es6 imports.-->
     <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
     <script
       type="text/javascript"
@@ -39,8 +35,28 @@
       gtag("js", new Date());
     </script>
 
-    <script defer src="/build/bundle.js"></script>
-  </head>
+    %sapper.base%
 
-  <body></body>
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <!-- Sapper creates a <script> tag containing `src/client.js`
+	     and anything else it needs to hydrate the app and
+	     initialise the router -->
+    %sapper.scripts%
+
+    <!-- Sapper generates a <style> tag containing critical CSS
+	     for the current page. CSS for the rest of the app is
+	     lazily loaded when it precaches secondary pages -->
+    %sapper.styles%
+
+    <!-- This contains the contents of the <svelte:head> component, if
+	     the current page has one -->
+    %sapper.head%
+  </head>
+  <body>
+    <!-- The application will be rendered inside this element,
+	     because `src/client.js` references it -->
+    <div id="sapper">%sapper.html%</div>
+  </body>
 </html>
