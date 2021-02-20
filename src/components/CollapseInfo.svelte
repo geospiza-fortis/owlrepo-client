@@ -2,18 +2,24 @@
   export let component;
   export let params;
   export let text;
+  import { Collapse } from "sveltestrap/src";
 
   let open = false;
-  $: console.log(open);
 </script>
 
-<details bind:open>
-  <summary>
-    <button class="btn btn-info" type="button" on:click={() => (open = !open)}>
-      {text}
-    </button>
-  </summary>
-  <br />
-  <svelte:component this={component} bind:params />
-</details>
-<br />
+<style>
+  div {
+    padding-bottom: 1em;
+  }
+</style>
+
+<div>
+  <button class="btn btn-info" type="button" on:click={() => (open = !open)}>
+    {text}
+  </button>
+</div>
+<div>
+  <Collapse isOpen={open}>
+    <svelte:component this={component} bind:params />
+  </Collapse>
+</div>

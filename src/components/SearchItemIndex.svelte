@@ -94,6 +94,7 @@
   import { Stretch } from "svelte-loading-spinners/src";
   import TabulatorSearchBox from "./TabulatorSearchBox.svelte";
   import { shortFormatter } from "../tabulator.js";
+  import { Collapse } from "sveltestrap/src";
 
   let itemsReady = false;
   let itemsLastModified;
@@ -101,6 +102,8 @@
   let table;
   let itemData;
   let results;
+
+  let settingsIsOpen = false;
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
@@ -293,10 +296,7 @@
     <button
       class="btn btn-primary"
       type="button"
-      data-toggle="collapse"
-      data-target="#search_item_index_settings"
-      aria-expanded="false"
-      aria-controls="search_item_index_settings">
+      on:click={() => (settingsIsOpen = !settingsIsOpen)}>
       Settings
     </button>
   {/if}
@@ -313,10 +313,7 @@
     {table}
     keys={['search_item']}
     initialSort={[{ column: tableSettings.sortColumn, dir: tableSettings.sortDir }]} />
-  <div
-    class="collapse"
-    id="search_item_index_settings"
-    style="text-align: right">
+  <Collapse isOpen={settingsIsOpen} style="text-align: right">
     Default Sort:
     <select
       name="sort-column"
@@ -347,7 +344,7 @@
         <option value={size}>{size}</option>
       {/each}
     </select>
-  </div>
+  </Collapse>
 {/if}
 
 <div id="search_item_index" />
