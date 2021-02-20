@@ -1,29 +1,19 @@
 <script>
   export let component;
   export let params;
-  export let componentId;
   export let text;
-  import { onMount } from "svelte";
 
-  onMount(async () => {
-    await import("bootstrap");
-  });
+  let open = false;
+  $: console.log(open);
 </script>
 
-{#if component}
-  <p>
-    <button
-      class="btn btn-info"
-      type="button"
-      data-toggle="collapse"
-      data-target="#{componentId}"
-      aria-expanded="false"
-      aria-controls="searchItemCollapse">
+<details bind:open>
+  <summary>
+    <button class="btn btn-info" type="button" on:click={() => (open = !open)}>
       {text}
     </button>
-  </p>
-
-  <div class="collapse" id={componentId}>
-    <svelte:component this={component} bind:params />
-  </div>
-{/if}
+  </summary>
+  <br />
+  <svelte:component this={component} bind:params />
+</details>
+<br />

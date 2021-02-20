@@ -29,11 +29,7 @@
 
 <FrontMatter />
 
-<CollapseInfo
-  component={IndexDescription}
-  componentId="searchItemCollapse"
-  text="Tell me more!" />
-<br />
+<CollapseInfo component={IndexDescription} text="Tell me more!" />
 
 <SearchItemIndex />
 
