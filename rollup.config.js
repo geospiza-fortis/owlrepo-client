@@ -71,7 +71,7 @@ export default {
         moment: "moment",
         url: "url",
       }),
-      commonjs(),
+      commonjs({ requireReturnsDefault: true }),
       globals(),
 
       legacy &&
