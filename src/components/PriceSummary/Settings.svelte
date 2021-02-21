@@ -5,7 +5,6 @@
   import { onMount } from "svelte";
 
   export let settings;
-  export let toggle = false;
 
   // Added to make sure there aren't any weird race conditions...
   let loaded = false;
@@ -20,15 +19,14 @@
     .catch(console.log)
     .then(obj => {
       if (obj) {
-        ({ sortColumn, sortDir, paginationSize, toggle } = obj);
+        ({ sortColumn, sortDir, paginationSize } = obj);
       }
       loaded = true;
     });
   $: settings = {
     sortColumn: sortColumn,
     sortDir: sortDir,
-    paginationSize: paginationSize,
-    toggle: toggle
+    paginationSize: paginationSize
   };
   $: process.env.NODE_ENV == "development" &&
     console.log(`search index settings ${JSON.stringify(settings)}`);
@@ -49,14 +47,12 @@
   }
 </script>
 
-{#if toggle}
-  <button
-    class="btn btn-primary"
-    type="button"
-    on:click={() => (isOpen = !isOpen)}>
-    Settings
-  </button>
-{/if}
+<button
+  class="btn btn-primary"
+  type="button"
+  on:click={() => (isOpen = !isOpen)}>
+  Settings
+</button>
 
 <Collapse {isOpen} style="text-align: right">
   <label>
