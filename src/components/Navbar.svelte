@@ -6,7 +6,6 @@
     { text: "Charts", href: "charts" },
     { text: "Upload", href: "upload" },
     { text: "Recommendation", href: "recommendation" },
-    { text: "Merchants", href: "merchants" },
     { text: "Curate", href: "curate" },
     { text: "Personal", href: "personal" },
     {
