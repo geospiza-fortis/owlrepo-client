@@ -6,6 +6,7 @@
   export let table;
   export let keys;
   export let initialSort = [];
+  export let term = null;
 
   $: fuse = new Fuse(itemData, {
     includeScore: true,
@@ -31,6 +32,7 @@
       await table.replaceData(data.map(d => d.item));
       results = data.length;
     }
+    term = value.trim();
   }
 
   // https://schier.co/blog/wait-for-user-to-stop-typing-using-javascript

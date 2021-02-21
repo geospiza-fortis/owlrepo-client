@@ -223,8 +223,6 @@
     position: sticky;
     bottom: 0;
     height: 60px;
-    /* This is a hack, it won't look good when the body changes. */
-    background: white;
   }
 
   /* divider https://stackoverflow.com/a/5119860 */

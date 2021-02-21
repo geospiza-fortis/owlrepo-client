@@ -45,7 +45,9 @@
 
   onMount(async () => {
     // TODO: I wish I had some documentation on the schema of these...
-    let index = await getData("/api/v1/query/search_item_index");
+    let index = await getData("/api/v1/query/search_item_index", {
+      cache: "no-cache"
+    });
     let category = await getData("/api/v1/query/mllib_scrolls_category");
 
     console.log(category);
@@ -135,6 +137,30 @@
 </script>
 
 <style>
+  /* https://stackoverflow.com/a/24895631 */
+  .guide-container {
+    width: 100vw;
+    position: relative;
+    left: calc(-50vw + 50%);
+  }
+
+  .guide {
+    padding: 0 2em;
+  }
+
+  @media (max-width: 900px) {
+    .guide {
+      padding: 0 0.5rem;
+    }
+  }
+
+  .guide,
+  td {
+    color: #000;
+  }
+
+  /* https://stackoverflow.com/a/43117538 */
+
   @media (min-width: 550px) {
     .card-columns {
       column-count: 2;
@@ -158,6 +184,11 @@
       column-count: 4;
     }
   }
+  @media (min-width: 1600px) {
+    .card-columns {
+      column-count: 5;
+    }
+  }
 </style>
 
 <h1>Scroll Guide</h1>
@@ -178,9 +209,9 @@
 </details>
 <br />
 
-{#if price_data}
-  <div class="container full-width guide">
-    <div class="card-columns">
+<div class="guide-container">
+  <div class="card-columns guide">
+    {#if price_data}
       {#each Object.keys(price_data).sort() as key}
         {#each chunkList(sortBy(
             price_data[key].filter(x => x.p50 > 350000 || x.percent == 'etc'),
@@ -189,7 +220,9 @@
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};">
-            <div class="card-header">
+            <div
+              class="card-header"
+              style="background-color: {getBackgroundColor(key)};">
               {#if parseInt(key)}
                 <h5>{key}% Scrolls</h5>
               {:else}
@@ -198,7 +231,9 @@
             </div>
 
             <div class="card-body">
-              <table class="table table-sm table-striped table-hover">
+              <table
+                class="table table-sm table-hover"
+                style="background-color: {getBackgroundColor(key)};">
                 <tbody>
                   {#each chunk as row}
                     <tr
@@ -228,6 +263,6 @@
           </div>
         {/each}
       {/each}
-    </div>
+    {/if}
   </div>
-{/if}
+</div>

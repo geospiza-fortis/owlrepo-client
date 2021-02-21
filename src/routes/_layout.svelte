@@ -1,9 +1,19 @@
 <script>
+  import { stores } from "@sapper/app";
+  const { page } = stores();
   import Navbar from "../components/Navbar.svelte";
+
   // bunch of css import for various modules
-  import "tabulator-tables/dist/css/tabulator.min.css";
-  import "bootstrap/dist/css/bootstrap.min.css";
+  import "./_assets/darkly.bootstrap.css";
+
   export let segment;
+
+  // pageview for analytics
+  $: process.client &&
+    $page &&
+    gtag("config", "UA-172155429-1", {
+      page_path: $page.path
+    });
 </script>
 
 <style>
@@ -12,31 +22,39 @@
     https://jgthms.com/web-design-in-4-minutes/#centering
   */
   main {
-    color: #333;
+    margin-top: 1rem;
     margin: 0 auto;
-    max-width: 900px;
-    /* padding: 0 2rem; */
+    max-width: 992px;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 992px) {
     main {
       padding: 0 0.5rem;
     }
   }
-
-  /* https://stackoverflow.com/a/43117538*/
-  :global(.full-width) {
-    position: absolute;
-    left: 0;
-    right: 0;
+  /* from https://bootswatch.com/cyborg/ */
+  :global(a) {
+    color: #2a9fd6;
+    text-decoration: none;
+    background-color: transparent;
   }
 
-  .footer {
-    margin: 0 auto;
-    padding-bottom: 2rem;
+  :global(a:hover) {
+    color: #1d7097;
+    text-decoration: underline;
+  }
+
+  hr {
+    max-width: 30em;
+    border-top: 1px solid lightgray;
+  }
+
+  footer {
+    text-align: center;
+    margin-bottom: 2rem;
   }
 </style>
 
@@ -45,4 +63,12 @@
   <slot />
 </main>
 
-<div class="footer" />
+<hr />
+<footer>
+  OwlRepo __VERSION__ (
+  <a
+    href="https://github.com/geospiza-fortis/owlrepo-client/commit/__GIT_COMMIT__">
+    __GIT_COMMIT__
+  </a>
+  )
+</footer>

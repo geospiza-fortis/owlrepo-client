@@ -1,0 +1,34 @@
+<script>
+  export let data;
+  export let transform = res => res;
+  export let layout = {};
+  let plotElement;
+
+  let darkStyle = {
+    font: {
+      color: "#fff"
+    },
+    paper_bgcolor: "#222222",
+    plot_bgcolor: "#222222"
+  };
+
+  $: plotElement &&
+    data &&
+    layout &&
+    Plotly.newPlot(
+      plotElement,
+      transform(data),
+      {
+        margin: {
+          l: 50,
+          r: 0,
+          b: 50
+        },
+        ...darkStyle,
+        ...layout
+      },
+      { responsive: true }
+    );
+</script>
+
+<div bind:this={plotElement} />

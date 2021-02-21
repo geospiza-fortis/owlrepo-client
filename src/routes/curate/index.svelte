@@ -9,6 +9,7 @@
   import { validate } from "jsonschema";
   import TopContributors from "../../components/TopContributors.svelte";
   import { schema } from "./schema";
+  import "tabulator-tables/dist/css/tabulator_midnight.min.css";
 
   let contributor_id;
   let show_candidates = false;
@@ -189,6 +190,15 @@
     }
   }
 </script>
+
+<style>
+  :global(.tabulator-row:nth-child(2n)) {
+    background-color: #222;
+  }
+  :global(.tabulator-row-odd) {
+    background-color: #333;
+  }
+</style>
 
 <h1>Curation</h1>
 

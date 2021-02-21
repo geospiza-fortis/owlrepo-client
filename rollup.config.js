@@ -10,6 +10,7 @@ import config from "sapper/config/rollup.js";
 import pkg from "./package.json";
 import { mdsvex } from "mdsvex";
 import dotenv from "dotenv";
+import child_process from "child_process";
 dotenv.config();
 
 const mode = process.env.NODE_ENV;
@@ -22,11 +23,22 @@ const onwarn = (warning, onwarn) =>
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning);
 
+let replaceVersion = () =>
+  replace({
+    __VERSION__: process.env.npm_package_version,
+    __GIT_COMMIT__: child_process
+      .execSync("git rev-parse HEAD")
+      .toString()
+      .trim()
+      .slice(0, 8),
+  });
+
 export default {
   client: {
     input: config.client.input(),
     output: config.client.output(),
     plugins: [
+      replaceVersion(),
       replace({
         // very brittle: helpers.nodeCrypto.getHashes is not a function
         // ecdsaSignFN
@@ -39,6 +51,7 @@ export default {
       }),
       replace({
         values: {
+          "process.client": true,
           // "process.browser": true,
           "process.env.NODE_ENV": JSON.stringify(mode),
         },
@@ -112,8 +125,10 @@ export default {
     input: config.server.input(),
     output: config.server.output(),
     plugins: [
+      replaceVersion(),
       replace({
         values: {
+          "process.client": false,
           // "process.browser": false,
           "process.env.NODE_ENV": JSON.stringify(mode),
         },
@@ -147,8 +162,10 @@ export default {
     output: config.serviceworker.output(),
     plugins: [
       resolve(),
+      replaceVersion(),
       replace({
         values: {
+          "process.client": true,
           // "process.browser": true,
           "process.env.NODE_ENV": JSON.stringify(mode),
         },

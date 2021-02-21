@@ -1,72 +1,28 @@
 <script>
   import { onMount } from "svelte";
   import localforage from "localforage";
-  import Tabulator from "tabulator-tables";
+  import Table from "../../components/Table.svelte";
   import PublicKey from "../../docs/PublicKey.svelte";
+  import { uploadColumns, curationColumns } from "./columns.js";
 
   let uploads = [];
   let curations = [];
   let contributor_id;
 
+  const uploadOptions = {
+    initialSort: [{ column: "timestamp", dir: "desc" }],
+    columns: uploadColumns
+  };
+
+  const curationOptions = {
+    initialSort: [{ column: "timestamp", dir: "desc" }],
+    columns: curationColumns
+  };
+
   onMount(async () => {
     uploads = (await localforage.getItem("personal-uploads")) || [];
     curations = (await localforage.getItem("personal-curations")) || [];
     contributor_id = await localforage.getItem("contributor-id");
-
-    if (uploads.length > 0) {
-      new Tabulator("#uploads", {
-        data: uploads,
-        initialSort: [{ column: "timestamp", dir: "desc" }],
-        columns: [
-          {
-            title: "Date",
-            field: "timestamp",
-            formatter: "datetime",
-            formatterParams: {
-              outputFormat: "YYYY-MM-DD HH:MM"
-            }
-          },
-          {
-            title: "Task ID",
-            field: "task_id",
-            formatter: "link",
-            formatterParams: {
-              urlField: "task_id",
-              urlPrefix: "/listing/"
-            }
-          }
-        ]
-      });
-    }
-    if (curations.length > 0) {
-      new Tabulator("#curations", {
-        data: curations,
-        initialSort: [{ column: "timestamp", dir: "desc" }],
-        columns: [
-          {
-            title: "Date",
-            field: "timestamp",
-            formatter: "datetime",
-            formatterParams: {
-              outputFormat: "YYYY-MM-DD HH:MM"
-            }
-          },
-          {
-            title: "Task ID",
-            field: "task_id",
-            formatter: "link",
-            formatterParams: {
-              urlField: "task_id",
-              urlPrefix: "/listing/"
-            }
-          },
-          {
-            title: "Screenshot ID",
-            field: "screenshot_sha1"
-          }
-        ]
-      });
-    }
   });
 </script>
 
@@ -89,8 +45,9 @@
     Any contributed owl uploads will appear here.
   </p>
 {/if}
-
-<div id="uploads" />
+{#if uploads.length}
+  <Table data={uploads} options={uploadOptions} />
+{/if}
 
 <h2>Curation contributions</h2>
 
@@ -108,4 +65,6 @@
   </p>
 {/if}
 
-<div id="curations" />
+{#if curations.length}
+  <Table data={curations} options={curationOptions} />
+{/if}

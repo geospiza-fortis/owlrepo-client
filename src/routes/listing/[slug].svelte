@@ -1,8 +1,11 @@
 <script>
   import { onMount } from "svelte";
-  import SummaryView from "../../components/SummaryView.svelte";
   import { Stretch } from "svelte-loading-spinners/src";
-  import Tabulator from "tabulator-tables";
+  import { resultColumns } from "./columns.js";
+
+  import Table from "../../components/Table.svelte";
+
+  import SummaryView from "./SummaryView.svelte";
 
   import { stores } from "@sapper/app";
   const { page } = stores();
@@ -37,45 +40,6 @@
     }
     let data = await resp.json();
     flattened = flatten(data);
-    table = new Tabulator("#results", {
-      data: flattened,
-      clipboard: "copy",
-      clipboardCopyStyled: false,
-      layout: "fitDataFill",
-      columns: [
-        {
-          title: "Search Item",
-          field: "item"
-        },
-        {
-          title: "Results",
-          field: "results"
-        },
-        {
-          title: "Seller",
-          field: "id"
-        },
-        {
-          title: "Store Name",
-          field: "store_name"
-        },
-        {
-          title: "Bundle",
-          field: "bundle"
-        },
-        {
-          title: "Price",
-          field: "price",
-          formatter: "money",
-          formatterParams: { precision: 0 },
-          align: "right"
-        },
-        {
-          title: "Quantity",
-          field: "quantity"
-        }
-      ]
-    });
   });
 </script>
 
@@ -99,7 +63,7 @@
 {#if flattened}
   <SummaryView {flattened} {cutoff} />
   <h2>Results</h2>
-  <button on:click={table.copyToClipboard('active', true)}>
+  <button class="btn btn-info" on:click={table.copyToClipboard('active', true)}>
     Copy to Clipboard
   </button>
 {:else if !ready}
@@ -110,4 +74,7 @@
   </div>
 {/if}
 
-<div id="results" />
+<Table
+  bind:table
+  data={flattened}
+  options={{ clipboard: 'copy', clipboardCopyStyled: false, columns: resultColumns }} />

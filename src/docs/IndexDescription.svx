@@ -1,5 +1,5 @@
 <script>
-  import { columns as search_item_index_columns } from "../components/SearchItemIndex.svelte";
+  import { columns as search_item_index_columns } from "../components/PriceSummary/columns.js";
 </script>
 
 ### How is the data in table populated?
