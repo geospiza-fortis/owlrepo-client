@@ -9,6 +9,7 @@
   import { validate } from "jsonschema";
   import TopContributors from "../../components/TopContributors.svelte";
   import { schema } from "./schema";
+  import "tabulator-tables/dist/css/tabulator.min.css";
 
   let contributor_id;
   let show_candidates = false;

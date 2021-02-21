@@ -1,12 +1,13 @@
 <script>
   import { onMount } from "svelte";
-  import moment from "moment";
   import Table from "../Table.svelte";
+  import SearchBox from "../SearchBox.svelte";
   import { Stretch } from "svelte-loading-spinners/src";
-  import TabulatorSearchBox from "../TabulatorSearchBox.svelte";
-  import { columns } from "./columns.js";
   import Settings from "./Settings.svelte";
   import Plot from "./Plot.svelte";
+
+  import moment from "moment";
+  import { columns } from "./columns.js";
 
   let itemsReady = false;
   let itemsLastModified;
@@ -95,7 +96,7 @@
     <span style="background: {BG_RED}">6 weeks</span>
     ]
   </span>
-  <TabulatorSearchBox
+  <SearchBox
     {itemData}
     {table}
     keys={['search_item']}

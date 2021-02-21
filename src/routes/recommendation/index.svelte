@@ -1,5 +1,5 @@
 <script>
-  import Tabulator from "tabulator-tables";
+  import Table from "../../components/Table.svelte";
   import { onMount } from "svelte";
   import moment from "moment";
   import { sortBy } from "lodash";
@@ -9,7 +9,7 @@
   let p25_thresh = 350000;
   let search_thresh = 8;
 
-  let core_scrolls = [
+  const core_scrolls = [
     "Dark scroll for Claw for ATT 30%",
     "Scroll for Gloves for ATT 60%",
     "Scroll for Overall Armor for DEX 60%",
@@ -19,7 +19,22 @@
   ];
   let core_scroll_update = 4;
   // this one is weird since we have some conditional text based on this
-  let core;
+
+  let predData; // unseenOptions
+  let data;
+  let coreData;
+  let staleData;
+  let etcData;
+  let coreOptions = createOptions([
+    { field: "search_item_timestamp", type: "!=", value: null },
+    { field: "days_since_update", type: ">=", value: core_scroll_update }
+  ]);
+  let staleOptions = createOptions([
+    { field: "search_item_timestamp", type: "!=", value: null },
+    { field: "days_since_update", type: ">", value: 28 }
+  ]);
+
+  let etcOptions = staleOptions;
 
   function sortData(data) {
     // Sort and concat the two fields. Somewhat of an inefficient solution.
@@ -46,9 +61,8 @@
     );
   }
 
-  function createTable(element, data, initialFilter) {
-    return new Tabulator(element, {
-      data: data,
+  function createOptions(initialFilter) {
+    return {
       initialFilter: initialFilter,
       layout: "fitDataFill",
       columns: [
@@ -71,13 +85,35 @@
       ],
       pagination: "local",
       paginationSize: 8
-    });
+    };
   }
 
+  let unseenOptions = {
+    initialFilter: [{ field: "search_item_timestamp", type: "=", value: null }],
+    layout: "fitDataFill",
+    columns: [
+      {
+        title: "Search Item",
+        field: "name"
+      },
+      { title: "Predicted Results", field: "search_results_pred" },
+      {
+        title: "Predicted p25",
+        field: "p25_pred",
+        formatter: "money",
+        formatterParams: { precision: 0 },
+        align: "right"
+      }
+    ],
+    pagination: "local",
+    paginationSize: 8
+  };
+
   onMount(async () => {
-    let pred_data = await getData("/api/v1/query/scrolls_predict");
+    predData = await getData("/api/v1/query/scrolls_predict");
+
     // convert front page data for this page
-    let data = (await getData("/api/v1/query/search_item_index")).map(obj => ({
+    data = (await getData("/api/v1/query/search_item_index")).map(obj => ({
       ...obj,
       name: obj.search_item
     }));
@@ -85,57 +121,10 @@
     // NOTE: I'm not sure if the names in scrolls_predict will line up exactly
     // with the names in the search item index, but we can be sure etc will
     // be fine
-    let scroll_names = pred_data.map(obj => obj.name);
-    let stale_data = data.filter(obj => scroll_names.includes(obj.name));
-    let etc_data = data.filter(obj => !scroll_names.includes(obj.name));
-
-    core = createTable("#core", data, [
-      { field: "search_item_timestamp", type: "!=", value: null },
-      { field: "days_since_update", type: ">=", value: core_scroll_update },
-      {
-        field: "name",
-        type: "in",
-        value: core_scrolls
-      }
-    ]);
-    if (core.getDataCount(true) === 0) {
-      core.destroy();
-      core = null;
-    }
-
-    let stale = createTable("#stale", stale_data, [
-      { field: "search_item_timestamp", type: "!=", value: null },
-      { field: "days_since_update", type: ">", value: 28 }
-    ]);
-
-    let etc = createTable("#etc", etc_data, [
-      { field: "search_item_timestamp", type: "!=", value: null },
-      { field: "days_since_update", type: ">", value: 28 }
-    ]);
-
-    let unseen = new Tabulator("#unseen", {
-      data: pred_data,
-      initialFilter: [
-        { field: "search_item_timestamp", type: "=", value: null }
-      ],
-      layout: "fitDataFill",
-      columns: [
-        {
-          title: "Search Item",
-          field: "name"
-        },
-        { title: "Predicted Results", field: "search_results_pred" },
-        {
-          title: "Predicted p25",
-          field: "p25_pred",
-          formatter: "money",
-          formatterParams: { precision: 0 },
-          align: "right"
-        }
-      ],
-      pagination: "local",
-      paginationSize: 8
-    });
+    let scroll_names = predData.map(obj => obj.name);
+    coreData = data.filter(obj => core_scrolls.includes(obj.name));
+    staleData = data.filter(obj => scroll_names.includes(obj.name));
+    etcData = data.filter(obj => !scroll_names.includes(obj.name));
   });
 </script>
 
@@ -161,21 +150,23 @@
   These scrolls are strong indicators of the market. They should be measured
   every ~{core_scroll_update} days.
 </p>
-{#if !core}
+{#if !coreData}
   <ul>
     {#each core_scrolls as scroll}
       <li>{scroll}</li>
     {/each}
   </ul>
   <p>Core scrolls are up to date.</p>
+{:else}
+  <Table data={coreData} options={coreOptions} />
 {/if}
-<div id="core" />
 
 <h2>Stale Scrolls</h2>
-<div id="stale" />
+<Table data={staleData} options={staleOptions} />
 
 <h2>Weapons, Mastery Books, Etc.</h2>
-<div id="etc" />
+<Table data={etcData} options={etcOptions} />
 
 <h2>Unseen Scrolls</h2>
-<div id="unseen" />
+
+<Table data={predData} options={unseenOptions} />

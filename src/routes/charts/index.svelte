@@ -1,15 +1,15 @@
 <script>
   import { onMount } from "svelte";
-  import Tabulator from "tabulator-tables";
-  import TabulatorSearchBox from "../../components/TabulatorSearchBox.svelte";
+  import Table from "../../components/Table.svelte";
+  import SearchBox from "../../components/SearchBox.svelte";
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
+
+  let table;
 
   let search_item_name = "Scroll for Gloves for ATT 60%";
   let initialSort = [{ column: "num_owls", dir: "desc" }];
   let listingData = [];
-  let tableElement;
   $: itemData = transform(listingData);
-  $: table = tableElement ? createTable(tableElement, itemData) : null;
 
   async function fetchData() {
     let resp = await fetch("/api/v1/query/search_item_listing");
@@ -33,28 +33,24 @@
     return itemData;
   }
 
-  function createTable(element, itemData) {
-    return new Tabulator(element, {
-      data: itemData,
-      layout: "fitColumns",
-      pagination: "local",
-      paginationSize: 5,
-      rowClick: (e, row) => {
-        search_item_name = row.getData().search_item;
+  const options = {
+    pagination: "local",
+    paginationSize: 5,
+    rowClick: (e, row) => {
+      search_item_name = row.getData().search_item;
+    },
+    initialSort: initialSort,
+    columns: [
+      {
+        title: "Search Item",
+        field: "search_item"
       },
-      initialSort: initialSort,
-      columns: [
-        {
-          title: "Search Item",
-          field: "search_item"
-        },
-        {
-          title: "# Owls",
-          field: "num_owls"
-        }
-      ]
-    });
-  }
+      {
+        title: "# Owls",
+        field: "num_owls"
+      }
+    ]
+  };
 
   onMount(async () => {
     listingData = await fetchData();
@@ -63,7 +59,7 @@
 
 <h1>Charts</h1>
 
-<TabulatorSearchBox {itemData} {table} keys={['search_item']} {initialSort} />
-<div bind:this={tableElement} />
+<SearchBox {itemData} {table} keys={['search_item']} {initialSort} />
+<Table bind:table data={itemData} {options} />
 
 <PriceQuantityCharts data={listingData} {search_item_name} />
