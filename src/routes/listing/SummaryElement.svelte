@@ -2,19 +2,26 @@
   import { onMount } from "svelte";
   import { dropOutliers, generateSummary } from "./stats.js";
   import { summaryColumns } from "./columns.js";
-  import Table from "../../components/Table";
+  import Table from "../../components/Table.svelte";
+  import Plot from "../../components/Plot.svelte";
 
   export let key;
   export let data;
-  export let cutoff = 3;
+  export let outlierCutoff = 3;
 
-  function formatId(key) {
-    return btoa(key).replaceAll("=", "");
+  function transformPlot(data) {
+    return [
+      {
+        y: dropOutliers(data.map(row => row.price), outlierCutoff),
+        type: "box",
+        name: "prices"
+      }
+    ];
   }
 
-  function transform(data) {
+  function transformTable(data) {
     let prices = data.map(row => row.price);
-    let cleanPrices = dropOutliers(prices, cutoff);
+    let cleanPrices = dropOutliers(prices, outlierCutoff);
 
     let summary = generateSummary(prices);
     let cleanSummary = generateSummary(cleanPrices);
@@ -29,21 +36,6 @@
     }
     return result;
   }
-
-  onMount(() => {
-    Plotly.newPlot(
-      `boxplot_${formatId(key)}`,
-      [
-        {
-          y: cleanPrices,
-          type: "box",
-          name: "prices"
-        }
-      ],
-      { title: "Price Box Plot" },
-      { responsive: true }
-    );
-  });
 </script>
 
 <h3>{key}</h3>
@@ -56,9 +48,12 @@
       search results with {data.length} results ({((data.length / data[0].results) * 100).toFixed(1)}%)
       captured.
     </p>
-    <Table data={transform(data)} options={{ columns: summaryColumns }} />
+    <Table data={transformTable(data)} options={{ columns: summaryColumns }} />
   </div>
   <div class="col-sm-5">
-    <div id={`boxplot_${formatId(key)}`} />
+    <Plot
+      {data}
+      transform={transformPlot}
+      layout={{ title: 'Price Box Plot' }} />
   </div>
 </div>

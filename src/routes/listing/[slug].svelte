@@ -63,7 +63,7 @@
 {#if flattened}
   <SummaryView {flattened} {cutoff} />
   <h2>Results</h2>
-  <button on:click={table.copyToClipboard('active', true)}>
+  <button class="btn btn-info" on:click={table.copyToClipboard('active', true)}>
     Copy to Clipboard
   </button>
 {:else if !ready}

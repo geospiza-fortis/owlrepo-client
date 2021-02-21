@@ -1,38 +1,8 @@
 <script>
+  import Plot from "./Plot.svelte";
+
   export let data = [];
   export let search_item_name;
-
-  let chartElement;
-  $: chartElement &&
-    data &&
-    data.length &&
-    Plotly.newPlot(
-      chartElement,
-      transform(data, search_item_name),
-      {
-        title: `${search_item_name} over time`,
-        legend: { orientation: "h" },
-        yaxis: {
-          title: "price"
-        },
-        yaxis2: {
-          title: "count"
-        },
-        grid: {
-          rows: 2,
-          columns: 1,
-          subplots: ["xy", "xy2"],
-          roworder: "top to bottom"
-        },
-        margin: {
-          l: 50,
-          r: 0,
-          b: 0,
-          t: 100
-        }
-      },
-      { responsive: true }
-    );
 
   function transform(data, search_item) {
     let items = data.filter(
@@ -69,6 +39,29 @@
         }
       ]);
   }
+
+  const layout = {
+    title: `${search_item_name} over time`,
+    legend: { orientation: "h" },
+    yaxis: {
+      title: "price"
+    },
+    yaxis2: {
+      title: "count"
+    },
+    grid: {
+      rows: 2,
+      columns: 1,
+      subplots: ["xy", "xy2"],
+      roworder: "top to bottom"
+    },
+    margin: {
+      l: 50,
+      r: 0,
+      b: 0,
+      t: 100
+    }
+  };
 </script>
 
-<div bind:this={chartElement} />
+<Plot {data} transform={data => transform(data, search_item_name)} {layout} />
