@@ -135,6 +135,10 @@
 </script>
 
 <style>
+  .guide,
+  td {
+    color: #000;
+  }
   @media (min-width: 550px) {
     .card-columns {
       column-count: 2;
@@ -189,7 +193,9 @@
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};">
-            <div class="card-header">
+            <div
+              class="card-header"
+              style="background-color: {getBackgroundColor(key)};">
               {#if parseInt(key)}
                 <h5>{key}% Scrolls</h5>
               {:else}
@@ -198,7 +204,9 @@
             </div>
 
             <div class="card-body">
-              <table class="table table-sm table-striped table-hover">
+              <table
+                class="table table-sm table-hover"
+                style="background-color: {getBackgroundColor(key)};">
                 <tbody>
                   {#each chunk as row}
                     <tr

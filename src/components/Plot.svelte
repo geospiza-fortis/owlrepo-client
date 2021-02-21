@@ -4,6 +4,14 @@
   export let layout = {};
   let plotElement;
 
+  let darkStyle = {
+    font: {
+      color: "#fff"
+    },
+    paper_bgcolor: "#222222",
+    plot_bgcolor: "#222222"
+  };
+
   $: plotElement &&
     data &&
     layout &&
@@ -16,6 +24,7 @@
           r: 0,
           b: 50
         },
+        ...darkStyle,
         ...layout
       },
       { responsive: true }

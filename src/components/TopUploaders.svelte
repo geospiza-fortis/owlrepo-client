@@ -21,6 +21,7 @@
           if (value == client_thumbprint) {
             let el = cell.getElement();
             el.style.backgroundColor = BG_GREEN;
+            el.style.color = "#333";
             // bold looks a bit weird
             // el.style.fontWeight = "bold";
           }

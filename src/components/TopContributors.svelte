@@ -25,6 +25,7 @@
           if (value == contributor_id) {
             let el = cell.getElement();
             el.style.backgroundColor = BG_GREEN;
+            el.style.color = "#333";
           }
           return value;
         },

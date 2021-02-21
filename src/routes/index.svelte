@@ -52,9 +52,11 @@
   If you find this site useful, the best way to help is to
   <a href="/upload">upload owl searches.</a>
   Items marked in
-  <span style="background: {BG_YELLOW}">yellow</span>
+  <span style="padding:0 3px; color: #333; background: {BG_YELLOW}">
+    yellow
+  </span>
   or
-  <span style="background: {BG_RED}">red</span>
+  <span style="padding:0 3px; color: #333; background: {BG_RED}">red</span>
   are likely worth uploading. Look at the
   <a href="/recommendation">recommendations</a>
   for a list of outdated items ranked by value. Also help by correct errors in

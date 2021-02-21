@@ -41,13 +41,19 @@
   }
 </script>
 
-<Navbar color="light" light expand="md">
+<style>
+  :global(.nav-link) {
+    color: rgba(255, 255, 255, 0.95);
+  }
+</style>
+
+<Navbar class="navbar-dark bg-primary" expand="md">
   {#if !isOpen}
     <NavbarBrand href="/">owlrepo</NavbarBrand>
   {/if}
   <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-    <Nav class="mx-auto" tabs>
+    <Nav class="mx-auto">
       <NavbarBrand href="/">owlrepo</NavbarBrand>
       {#each items as item, index}
         {#if index < breakpoint}

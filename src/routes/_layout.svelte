@@ -4,8 +4,7 @@
   import Navbar from "../components/Navbar.svelte";
 
   // bunch of css import for various modules
-  import "tabulator-tables/dist/css/tabulator.min.css";
-  import "bootstrap/dist/css/bootstrap.min.css";
+  import "./_assets/darkly.bootstrap.css";
 
   export let segment;
 
@@ -23,10 +22,9 @@
     https://jgthms.com/web-design-in-4-minutes/#centering
   */
   main {
-    color: #333;
+    margin-top: 1rem;
     margin: 0 auto;
     max-width: 900px;
-    /* padding: 0 2rem; */
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -36,6 +34,17 @@
     main {
       padding: 0 0.5rem;
     }
+  }
+  /* from https://bootswatch.com/cyborg/ */
+  :global(a) {
+    color: #2a9fd6;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  :global(a:hover) {
+    color: #1d7097;
+    text-decoration: underline;
   }
 
   /* https://stackoverflow.com/a/43117538*/

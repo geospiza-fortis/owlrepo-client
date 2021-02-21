@@ -55,9 +55,11 @@
       // 6 weeks is really old
       if (datum.days_since_update > 7 * 6) {
         dateElement.style.backgroundColor = BG_RED;
+        dateElement.style.color = "#333";
         // 2 weeks is kind of old
       } else if (datum.days_since_update > 7 * 2) {
         dateElement.style.backgroundColor = BG_YELLOW;
+        dateElement.style.color = "#333";
       }
     }
   };
@@ -91,9 +93,13 @@
   <Settings bind:settings />
   <span style="float:right">
     older than [
-    <span style="background: {BG_YELLOW}">2 weeks</span>
+    <span style="padding:0 3px; color: #333; background: {BG_YELLOW}">
+      2 weeks
+    </span>
     |
-    <span style="background: {BG_RED}">6 weeks</span>
+    <span style="padding:0 3px; color: #333; background: {BG_RED}">
+      6 weeks
+    </span>
     ]
   </span>
   <SearchBox
