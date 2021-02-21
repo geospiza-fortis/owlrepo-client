@@ -39,6 +39,7 @@ export default {
       }),
       replace({
         values: {
+          "process.client": true,
           // "process.browser": true,
           "process.env.NODE_ENV": JSON.stringify(mode),
         },
@@ -114,6 +115,8 @@ export default {
     plugins: [
       replace({
         values: {
+          "process.client": false,
+
           // "process.browser": false,
           "process.env.NODE_ENV": JSON.stringify(mode),
         },
@@ -149,6 +152,7 @@ export default {
       resolve(),
       replace({
         values: {
+          "process.client": true,
           // "process.browser": true,
           "process.env.NODE_ENV": JSON.stringify(mode),
         },

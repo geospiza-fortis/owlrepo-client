@@ -1,9 +1,20 @@
 <script>
+  import { stores } from "@sapper/app";
+  const { page } = stores();
   import Navbar from "../components/Navbar.svelte";
+
   // bunch of css import for various modules
   import "tabulator-tables/dist/css/tabulator.min.css";
   import "bootstrap/dist/css/bootstrap.min.css";
+
   export let segment;
+
+  // pageview for analytics
+  $: process.client &&
+    $page &&
+    gtag("config", "UA-172155429-1", {
+      page_path: $page.path
+    });
 </script>
 
 <style>
