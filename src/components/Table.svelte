@@ -8,7 +8,8 @@
 
   let element;
 
-  $: data &&
+  $: element &&
+    data &&
     options &&
     (table = new Tabulator(element, {
       data: data,
