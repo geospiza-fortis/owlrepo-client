@@ -137,10 +137,30 @@
 </script>
 
 <style>
+  /* https://stackoverflow.com/a/24895631 */
+  .guide-container {
+    width: 100vw;
+    position: relative;
+    left: calc(-50vw + 50%);
+  }
+
+  .guide {
+    padding: 0 2em;
+  }
+
+  @media (max-width: 900px) {
+    .guide {
+      padding: 0 0.5rem;
+    }
+  }
+
   .guide,
   td {
     color: #000;
   }
+
+  /* https://stackoverflow.com/a/43117538 */
+
   @media (min-width: 550px) {
     .card-columns {
       column-count: 2;
@@ -164,6 +184,11 @@
       column-count: 4;
     }
   }
+  @media (min-width: 1600px) {
+    .card-columns {
+      column-count: 5;
+    }
+  }
 </style>
 
 <h1>Scroll Guide</h1>
@@ -184,9 +209,9 @@
 </details>
 <br />
 
-{#if price_data}
-  <div class="container full-width guide">
-    <div class="card-columns">
+<div class="guide-container">
+  <div class="card-columns guide">
+    {#if price_data}
       {#each Object.keys(price_data).sort() as key}
         {#each chunkList(sortBy(
             price_data[key].filter(x => x.p50 > 350000 || x.percent == 'etc'),
@@ -238,6 +263,6 @@
           </div>
         {/each}
       {/each}
-    </div>
+    {/if}
   </div>
-{/if}
+</div>

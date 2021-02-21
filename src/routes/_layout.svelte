@@ -47,13 +47,6 @@
     text-decoration: underline;
   }
 
-  /* https://stackoverflow.com/a/43117538*/
-  :global(.full-width) {
-    position: absolute;
-    left: 0;
-    right: 0;
-  }
-
   hr {
     max-width: 30em;
     border-top: 1px solid lightgray;
