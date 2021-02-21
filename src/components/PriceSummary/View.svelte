@@ -66,7 +66,9 @@
 
   onMount(async () => {
     async function loadSearchItems() {
-      let resp = await fetch("/api/v1/query/search_item_index");
+      let resp = await fetch("/api/v1/query/search_item_index", {
+        cache: "no-cache"
+      });
       let data = await resp.json();
       itemsLastModified = new Date(
         resp.headers.get("last-modified")

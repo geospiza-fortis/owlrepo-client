@@ -39,7 +39,9 @@
     const urlParams = new URLSearchParams(window.location.search);
     keyword = urlParams.get("keyword");
 
-    let resp = await fetch("/api/v1/query/search_item_listing");
+    let resp = await fetch("/api/v1/query/search_item_listing", {
+      cache: "no-cache"
+    });
     data = await resp.json();
 
     lastModified = new Date(resp.headers.get("last-modified")).toISOString();
