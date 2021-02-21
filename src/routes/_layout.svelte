@@ -54,9 +54,14 @@
     right: 0;
   }
 
-  .footer {
-    margin: 0 auto;
-    padding-bottom: 2rem;
+  hr {
+    max-width: 30em;
+    border-top: 1px solid lightgray;
+  }
+
+  footer {
+    text-align: center;
+    margin-bottom: 2rem;
   }
 </style>
 
@@ -65,4 +70,12 @@
   <slot />
 </main>
 
-<div class="footer" />
+<hr />
+<footer>
+  OwlRepo __VERSION__ (
+  <a
+    href="https://github.com/geospiza-fortis/owlrepo-client/commit/__GIT_COMMIT__">
+    __GIT_COMMIT__
+  </a>
+  )
+</footer>
