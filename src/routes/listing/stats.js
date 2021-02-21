@@ -1,4 +1,12 @@
-import { median, medianAbsoluteDeviation } from "simple-statistics";
+import {
+  median,
+  medianAbsoluteDeviation,
+  min,
+  quantile,
+  max,
+  mean,
+  standardDeviation,
+} from "simple-statistics";
 
 // https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/
 function calculateModifiedZScore(data, constant = 2 * Math.sqrt(3)) {
@@ -24,4 +32,18 @@ function dropOutliers(data, cutoff = 3) {
   return filtered;
 }
 
-export { calculateModifiedZScore, dropOutliers };
+function generateSummary(prices) {
+  let summary = [
+    { key: "count", value: prices.length },
+    { key: "min", value: min(prices) },
+    { key: "p25", value: quantile(prices, 0.25) },
+    { key: "p50", value: quantile(prices, 0.5) },
+    { key: "p75", value: quantile(prices, 0.75) },
+    { key: "max", value: max(prices) },
+    { key: "mean", value: mean(prices) },
+    { key: "stddev", value: standardDeviation(prices) },
+  ];
+  return summary;
+}
+
+export { calculateModifiedZScore, dropOutliers, generateSummary };
