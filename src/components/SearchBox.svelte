@@ -1,5 +1,6 @@
 <script>
   import Fuse from "fuse.js";
+  import { onMount } from "svelte";
 
   // Do I really need to provide the itemData alongside the table?
   export let itemData;
@@ -10,7 +11,7 @@
 
   $: fuse = new Fuse(itemData, {
     includeScore: true,
-    keys: keys
+    keys: keys,
   });
   $: results = itemData.length;
 
@@ -29,11 +30,15 @@
       results = itemData.length;
     } else {
       let data = fuse.search(value);
-      await table.replaceData(data.map(d => d.item));
+      await table.replaceData(data.map((d) => d.item));
       results = data.length;
     }
     term = value.trim();
   }
+
+  onMount(async () => {
+    updateTable("");
+  });
 
   // https://schier.co/blog/wait-for-user-to-stop-typing-using-javascript
   async function debounce(value) {
@@ -50,7 +55,7 @@
         }
         // https://developers.google.com/gtagjs/reference/event#search
         gtag("event", "search", {
-          search_term: term
+          search_term: term,
         });
       }
     }, 1000);
@@ -61,6 +66,7 @@
   type="text"
   placeholder="Search..."
   id="search-box"
-  on:input={e => updateTable(e.target.value)}
-  on:keyup={e => debounce(e.target.value)} />
+  on:input={(e) => updateTable(e.target.value)}
+  on:keyup={(e) => debounce(e.target.value)}
+/>
 {results} results
