@@ -38,6 +38,7 @@
       30: `rgba(234, 210, 184, ${opacity})`,
       60: `rgba(157, 151, 188, ${opacity})`,
       70: `rgba(222, 167, 161, ${opacity})`,
+      100: `rgba(222, 167, 161, ${opacity})`,
       etc: `rgba(174, 188, 110, ${opacity})`,
       mastery: `rgba(103, 154, 125, ${opacity})`,
     }[percent];
@@ -144,6 +145,11 @@
 
 <details>
   <summary>Click here for changelog</summary>
+  <b>Update 2021-03-01</b>
+  <ul>
+    <li>bug fixed with 100% being mixed in with 10% scrolls</li>
+  </ul>
+
   <b>Update 2021-02-18</b>
   <ul>
     <li>added etc and mastery books</li>
