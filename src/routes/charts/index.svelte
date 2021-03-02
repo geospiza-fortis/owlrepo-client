@@ -57,6 +57,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>OwlRepo | Charts</title>
+</svelte:head>
+
 <h1>Charts</h1>
 
 <SearchBox {itemData} {table} keys={["search_item"]} {initialSort} />

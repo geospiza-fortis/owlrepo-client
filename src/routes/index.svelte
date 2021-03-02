@@ -26,6 +26,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>OwlRepo | Home</title>
+</svelte:head>
+
 <FrontMatter />
 
 <CollapseInfo component={IndexDescription} text="Tell me more!" />

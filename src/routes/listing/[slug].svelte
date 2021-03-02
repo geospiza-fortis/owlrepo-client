@@ -43,6 +43,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>OwlRepo | Listing</title>
+</svelte:head>
+
 <h2>Summary</h2>
 
 <p>

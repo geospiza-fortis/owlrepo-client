@@ -20,6 +20,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>OwlRepo | Upload</title>
+</svelte:head>
+
 <h1>Upload Owls</h1>
 
 <Uploader />

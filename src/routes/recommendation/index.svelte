@@ -128,6 +128,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>OwlRepo | Recommendation</title>
+</svelte:head>
+
 <h1>Recommendations</h1>
 
 <p>

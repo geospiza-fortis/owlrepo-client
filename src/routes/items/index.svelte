@@ -46,6 +46,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>OwlRepo | Items</title>
+</svelte:head>
+
 <h1>Items</h1>
 
 <Table {data} {options} />
