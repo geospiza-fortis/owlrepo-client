@@ -39,15 +39,13 @@
       60: `rgba(157, 151, 188, ${opacity})`,
       70: `rgba(222, 167, 161, ${opacity})`,
       etc: `rgba(174, 188, 110, ${opacity})`,
-      mastery: `rgba(103, 154, 125, ${opacity})`
+      mastery: `rgba(103, 154, 125, ${opacity})`,
     }[percent];
   }
 
   onMount(async () => {
     // TODO: I wish I had some documentation on the schema of these...
-    let index = await getData("/api/v1/query/search_item_index", {
-      cache: "no-cache"
-    });
+    let index = await getData("/api/v1/query/search_item_index");
     let category = await getData("/api/v1/query/mllib_scrolls_category");
 
     console.log(category);
@@ -58,18 +56,15 @@
     }
 
     // also include some other things that are not necessarily scrolls
-    let masterybooks = index.filter(row =>
+    let masterybooks = index.filter((row) =>
       row.search_item.includes("Mastery Book")
     );
     for (let item of masterybooks) {
       category_data[item.search_item] = {
         percent: "mastery",
-        category: item.search_item
-          .split("]")[1]
-          .trim()
-          .toLowerCase(),
+        category: item.search_item.split("]")[1].trim().toLowerCase(),
         // could be better...
-        stat: item.search_item.includes("20") ? "20" : "30"
+        stat: item.search_item.includes("20") ? "20" : "30",
       };
     }
 
@@ -78,43 +73,43 @@
       "Clean Slate Scroll 20%": {
         percent: "etc",
         category: "css",
-        stat: "20%"
+        stat: "20%",
       },
       "Clean Slate Scroll 1%": {
         percent: "etc",
         category: "css",
-        stat: "1%"
+        stat: "1%",
       },
       "Chaos Scroll 60%": {
         percent: "etc",
         category: "chaos scroll",
-        stat: ""
+        stat: "",
       },
       "White Scroll": {
         percent: "etc",
         category: "white scroll",
-        stat: ""
+        stat: "",
       },
       "Onyx Apple": {
         percent: "etc",
         category: "onyx apple",
-        stat: ""
+        stat: "",
       },
       "Zombie's Lost Gold Tooth": {
         percent: "etc",
         category: "gold tooth",
-        stat: ""
+        stat: "",
       },
       "Dragon Scale": {
         percent: "etc",
         category: "dragon scale",
-        stat: ""
+        stat: "",
       },
       "Piece of Time": {
         percent: "etc",
         category: "piece of time",
-        stat: ""
-      }
+        stat: "",
+      },
     };
 
     price_data = [];
@@ -128,13 +123,100 @@
         ...category_data[item.search_item],
         ...item,
         days_since_update:
-          moment().diff(moment(item.search_item_timestamp), "days") || -1
+          moment().diff(moment(item.search_item_timestamp), "days") || -1,
       });
     }
 
-    price_data = groupBy(price_data, v => v.percent);
+    price_data = groupBy(price_data, (v) => v.percent);
   });
 </script>
+
+<svelte:head>
+  <title>OwlRepo | Guide</title>
+</svelte:head>
+
+<h1>Scroll Guide</h1>
+
+<p>
+  Only scrolls worth more than 350k median. Prices more than 1 month old are
+  greyed out.
+</p>
+
+<details>
+  <summary>Click here for changelog</summary>
+  <b>Update 2021-02-18</b>
+  <ul>
+    <li>added etc and mastery books</li>
+    <li>list prices are now p50 instead of p25</li>
+    <li>rows are clickable</li>
+  </ul>
+</details>
+<br />
+
+<div class="guide-container">
+  <div class="card-columns guide">
+    {#if price_data}
+      {#each Object.keys(price_data).sort() as key}
+        {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > 350000 || x.percent == "etc"), ["category", "stat"] ), 15) as chunk, i}
+          <div
+            class="card"
+            style="background-color: {getBackgroundColor(key)};"
+          >
+            <div
+              class="card-header"
+              style="background-color: {getBackgroundColor(key)};"
+            >
+              {#if parseInt(key)}
+                <h5>{key}% Scrolls</h5>
+              {:else}
+                <h5>{{ mastery: "Mastery Book", etc: "Et cetera" }[key]}</h5>
+              {/if}
+            </div>
+
+            <div class="card-body">
+              <table
+                class="table table-sm table-hover"
+                style="background-color: {getBackgroundColor(key)};"
+              >
+                <tbody>
+                  {#each chunk as row}
+                    <tr
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Updated {row.search_item_timestamp.slice(0, 10)}"
+                      on:click={() => {
+                        window.location = `/items?keyword=${encodeURIComponent(
+                          row.search_item
+                        )}`;
+                      }}
+                    >
+                      <td>
+                        {row.category
+                          .replace("one-handed", "1h")
+                          .replace("two-handed", "2h")}
+                      </td>
+                      <td>{row.stat}</td>
+                      <td>
+                        <span
+                          style="background-color: {row.days_since_update >
+                          7 * 4
+                            ? BG_BLACK
+                            : 'none'}"
+                        >
+                          {formatPrice(row.p50)}
+                        </span>
+                      </td>
+                    </tr>
+                  {/each}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        {/each}
+      {/each}
+    {/if}
+  </div>
+</div>
 
 <style>
   /* https://stackoverflow.com/a/24895631 */
@@ -190,79 +272,3 @@
     }
   }
 </style>
-
-<h1>Scroll Guide</h1>
-
-<p>
-  Only scrolls worth more than 350k median. Prices more than 1 month old are
-  greyed out.
-</p>
-
-<details>
-  <summary>Click here for changelog</summary>
-  <b>Update 2021-02-18</b>
-  <ul>
-    <li>added etc and mastery books</li>
-    <li>list prices are now p50 instead of p25</li>
-    <li>rows are clickable</li>
-  </ul>
-</details>
-<br />
-
-<div class="guide-container">
-  <div class="card-columns guide">
-    {#if price_data}
-      {#each Object.keys(price_data).sort() as key}
-        {#each chunkList(sortBy(
-            price_data[key].filter(x => x.p50 > 350000 || x.percent == 'etc'),
-            ['category', 'stat']
-          ), 15) as chunk, i}
-          <div
-            class="card"
-            style="background-color: {getBackgroundColor(key)};">
-            <div
-              class="card-header"
-              style="background-color: {getBackgroundColor(key)};">
-              {#if parseInt(key)}
-                <h5>{key}% Scrolls</h5>
-              {:else}
-                <h5>{{ mastery: 'Mastery Book', etc: 'Et cetera' }[key]}</h5>
-              {/if}
-            </div>
-
-            <div class="card-body">
-              <table
-                class="table table-sm table-hover"
-                style="background-color: {getBackgroundColor(key)};">
-                <tbody>
-                  {#each chunk as row}
-                    <tr
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Updated {row.search_item_timestamp.slice(0, 10)}"
-                      on:click={() => {
-                        window.location = `/items?keyword=${encodeURIComponent(row.search_item)}`;
-                      }}>
-                      <td>
-                        {row.category
-                          .replace('one-handed', '1h')
-                          .replace('two-handed', '2h')}
-                      </td>
-                      <td>{row.stat}</td>
-                      <td>
-                        <span
-                          style="background-color: {row.days_since_update > 7 * 4 ? BG_BLACK : 'none'}">
-                          {formatPrice(row.p50)}
-                        </span>
-                      </td>
-                    </tr>
-                  {/each}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        {/each}
-      {/each}
-    {/if}
-  </div>
-</div>

@@ -1,6 +1,6 @@
 # owlrepo-client
 
-This is the source for [OwlRepo](https://owlrepo.com).
+This is the client source for [OwlRepo](https://owlrepo.com).
 
 ## Get started
 
@@ -18,7 +18,7 @@ Copy over the `.env.template` to `.env` to define the testing server. Then start
 npm run dev
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app
+Navigate to [localhost:3000](http://localhost:3000). You should see your app
 running. Edit a component file in `src`, save it, and reload the page to see
 your changes.
 

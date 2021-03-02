@@ -11,10 +11,24 @@
   // pageview for analytics
   $: process.client &&
     $page &&
-    gtag("config", "UA-172155429-1", {
-      page_path: $page.path
-    });
+    gtag("config", "G-NBGZYVSFSH");
 </script>
+
+<Navbar {segment} />
+<main>
+  <slot />
+</main>
+
+<hr />
+<footer>
+  OwlRepo __VERSION__ (
+  <a
+    href="https://github.com/geospiza-fortis/owlrepo-client/commit/__GIT_COMMIT__"
+  >
+    __GIT_COMMIT__
+  </a>
+  )
+</footer>
 
 <style>
   /* 
@@ -57,18 +71,3 @@
     margin-bottom: 2rem;
   }
 </style>
-
-<Navbar {segment} />
-<main>
-  <slot />
-</main>
-
-<hr />
-<footer>
-  OwlRepo __VERSION__ (
-  <a
-    href="https://github.com/geospiza-fortis/owlrepo-client/commit/__GIT_COMMIT__">
-    __GIT_COMMIT__
-  </a>
-  )
-</footer>

@@ -11,12 +11,12 @@
 
   const uploadOptions = {
     initialSort: [{ column: "timestamp", dir: "desc" }],
-    columns: uploadColumns
+    columns: uploadColumns,
   };
 
   const curationOptions = {
     initialSort: [{ column: "timestamp", dir: "desc" }],
-    columns: curationColumns
+    columns: curationColumns,
   };
 
   onMount(async () => {
@@ -25,6 +25,10 @@
     contributor_id = await localforage.getItem("contributor-id");
   });
 </script>
+
+<svelte:head>
+  <title>OwlRepo | Personal</title>
+</svelte:head>
 
 <h1>Personal Statistics</h1>
 

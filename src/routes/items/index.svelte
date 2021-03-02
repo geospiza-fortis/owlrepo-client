@@ -18,8 +18,8 @@
     pagination: "local",
     paginationSize: 20,
     dataFiltered: (filters, rows) => {
-      let data = rows.map(x => x.getData());
-      let set = new Set(data.map(x => x.search_item));
+      let data = rows.map((x) => x.getData());
+      let set = new Set(data.map((x) => x.search_item));
       is_chartable = set.size == 1;
       search_item_name = set.values().next().value;
     },
@@ -27,26 +27,28 @@
       ? [
           {
             field: "search_item",
-            value: keyword
-          }
+            value: keyword,
+          },
         ]
       : undefined,
     initialSort: [{ column: "search_item_timestamp", dir: "desc" }],
-    columns: columns
+    columns: columns,
   };
 
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
     keyword = urlParams.get("keyword");
 
-    let resp = await fetch("/api/v1/query/search_item_listing", {
-      cache: "no-cache"
-    });
+    let resp = await fetch("/api/v1/query/search_item_listing");
     data = await resp.json();
 
     lastModified = new Date(resp.headers.get("last-modified")).toISOString();
   });
 </script>
+
+<svelte:head>
+  <title>OwlRepo | Items</title>
+</svelte:head>
 
 <h1>Items</h1>
 

@@ -10,8 +10,8 @@
     {
       text: "Forum",
       href:
-        "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/"
-    }
+        "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/",
+    },
   ];
 </script>
 
@@ -27,7 +27,7 @@
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem
+    DropdownItem,
   } from "sveltestrap/src";
 
   const breakpoint = 4;
@@ -39,12 +39,6 @@
     isOpen = event.detail.isOpen;
   }
 </script>
-
-<style>
-  :global(.nav-link) {
-    color: rgba(255, 255, 255, 0.95);
-  }
-</style>
 
 <Navbar class="navbar-dark bg-primary" expand="md">
   {#if !isOpen}
@@ -65,7 +59,8 @@
           <NavItem>
             <NavLink
               href={item.href}
-              active={!segment ? '' == item.href : segment == item.href}>
+              active={!segment ? "" == item.href : segment == item.href}
+            >
               {item.text}
             </NavLink>
           </NavItem>
@@ -89,3 +84,9 @@
     </Nav>
   </Collapse>
 </Navbar>
+
+<style>
+  :global(.nav-link) {
+    color: rgba(255, 255, 255, 0.95);
+  }
+</style>

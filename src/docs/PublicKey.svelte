@@ -21,8 +21,8 @@
     <code>
       <pre>{JSON.stringify(client_public_key.toJSON(), null, 4)}</pre>
     </code>
-    This is a cryptographic key that can be used to prove your identity. Feel
-    free to share your public key as you see fit. For the technically savvy, do
-    not share your private key (available in IndexedDB) with others.
+    This is a cryptographic key that can be used to prove your identity. Feel free
+    to share your public key as you see fit. For the technically savvy, do not share
+    your private key (available in IndexedDB) with others.
   </p>
 {/if}

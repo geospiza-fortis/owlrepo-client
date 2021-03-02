@@ -20,13 +20,13 @@
   let cutoff = 3;
 
   function flatten(data) {
-    return data.payload.flatMap(row => {
+    return data.payload.flatMap((row) => {
       return row.body.entries.map((entry, entryIndex) => ({
         ...row.screenshot,
         ...row.search,
         ...row.paginator,
         ...entry,
-        entry_index: entryIndex
+        entry_index: entryIndex,
       }));
     });
   }
@@ -43,12 +43,9 @@
   });
 </script>
 
-<style>
-  #spinner {
-    width: 100px;
-    margin: 0 auto;
-  }
-</style>
+<svelte:head>
+  <title>OwlRepo | Listing</title>
+</svelte:head>
 
 <h2>Summary</h2>
 
@@ -63,7 +60,7 @@
 {#if flattened}
   <SummaryView {flattened} {cutoff} />
   <h2>Results</h2>
-  <button class="btn btn-info" on:click={table.copyToClipboard('active', true)}>
+  <button class="btn btn-info" on:click={table.copyToClipboard("active", true)}>
     Copy to Clipboard
   </button>
 {:else if !ready}
@@ -77,4 +74,16 @@
 <Table
   bind:table
   data={flattened}
-  options={{ clipboard: 'copy', clipboardCopyStyled: false, columns: resultColumns }} />
+  options={{
+    clipboard: "copy",
+    clipboardCopyStyled: false,
+    columns: resultColumns,
+  }}
+/>
+
+<style>
+  #spinner {
+    width: 100px;
+    margin: 0 auto;
+  }
+</style>

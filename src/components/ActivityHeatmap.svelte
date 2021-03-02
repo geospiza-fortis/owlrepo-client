@@ -37,7 +37,7 @@
         .subtract(range - 1, "months")
         .toDate(),
       data: transformData(data),
-      tooltip: true
+      tooltip: true,
     });
   }
 
