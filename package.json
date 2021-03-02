@@ -1,7 +1,7 @@
 {
   "name": "owlrepo-client",
   "version": "2.2.0",
-  "repository": "https://bitbucket.org/geospiza/owlrepo",
+  "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "scripts": {
     "dev": "sapper dev",
