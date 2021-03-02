@@ -12,7 +12,7 @@ machine-read to create a repository of owl search results. Please see the
 feedback.
 
 <div style="text-align:center;">
-<a href="guide" class="btn btn-info" type="button">Click here for the scroll guide.</a>
+<button class="btn btn-info" type="button">Click here for the scroll guide.</a>
 </div>
 <br />
 

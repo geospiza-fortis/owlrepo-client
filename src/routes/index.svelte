@@ -7,7 +7,6 @@
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
   import CollapseInfo from "../components/CollapseInfo.svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
   import { onMount } from "svelte";
 
   const BG_RED = "#ffaebf";

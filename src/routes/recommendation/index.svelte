@@ -48,9 +48,7 @@
   }
 
   async function getData(route) {
-    let resp = await fetch(route, {
-      cache: "no-cache",
-    });
+    let resp = await fetch(route);
     let data = await resp.json();
     // NOTE: stateful, will globally set whatever was called last
     last_modified = new Date(resp.headers.get("last-modified")).toISOString();

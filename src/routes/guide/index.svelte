@@ -45,9 +45,7 @@
 
   onMount(async () => {
     // TODO: I wish I had some documentation on the schema of these...
-    let index = await getData("/api/v1/query/search_item_index", {
-      cache: "no-cache",
-    });
+    let index = await getData("/api/v1/query/search_item_index");
     let category = await getData("/api/v1/query/mllib_scrolls_category");
 
     console.log(category);
