@@ -17,7 +17,7 @@
   let top_contributors_data;
 
   $: total_contributions = top_contributors_data
-    ? top_contributors_data.map(x => x.n).reduce((a, b) => a + b)
+    ? top_contributors_data.map((x) => x.n).reduce((a, b) => a + b)
     : 0;
 
   let task_data;
@@ -44,7 +44,7 @@
     if (show_candidates) {
       candidate = new Tabulator("#candidate", {
         data: data,
-        autoColumns: true
+        autoColumns: true,
       });
     }
   });
@@ -70,7 +70,7 @@
       task_id: task_id,
       screenshot_sha1: screenshot_sha1,
       entries: slim.payload[i].body.entries,
-      screenshot_url: `${base}/raw/${slim.payload[i].screenshot.name}`
+      screenshot_url: `${base}/raw/${slim.payload[i].screenshot.name}`,
     };
     task_old_entries = JSON.parse(stringify(task_data.entries));
     task_table = new Tabulator("#transcribed", {
@@ -82,21 +82,21 @@
           title: "bundle",
           field: "bundle",
           editor: "number",
-          editorParams: { min: 1, max: 200 }
+          editorParams: { min: 1, max: 200 },
         },
         {
           title: "price",
           field: "price",
           editor: "number",
-          editorParams: { min: 1 }
+          editorParams: { min: 1 },
         },
         {
           title: "quantity",
           field: "quantity",
           editor: "number",
-          editorParams: { min: 1, max: 200 }
-        }
-      ]
+          editorParams: { min: 1, max: 200 },
+        },
+      ],
     });
     task_start = new Date();
   }
@@ -117,7 +117,7 @@
     uploads.push({
       timestamp: new Date().toISOString(),
       task_id: task_id,
-      screenshot_sha1: screenshot_sha1
+      screenshot_sha1: screenshot_sha1,
     });
     await localforage.setItem("personal-curations", uploads);
   }
@@ -126,14 +126,14 @@
     let old = stringify(task_old_entries);
     let mod = stringify(task_table.getData());
     let distance = levenshtein.get(old, mod);
-    let diff = diffWords(old, mod).map(entry => ({
+    let diff = diffWords(old, mod).map((entry) => ({
       count: entry.count,
       type: entry.removed ? "removed" : entry.added ? "added" : "unchanged",
-      value: entry.value
+      value: entry.value,
     }));
     task_diff = {
       characters: diff,
-      distance: distance
+      distance: distance,
     };
     console.log(task_diff);
     if (!distance) {
@@ -144,7 +144,7 @@
     }
     task_diff_table = new Tabulator("#task_diff", {
       data: diff,
-      autoColumns: true
+      autoColumns: true,
     });
   }
 
@@ -157,9 +157,9 @@
       screenshot_sha1: task_data.screenshot_sha1,
       payload: {
         entries: task_table.getData(),
-        is_missing_rows: is_missing_rows
+        is_missing_rows: is_missing_rows,
       },
-      diff: task_diff
+      diff: task_diff,
     };
     task_validator = validate(submission, schema);
     if (!task_validator.valid) {
@@ -168,10 +168,10 @@
     }
     let resp = await fetch("/api/v1/submit_curate_task", {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(submission),
-      method: "post"
+      method: "post",
     });
     if (resp.status == 200) {
       await updatePersonalCurations(
@@ -191,15 +191,6 @@
   }
 </script>
 
-<style>
-  :global(.tabulator-row:nth-child(2n)) {
-    background-color: #222;
-  }
-  :global(.tabulator-row-odd) {
-    background-color: #333;
-  }
-</style>
-
 <h1>Curation</h1>
 
 <p>
@@ -211,8 +202,8 @@
   <p>
     Your contributor id is
     <code>{contributor_id}</code>
-    . There are currently {data.length} candidate tasks in the current batch,
-    with {total_contributions} tasks completed so far.
+    . There are currently {data.length} candidate tasks in the current batch, with
+    {total_contributions} tasks completed so far.
   </p>
 {/if}
 
@@ -236,7 +227,8 @@
       <img
         id="screenshot"
         src={task_data.screenshot_url}
-        alt="random screenshot" />
+        alt="random screenshot"
+      />
     {/if}
     <div id="transcribed" />
   </div>
@@ -269,3 +261,12 @@
     {/if}
   {/if}
 {/if}
+
+<style>
+  :global(.tabulator-row:nth-child(2n)) {
+    background-color: #222;
+  }
+  :global(.tabulator-row-odd) {
+    background-color: #333;
+  }
+</style>

@@ -7,7 +7,7 @@
     readDataAsync,
     readImageAsync,
     dataURItoBlob,
-    validateOwl
+    validateOwl,
   } from "../image.js";
   import moment from "moment";
   import localforage from "localforage";
@@ -107,27 +107,27 @@
 
     // https://stackoverflow.com/a/38968948
     // https://stackoverflow.com/a/6756680
-    window.ondragover = window.ondragenter = ev => {
+    window.ondragover = window.ondragenter = (ev) => {
       ev.preventDefault();
     };
 
-    window.ondrop = async ev => {
+    window.ondrop = async (ev) => {
       ev.preventDefault();
       await appendToFiles(ev.dataTransfer.files);
     };
 
-    window.onkeydown = ev => {
+    window.onkeydown = (ev) => {
       //   console.log(ev.key);
       if (ev.key === "Delete") {
         // get the index of files that are selected
-        files = files.filter(file => !file.selected);
-        console.log(files.map(e => e.name));
+        files = files.filter((file) => !file.selected);
+        console.log(files.map((e) => e.name));
         files = files;
       }
     };
 
     let fileInput = document.getElementById("fileInput");
-    fileInput.onchange = async ev => {
+    fileInput.onchange = async (ev) => {
       await appendToFiles(fileInput.files);
     };
   });
@@ -144,7 +144,7 @@
       "metadata",
       JSON.stringify({
         // current timestamp in local timezone
-        timestamp: moment().format()
+        timestamp: moment().format(),
       })
     );
     let images = document.getElementById("screenshots").children;
@@ -158,9 +158,9 @@
       let resp = await fetch("/api/v1/upload", {
         method: "post",
         headers: new Headers({
-          Authorization: `Bearer ${token.access_token}`
+          Authorization: `Bearer ${token.access_token}`,
         }),
-        body: formData
+        body: formData,
       });
       let data = await resp.json();
 
@@ -180,6 +180,70 @@
     }
   }
 </script>
+
+<form on:submit={handleSubmit}>
+  <!-- Nice way to hide the text: https://stackoverflow.com/a/14806776 -->
+  <input
+    style="display: none;"
+    type="file"
+    accept="image/png"
+    name="file[]"
+    id="fileInput"
+    multiple
+  />
+  <input style="display: none;" id="fileSubmit" type="submit" value="Upload" />
+</form>
+
+{#if total > 0}
+  {#if progress < total}
+    Processing {progress}/{total}
+    {#if error}with {error} errors{/if}
+    ...
+  {:else}Processed {progress}/{total} with {error} errors.{/if}
+{/if}
+
+<div id="container">
+  <div id="wrapper">
+    <div id="filenames">
+      <div id="filelist">
+        {#each files as file, i}
+          {#if file.selected}
+            <mark>{file.name}</mark>
+          {:else}{file.name}{/if}
+          <br />
+        {/each}
+      </div>
+      <div id="upload-button-container">
+        <button onclick="document.getElementById('fileInput').click();">
+          Browse...
+        </button>
+        {#if files.length > 0}
+          <div class="divider" />
+          <button
+            id="upload-button"
+            onclick="document.getElementById('fileSubmit').click();"
+          >
+            Upload
+          </button>
+        {/if}
+      </div>
+    </div>
+
+    <div id="screenshots">
+      {#each files as file, i}
+        <img
+          src={file.img}
+          alt={file.name}
+          class={file.selected ? "selected" : ""}
+          on:click={() => (files[i].selected = !files[i].selected)}
+        />
+      {/each}
+      {#if files.length == 0}
+        <LastUpload />
+      {/if}
+    </div>
+  </div>
+</div>
 
 <style>
   /* selected: https://stackoverflow.com/a/24693278 */
@@ -261,65 +325,3 @@
     }
   }
 </style>
-
-<form on:submit={handleSubmit}>
-  <!-- Nice way to hide the text: https://stackoverflow.com/a/14806776 -->
-  <input
-    style="display: none;"
-    type="file"
-    accept="image/png"
-    name="file[]"
-    id="fileInput"
-    multiple />
-  <input style="display: none;" id="fileSubmit" type="submit" value="Upload" />
-</form>
-
-{#if total > 0}
-  {#if progress < total}
-    Processing {progress}/{total}
-    {#if error}with {error} errors{/if}
-    ...
-  {:else}Processed {progress}/{total} with {error} errors.{/if}
-{/if}
-
-<div id="container">
-  <div id="wrapper">
-    <div id="filenames">
-      <div id="filelist">
-        {#each files as file, i}
-          {#if file.selected}
-            <mark>{file.name}</mark>
-          {:else}{file.name}{/if}
-          <br />
-        {/each}
-      </div>
-      <div id="upload-button-container">
-        <button onclick="document.getElementById('fileInput').click();">
-          Browse...
-        </button>
-        {#if files.length > 0}
-          <div class="divider" />
-          <button
-            id="upload-button"
-            onclick="document.getElementById('fileSubmit').click();">
-            Upload
-          </button>
-        {/if}
-
-      </div>
-    </div>
-
-    <div id="screenshots">
-      {#each files as file, i}
-        <img
-          src={file.img}
-          alt={file.name}
-          class={file.selected ? 'selected' : ''}
-          on:click={() => (files[i].selected = !files[i].selected)} />
-      {/each}
-      {#if files.length == 0}
-        <LastUpload />
-      {/if}
-    </div>
-  </div>
-</div>

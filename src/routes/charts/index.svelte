@@ -27,7 +27,7 @@
     for (let key in counter) {
       itemData.push({
         search_item: key,
-        num_owls: counter[key]
+        num_owls: counter[key],
       });
     }
     return itemData;
@@ -43,13 +43,13 @@
     columns: [
       {
         title: "Search Item",
-        field: "search_item"
+        field: "search_item",
       },
       {
         title: "# Owls",
-        field: "num_owls"
-      }
-    ]
+        field: "num_owls",
+      },
+    ],
   };
 
   onMount(async () => {
@@ -59,7 +59,7 @@
 
 <h1>Charts</h1>
 
-<SearchBox {itemData} {table} keys={['search_item']} {initialSort} />
+<SearchBox {itemData} {table} keys={["search_item"]} {initialSort} />
 <Table bind:table data={itemData} {options} />
 
 <PriceQuantityCharts data={listingData} {search_item_name} />

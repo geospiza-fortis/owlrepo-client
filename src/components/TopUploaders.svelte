@@ -27,10 +27,10 @@
           }
           return value;
         },
-        widthGrow: 3
+        widthGrow: 3,
       },
-      { title: "Uploads (last 7 days)", field: "n" }
-    ]
+      { title: "Uploads (last 7 days)", field: "n" },
+    ],
   };
 
   onMount(async () => {

@@ -11,12 +11,12 @@
 
   const uploadOptions = {
     initialSort: [{ column: "timestamp", dir: "desc" }],
-    columns: uploadColumns
+    columns: uploadColumns,
   };
 
   const curationOptions = {
     initialSort: [{ column: "timestamp", dir: "desc" }],
-    columns: curationColumns
+    columns: curationColumns,
   };
 
   onMount(async () => {

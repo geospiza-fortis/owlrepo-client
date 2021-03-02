@@ -14,9 +14,11 @@
     (table = new Tabulator(element, {
       data: data,
       layout: "fitDataFill",
-      ...options
+      ...options,
     }));
 </script>
+
+<div bind:this={element} />
 
 <style>
   :global(.tabulator-row:nth-child(2n)) {
@@ -26,5 +28,3 @@
     background-color: #333;
   }
 </style>
-
-<div bind:this={element} />

@@ -44,7 +44,8 @@
 {#if random_listing}
   <PriceQuantityCharts
     data={random_listing}
-    search_item_name={random_listing[0].search_item} />
+    search_item_name={random_listing[0].search_item}
+  />
 {/if}
 
 <h2>Contributions</h2>
@@ -59,8 +60,8 @@
   <span style="padding:0 3px; color: #333; background: {BG_RED}">red</span>
   are likely worth uploading. Look at the
   <a href="/recommendation">recommendations</a>
-  for a list of outdated items ranked by value. Also help by correct errors in
-  screenshots on the
+  for a list of outdated items ranked by value. Also help by correct errors in screenshots
+  on the
   <a href="/curate">curation</a>
   page.
 </p>

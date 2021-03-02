@@ -1,15 +1,15 @@
 <script>
   export let data;
-  export let transform = res => res;
+  export let transform = (res) => res;
   export let layout = {};
   let plotElement;
 
   let darkStyle = {
     font: {
-      color: "#fff"
+      color: "#fff",
     },
     paper_bgcolor: "#222222",
-    plot_bgcolor: "#222222"
+    plot_bgcolor: "#222222",
   };
 
   $: plotElement &&
@@ -22,10 +22,10 @@
         margin: {
           l: 50,
           r: 0,
-          b: 50
+          b: 50,
         },
         ...darkStyle,
-        ...layout
+        ...layout,
       },
       { responsive: true }
     );

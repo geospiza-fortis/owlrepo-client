@@ -27,7 +27,8 @@
 <CollapseInfo
   component={UploadInstructions}
   componentId="uploadInstructions"
-  text="How do I upload?" />
+  text="How do I upload?"
+/>
 
 <h2>Top Uploaders</h2>
 
@@ -39,7 +40,8 @@
 <CollapseInfo
   component={PublicKey}
   componentId="publicKey"
-  text="What is a thumbprint?" />
+  text="What is a thumbprint?"
+/>
 
 <TopUploaders />
 

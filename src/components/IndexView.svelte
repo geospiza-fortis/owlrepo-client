@@ -47,7 +47,7 @@
         listings[i].metadata = {
           mode: "unknown",
           pages: -1,
-          items: -1
+          items: -1,
         };
       }
     }
@@ -60,13 +60,6 @@
   });
 </script>
 
-<style>
-  #spinner {
-    width: 100px;
-    margin: 0 auto;
-  }
-</style>
-
 {#if listings.length > 0}
   <table class="table table-sm table-bordered">
     <tr>
@@ -77,7 +70,7 @@
     </tr>
     {#each listings as entry}
       <tr>
-        <td>{entry.completion_timestamp.split('.')[0]}</td>
+        <td>{entry.completion_timestamp.split(".")[0]}</td>
         <td>
           <a href="/listing/{entry.id}">{entry.metadata.mode}</a>
         </td>
@@ -96,7 +89,8 @@
           offset = 0;
         }
         await update();
-      }}>
+      }}
+    >
       Previous
     </button>
   {:else}
@@ -110,15 +104,21 @@
       on:click={async () => {
         offset += limit;
         await update();
-      }}>
+      }}
+    >
       Next
     </button>
   {/if}
   Page {Math.ceil(offset / limit) + 1}
-{:else}
-  {#if !is_cached}
-    <div id="spinner">
-      <Stretch size="60" color="#FF3E00" unit="px" />
-    </div>
-  {/if}
+{:else if !is_cached}
+  <div id="spinner">
+    <Stretch size="60" color="#FF3E00" unit="px" />
+  </div>
 {/if}
+
+<style>
+  #spinner {
+    width: 100px;
+    margin: 0 auto;
+  }
+</style>

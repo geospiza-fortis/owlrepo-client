@@ -29,10 +29,10 @@
           }
           return value;
         },
-        widthGrow: 3
+        widthGrow: 3,
       },
-      { title: "Contributions (all time)", field: "n" }
-    ]
+      { title: "Contributions (all time)", field: "n" },
+    ],
   };
 
   onMount(async () => {

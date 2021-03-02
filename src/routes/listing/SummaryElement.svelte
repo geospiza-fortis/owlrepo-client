@@ -12,15 +12,18 @@
   function transformPlot(data) {
     return [
       {
-        y: dropOutliers(data.map(row => row.price), outlierCutoff),
+        y: dropOutliers(
+          data.map((row) => row.price),
+          outlierCutoff
+        ),
         type: "box",
-        name: "prices"
-      }
+        name: "prices",
+      },
     ];
   }
 
   function transformTable(data) {
-    let prices = data.map(row => row.price);
+    let prices = data.map((row) => row.price);
     let cleanPrices = dropOutliers(prices, outlierCutoff);
 
     let summary = generateSummary(prices);
@@ -31,7 +34,7 @@
       result.push({
         key: summary[i].key,
         raw: summary[i].value,
-        clean: cleanSummary[i].value
+        clean: cleanSummary[i].value,
       });
     }
     return result;
@@ -45,8 +48,10 @@
     <p>
       There are
       <b>{data[0].results}</b>
-      search results with {data.length} results ({((data.length / data[0].results) * 100).toFixed(1)}%)
-      captured.
+      search results with {data.length} results ({(
+        (data.length / data[0].results) *
+        100
+      ).toFixed(1)}%) captured.
     </p>
     <Table data={transformTable(data)} options={{ columns: summaryColumns }} />
   </div>
@@ -54,6 +59,7 @@
     <Plot
       {data}
       transform={transformPlot}
-      layout={{ title: 'Price Box Plot' }} />
+      layout={{ title: "Price Box Plot" }}
+    />
   </div>
 </div>
