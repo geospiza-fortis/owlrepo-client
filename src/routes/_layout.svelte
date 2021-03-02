@@ -11,9 +11,7 @@
   // pageview for analytics
   $: process.client &&
     $page &&
-    gtag("config", "UA-172155429-1", {
-      page_path: $page.path,
-    });
+    gtag("config", "G-NBGZYVSFSH");
 </script>
 
 <Navbar {segment} />
