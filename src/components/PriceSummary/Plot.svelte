@@ -13,8 +13,8 @@
         l: 0,
         r: 0,
         b: 25,
-        t: 25
-      }
+        t: 25,
+      },
     });
   $: table && row && trackEvent(table, row);
   $: data = row ? row.getData() : null;
@@ -35,8 +35,8 @@
         upperfence: [r.p100.toPrecision(2)],
         mean: [r.mean.toPrecision(2)],
         sd: [r.std.toPrecision(2)],
-        orientation: "h"
-      }
+        orientation: "h",
+      },
     ];
   }
 
@@ -50,14 +50,14 @@
     gtag("config", "UA-172155429-1", {
       custom_map: {
         dimension1: "list_head",
-        dimension2: "list_position"
-      }
+        dimension2: "list_position",
+      },
     });
     let event_data = {
       event_category: "engagement",
       event_label: row.getData().search_item,
       list_head: first.search_item,
-      list_position: row.getPosition(true)
+      list_position: row.getPosition(true),
     };
     if (event_data.list_position == 0) {
       // ignore data at the head of the list

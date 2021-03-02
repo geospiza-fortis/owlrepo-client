@@ -38,13 +38,13 @@
     pagination: "local",
     paginationSize: settings.paginationSize,
     initialSort: [{ column: settings.sortColumn, dir: settings.sortDir }],
-    dataLoading: _ =>
+    dataLoading: (_) =>
       debounce(() => {
         selectedRow = null;
       }),
     rowClick: (_, row) => (selectedRow = row),
     columns: columns,
-    rowFormatter: row => {
+    rowFormatter: (row) => {
       // http://tabulator.info/docs/4.0/format
       // https://www.colorhexa.com/ffc6ae
       let element = row.getElement();
@@ -61,26 +61,24 @@
         dateElement.style.backgroundColor = BG_YELLOW;
         dateElement.style.color = "#333";
       }
-    }
+    },
   };
 
-  onMount(async () => {
-    async function loadSearchItems() {
-      let resp = await fetch("/api/v1/query/search_item_index", {
-        cache: "no-cache"
-      });
-      let data = await resp.json();
-      itemsLastModified = new Date(
-        resp.headers.get("last-modified")
-      ).toISOString();
-      itemData = data.map(obj => ({
-        ...obj,
-        days_since_update:
-          moment().diff(moment(obj.search_item_timestamp), "days") || -1
-      }));
-      itemsReady = true;
-    }
+  async function loadSearchItems() {
+    let resp = await fetch("/api/v1/query/search_item_index");
+    let data = await resp.json();
+    itemsLastModified = new Date(
+      resp.headers.get("last-modified")
+    ).toISOString();
+    itemData = data.map((obj) => ({
+      ...obj,
+      days_since_update:
+        moment().diff(moment(obj.search_item_timestamp), "days") || -1,
+    }));
+    itemsReady = true;
+  }
 
+  onMount(async () => {
     await loadSearchItems();
   });
 </script>
@@ -107,8 +105,9 @@
   <SearchBox
     {itemData}
     {table}
-    keys={['search_item']}
-    initialSort={[{ column: settings.sortColumn, dir: settings.sortDir }]} />
+    keys={["search_item"]}
+    initialSort={[{ column: settings.sortColumn, dir: settings.sortDir }]}
+  />
 {/if}
 
 <Table bind:table data={itemData} {options} />

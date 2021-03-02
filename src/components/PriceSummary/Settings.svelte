@@ -2,7 +2,6 @@
   import { Collapse } from "sveltestrap/src";
   import localforage from "localforage";
   import { columns } from "./columns.js";
-  import { onMount } from "svelte";
 
   export let settings;
 
@@ -17,7 +16,7 @@
 
   $: getSettings(key)
     .catch(console.log)
-    .then(obj => {
+    .then((obj) => {
       if (obj) {
         ({ sortColumn, sortDir, paginationSize } = obj);
       }
@@ -26,15 +25,11 @@
   $: settings = {
     sortColumn: sortColumn,
     sortDir: sortDir,
-    paginationSize: paginationSize
+    paginationSize: paginationSize,
   };
   $: process.env.NODE_ENV == "development" &&
     console.log(`search index settings ${JSON.stringify(settings)}`);
-  $: loaded &&
-    localforage
-      .setItem(key, settings)
-      .catch(console.log)
-      .then();
+  $: loaded && localforage.setItem(key, settings).catch(console.log).then();
 
   async function getSettings(key) {
     let storedItem = await localforage.getItem(key);
@@ -50,7 +45,8 @@
 <button
   class="btn btn-primary"
   type="button"
-  on:click={() => (isOpen = !isOpen)}>
+  on:click={() => (isOpen = !isOpen)}
+>
   Settings
 </button>
 
@@ -63,7 +59,7 @@
       {/each}
     </select>
     <select bind:value={sortDir}>
-      {#each [{ value: 'desc', title: 'descending' }, { value: 'asc', title: 'ascending' }] as item}
+      {#each [{ value: "desc", title: "descending" }, { value: "asc", title: "ascending" }] as item}
         <option value={item.value}>{item.title}</option>
       {/each}
     </select>

@@ -4,14 +4,13 @@
   export function refreshLastUpload(data_url = null, task_id = null) {
     lastUpload.set({
       img: refreshStorage("last-upload-data-url", data_url),
-      task_id: refreshStorage("last-upload-task-id", task_id)
+      task_id: refreshStorage("last-upload-task-id", task_id),
     });
   }
 </script>
 
 <script>
   import { onMount } from "svelte";
-  import { writable } from "svelte/store";
 
   function refreshStorage(key, value = null) {
     if (value) {
