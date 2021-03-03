@@ -4,9 +4,13 @@
   import { formatPrice } from "../../tabulator.js";
   import { groupBy, sortBy } from "lodash";
   import moment from "moment";
+  import localforage from "localforage";
 
   let category_data;
   let price_data;
+
+  let threshold;
+  $: threshold && localforage.setItem("guide-threshold", threshold);
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
@@ -45,6 +49,7 @@
   }
 
   onMount(async () => {
+    threshold = (await localforage.getItem("guide-threshold")) || 350000;
     // TODO: I wish I had some documentation on the schema of these...
     let index = await getData("/api/v1/query/search_item_index");
     let category = await getData("/api/v1/query/mllib_scrolls_category");
@@ -138,10 +143,29 @@
 
 <h1>Scroll Guide</h1>
 
-<p>
-  Only scrolls worth more than 350k median. Prices more than 1 month old are
-  greyed out.
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <p>
+        Only scrolls worth more than {formatPrice(threshold)} median. Prices more
+        than 1 month old are greyed out.
+      </p>
+    </div>
+    <div class="col">
+      <label
+        >Minimum price
+        <input type="number" bind:value={threshold} />
+      </label>
+      <input
+        type="range"
+        min="0"
+        max="1000000"
+        step="50000"
+        bind:value={threshold}
+      />
+    </div>
+  </div>
+</div>
 
 <details>
   <summary>Click here for changelog</summary>
@@ -163,7 +187,7 @@
   <div class="card-columns guide">
     {#if price_data}
       {#each Object.keys(price_data).sort() as key}
-        {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > 350000 || x.percent == "etc"), ["category", "stat"] ), 15) as chunk, i}
+        {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > threshold || x.percent == "etc"), ["category", "stat"] ), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};"
