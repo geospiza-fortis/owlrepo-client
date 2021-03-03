@@ -41,19 +41,6 @@ export default {
     plugins: [
       replaceVersion(),
       replace({
-        // very brittle: helpers.nodeCrypto.getHashes is not a function
-        // ecdsaSignFN
-        "helpers.nodeCrypto": "(false",
-        delimiters: ["(", " "],
-        preventAssignment: true,
-      }),
-      replace({
-        "helpers.nodeCrypto.createHash(md)": "return;",
-        delimiters: ["var digest = ", ";"],
-        preventAssignment: true,
-      }),
-      replace({
-        "process.client": true,
         "process.browser": true,
         "process.env.NODE_ENV": JSON.stringify(mode),
         preventAssignment: true,
@@ -131,7 +118,6 @@ export default {
     plugins: [
       replaceVersion(),
       replace({
-        "process.client": false,
         "process.browser": false,
         "process.env.NODE_ENV": JSON.stringify(mode),
         preventAssignment: true,
@@ -167,7 +153,6 @@ export default {
       resolve(),
       replaceVersion(),
       replace({
-        "process.client": true,
         "process.browser": true,
         "process.env.NODE_ENV": JSON.stringify(mode),
         preventAssignment: true,
