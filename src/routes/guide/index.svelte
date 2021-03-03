@@ -2,132 +2,27 @@
   import { onMount } from "svelte";
   // tabulator is a misnomer for a module name
   import { formatPrice } from "../../tabulator.js";
-  import { groupBy, sortBy } from "lodash";
-  import moment from "moment";
+  import { sortBy } from "lodash";
   import localforage from "localforage";
+  import {
+    CATEGORIES,
+    getData,
+    chunkList,
+    getBackgroundColor,
+    transform,
+  } from "./index.js";
 
-  let category_data;
   let price_data;
 
   let threshold;
   $: threshold && localforage.setItem("guide-threshold", threshold);
-
-  const CATEGORIES = ["10", "30", "60", "70", "100", "etc", "mastery"];
-
-  async function getData(route) {
-    let resp = await fetch(route);
-    let data = await resp.json();
-    return data;
-  }
-
-  function chunkList(list, size) {
-    // split it in half
-    if (list.length > size) {
-      let mid = Math.floor(list.length / 2);
-      return [list.slice(0, mid), list.slice(mid, list.length)];
-    } else {
-      return [list];
-    }
-  }
-
-  function getBackgroundColor(percent, opacity = 1.0) {
-    // https://www.schemecolor.com/pastel-calm.php
-    const colors = [
-      `rgba(165, 200, 228, ${opacity})`,
-      `rgba(192, 236, 204, ${opacity})`,
-      `rgba(242, 221, 192, ${opacity})`,
-      `rgba(249, 240, 193, ${opacity})`,
-      `rgba(244, 205, 166, ${opacity})`,
-      `rgba(246, 168, 166, ${opacity})`,
-    ];
-    return colors[CATEGORIES.indexOf(percent) % colors.length];
-  }
 
   onMount(async () => {
     threshold = (await localforage.getItem("guide-threshold")) || 350000;
     // TODO: I wish I had some documentation on the schema of these...
     let index = await getData("/api/v1/query/search_item_index");
     let category = await getData("/api/v1/query/mllib_scrolls_category");
-
-    // only keep scrolls that are categoriezed and exist in the database
-    category_data = {};
-    for (let i = 0; i < category.length; i++) {
-      category_data[category[i].name] = category[i];
-    }
-
-    // also include some other things that are not necessarily scrolls
-    let masterybooks = index.filter((row) =>
-      row.search_item.includes("Mastery Book")
-    );
-    for (let item of masterybooks) {
-      category_data[item.search_item] = {
-        percent: "mastery",
-        category: item.search_item.split("]")[1].trim().toLowerCase(),
-        // could be better...
-        stat: item.search_item.includes("20") ? "20" : "30",
-      };
-    }
-
-    category_data = {
-      ...category_data,
-      "Clean Slate Scroll 20%": {
-        percent: "etc",
-        category: "clean slate",
-        stat: "20%",
-      },
-      "Clean Slate Scroll 1%": {
-        percent: "etc",
-        category: "clean slate",
-        stat: "1%",
-      },
-      "Chaos Scroll 60%": {
-        percent: "etc",
-        category: "chaos scroll",
-        stat: "",
-      },
-      "White Scroll": {
-        percent: "etc",
-        category: "white scroll",
-        stat: "",
-      },
-      "Onyx Apple": {
-        percent: "etc",
-        category: "onyx apple",
-        stat: "",
-      },
-      "Zombie's Lost Gold Tooth": {
-        percent: "etc",
-        category: "gold tooth",
-        stat: "",
-      },
-      "Dragon Scale": {
-        percent: "etc",
-        category: "dragon scale",
-        stat: "",
-      },
-      "Piece of Time": {
-        percent: "etc",
-        category: "piece of time",
-        stat: "",
-      },
-    };
-
-    price_data = [];
-    // we need a method of matching items
-    for (let i = 0; i < index.length; i++) {
-      let item = index[i];
-      if (!(item.search_item in category_data)) {
-        continue;
-      }
-      price_data.push({
-        ...category_data[item.search_item],
-        ...item,
-        days_since_update:
-          moment().diff(moment(item.search_item_timestamp), "days") || -1,
-      });
-    }
-
-    price_data = groupBy(price_data, (v) => v.percent);
+    price_data = transform(index, category);
   });
 </script>
 
@@ -225,7 +120,7 @@
                           style="background-color: {row.days_since_update >
                           7 * 4
                             ? 'grey'
-                            : 'none'}"
+                            : 'transparent'}"
                         >
                           {formatPrice(row.p50)}
                         </span>
