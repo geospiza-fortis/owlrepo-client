@@ -31,6 +31,7 @@ let replaceVersion = () =>
       .toString()
       .trim()
       .slice(0, 8),
+    preventAssignment: true,
   });
 
 export default {
@@ -40,21 +41,9 @@ export default {
     plugins: [
       replaceVersion(),
       replace({
-        // very brittle: helpers.nodeCrypto.getHashes is not a function
-        // ecdsaSignFN
-        "helpers.nodeCrypto": "(false",
-        delimiters: ["(", " "],
-      }),
-      replace({
-        "helpers.nodeCrypto.createHash(md)": "return;",
-        delimiters: ["var digest = ", ";"],
-      }),
-      replace({
-        values: {
-          "process.client": true,
-          // "process.browser": true,
-          "process.env.NODE_ENV": JSON.stringify(mode),
-        },
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
+        preventAssignment: true,
       }),
       svelte({
         compilerOptions: {
@@ -74,10 +63,12 @@ export default {
       replace({
         "/api": !dev ? '"/api' : `"${process.env.OWLREPO_URL}/api`,
         delimiters: ['"', ""],
+        preventAssignment: true,
       }),
       replace({
         "/api": !dev ? "`/api" : `\`${process.env.OWLREPO_URL}/api`,
         delimiters: ["`", ""],
+        preventAssignment: true,
       }),
       // fix missing moment import inside of tabulator
       inject({
@@ -127,11 +118,9 @@ export default {
     plugins: [
       replaceVersion(),
       replace({
-        values: {
-          "process.client": false,
-          // "process.browser": false,
-          "process.env.NODE_ENV": JSON.stringify(mode),
-        },
+        "process.browser": false,
+        "process.env.NODE_ENV": JSON.stringify(mode),
+        preventAssignment: true,
       }),
       svelte({
         compilerOptions: {
@@ -164,11 +153,9 @@ export default {
       resolve(),
       replaceVersion(),
       replace({
-        values: {
-          "process.client": true,
-          // "process.browser": true,
-          "process.env.NODE_ENV": JSON.stringify(mode),
-        },
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
+        preventAssignment: true,
       }),
       commonjs(),
       !dev && terser(),
