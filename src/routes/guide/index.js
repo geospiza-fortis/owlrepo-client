@@ -90,8 +90,6 @@ function getBackgroundColor(percent, opacity = 1.0) {
 }
 
 function transform(index, category) {
-  // only keep scrolls that are categoriezed and exist in the database
-
   let category_data = {
     // normal scrolls
     ...Object.fromEntries(category.map((row) => [row.name, row])),

@@ -58,6 +58,17 @@
 
 <details>
   <summary>Click here for changelog</summary>
+  <b>Update 2021-03-02</b>
+  <ul>
+    <li>add configurable minimum price threshold</li>
+    <li>
+      update color scheme to <a
+        href="https://www.schemecolor.com/pastel-calm.php">pastel calm</a
+      >
+    </li>
+    <li>added a few ores and heartstoppers to etc</li>
+  </ul>
+
   <b>Update 2021-03-01</b>
   <ul>
     <li>bug fixed with 100% being mixed in with 10% scrolls</li>
