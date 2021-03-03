@@ -9,9 +9,7 @@
   export let segment;
 
   // pageview for analytics
-  $: process.client &&
-    $page &&
-    gtag("config", "G-NBGZYVSFSH");
+  $: process.browser && $page && gtag("config", "G-NBGZYVSFSH");
 </script>
 
 <Navbar {segment} />
