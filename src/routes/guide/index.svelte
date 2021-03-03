@@ -12,10 +12,7 @@
   let threshold;
   $: threshold && localforage.setItem("guide-threshold", threshold);
 
-  const BG_RED = "#ffaebf";
-  const BG_ORANGE = "#ffc6ae";
-  const BG_GREEN = "#a3c3b0";
-  const BG_BLACK = "grey";
+  const CATEGORIES = ["10", "30", "60", "70", "100", "etc", "mastery"];
 
   async function getData(route) {
     let resp = await fetch(route);
@@ -34,18 +31,16 @@
   }
 
   function getBackgroundColor(percent, opacity = 1.0) {
-    // https://colorhunt.co/palette/219735
-    // https://www.schemecolor.com/pastel-tropical.php
-    // https://www.schemecolor.com/old-style-pastels.php
-    return {
-      10: `rgba(163, 195, 176, ${opacity})`,
-      30: `rgba(234, 210, 184, ${opacity})`,
-      60: `rgba(157, 151, 188, ${opacity})`,
-      70: `rgba(222, 167, 161, ${opacity})`,
-      100: `rgba(222, 167, 161, ${opacity})`,
-      etc: `rgba(174, 188, 110, ${opacity})`,
-      mastery: `rgba(103, 154, 125, ${opacity})`,
-    }[percent];
+    // https://www.schemecolor.com/pastel-calm.php
+    const colors = [
+      `rgba(165, 200, 228, ${opacity})`,
+      `rgba(192, 236, 204, ${opacity})`,
+      `rgba(242, 221, 192, ${opacity})`,
+      `rgba(249, 240, 193, ${opacity})`,
+      `rgba(244, 205, 166, ${opacity})`,
+      `rgba(246, 168, 166, ${opacity})`,
+    ];
+    return colors[CATEGORIES.indexOf(percent) % colors.length];
   }
 
   onMount(async () => {
@@ -54,7 +49,6 @@
     let index = await getData("/api/v1/query/search_item_index");
     let category = await getData("/api/v1/query/mllib_scrolls_category");
 
-    console.log(category);
     // only keep scrolls that are categoriezed and exist in the database
     category_data = {};
     for (let i = 0; i < category.length; i++) {
@@ -78,12 +72,12 @@
       ...category_data,
       "Clean Slate Scroll 20%": {
         percent: "etc",
-        category: "css",
+        category: "clean slate",
         stat: "20%",
       },
       "Clean Slate Scroll 1%": {
         percent: "etc",
-        category: "css",
+        category: "clean slate",
         stat: "1%",
       },
       "Chaos Scroll 60%": {
@@ -186,7 +180,7 @@
 <div class="guide-container">
   <div class="card-columns guide">
     {#if price_data}
-      {#each Object.keys(price_data).sort() as key}
+      {#each CATEGORIES as key}
         {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > threshold || x.percent == "etc"), ["category", "stat"] ), 15) as chunk, i}
           <div
             class="card"
@@ -230,7 +224,7 @@
                         <span
                           style="background-color: {row.days_since_update >
                           7 * 4
-                            ? BG_BLACK
+                            ? 'grey'
                             : 'none'}"
                         >
                           {formatPrice(row.p50)}
