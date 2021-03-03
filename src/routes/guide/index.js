@@ -43,6 +43,21 @@ const ETC_DATA = {
     category: "piece of time",
     stat: "",
   },
+  Heartstopper: {
+    percent: "etc",
+    category: "heartstopper",
+    stat: "",
+  },
+  "Mithril Ore": {
+    percent: "etc",
+    category: "mithril ore",
+    stat: "",
+  },
+  "Dark Crystal": {
+    percent: "etc",
+    category: "dark crystal",
+    stat: "",
+  },
 };
 
 async function getData(route) {
