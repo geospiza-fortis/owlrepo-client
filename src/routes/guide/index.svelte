@@ -11,6 +11,7 @@
     getBackgroundColor,
     transform,
   } from "./index.js";
+  import { Tooltip } from "sveltestrap";
 
   let price_data;
 
@@ -67,6 +68,7 @@
       >
     </li>
     <li>added a few ores and heartstoppers to etc</li>
+    <li>finally fixed the popover</li>
   </ul>
 
   <b>Update 2021-03-01</b>
@@ -109,11 +111,17 @@
                 style="background-color: {getBackgroundColor(key)};"
               >
                 <tbody>
-                  {#each chunk as row}
+                  {#each chunk as row, j}
+                    <Tooltip placement="top" target={`row${key}-${i}-${j}`}
+                      ><div>
+                        Updated {row.days_since_update} days ago ({row.search_item_timestamp.slice(
+                          0,
+                          10
+                        )})
+                      </div>
+                    </Tooltip>
                     <tr
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Updated {row.search_item_timestamp.slice(0, 10)}"
+                      id={`row${key}-${i}-${j}`}
                       on:click={() => {
                         window.location = `/items?keyword=${encodeURIComponent(
                           row.search_item
