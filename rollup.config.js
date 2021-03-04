@@ -58,18 +58,6 @@ export default {
         dedupe: ["svelte"],
         preferBuiltins: false,
       }),
-      // There are instances of double quotes and backticks, so there needs to be
-      // a rule for each one.
-      replace({
-        "/api": !dev ? '"/api' : `"${process.env.OWLREPO_URL}/api`,
-        delimiters: ['"', ""],
-        preventAssignment: true,
-      }),
-      replace({
-        "/api": !dev ? "`/api" : `\`${process.env.OWLREPO_URL}/api`,
-        delimiters: ["`", ""],
-        preventAssignment: true,
-      }),
       // fix missing moment import inside of tabulator
       inject({
         moment: "moment",
