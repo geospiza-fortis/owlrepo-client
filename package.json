@@ -1,12 +1,13 @@
 {
   "name": "owlrepo-client",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
     "export": "sapper export --legacy",
+    "gcp-build": "npm run build",
     "start": "node __sapper__/build"
   },
   "devDependencies": {

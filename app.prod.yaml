@@ -1,0 +1,5 @@
+runtime: nodejs14
+entrypoint: node __sapper__/build
+
+env_variables:
+  OWLREPO_URL: https://api-v1-6jpxgj6jpa-uc.a.run.app
