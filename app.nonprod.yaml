@@ -2,4 +2,5 @@ runtime: nodejs14
 entrypoint: node __sapper__/build
 
 env_variables:
+  PROJECT_ID: owlrepo-nonprod
   OWLREPO_URL: https://api-v1-3s5yebp5cq-uc.a.run.app

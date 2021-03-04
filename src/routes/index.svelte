@@ -1,3 +1,16 @@
+<script context="module">
+  export async function preload() {
+    const fetchData = async (url) => {
+      let resp = await this.fetch(url);
+      return await resp.json();
+    };
+    const random_listing = await fetchData("/api/v2/query/random_listing");
+    const heatmap = await fetchData("/api/v2/query/heatmap");
+
+    return { random_listing, heatmap };
+  }
+</script>
+
 <script>
   import IndexView from "../components/IndexView.svelte";
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
@@ -7,23 +20,13 @@
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
   import CollapseInfo from "../components/CollapseInfo.svelte";
-  import { onMount } from "svelte";
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
   const BG_YELLOW = "#ffefae";
-  let random_listing;
-  let heatmap;
 
-  async function fetchData(url) {
-    let resp = await fetch(url);
-    return await resp.json();
-  }
-
-  onMount(async () => {
-    random_listing = await fetchData("/api/v1/query/random_listing");
-    heatmap = await fetchData("/api/v1/query/heatmap");
-  });
+  export let random_listing;
+  export let heatmap;
 </script>
 
 <svelte:head>
@@ -44,12 +47,10 @@
   to see more plots this this.
 </p>
 
-{#if random_listing}
-  <PriceQuantityCharts
-    data={random_listing}
-    search_item_name={random_listing[0].search_item}
-  />
-{/if}
+<PriceQuantityCharts
+  data={random_listing}
+  search_item_name={random_listing[0].search_item}
+/>
 
 <h2>Contributions</h2>
 <p>
@@ -70,9 +71,7 @@
 </p>
 
 <h3>Upload Activity</h3>
-{#if heatmap}
-  <ActivityHeatmap data={heatmap} max_range={14} />
-{/if}
+<ActivityHeatmap data={heatmap} max_range={14} />
 
 <br />
 

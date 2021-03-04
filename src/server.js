@@ -17,6 +17,21 @@ server.use(
   })
 );
 
+// simple redirect middleware
+// https://github.com/lukeed/polka/issues/78#issuecomment-600496930
+server.use(function (req, res, next) {
+  res.redirect = (location) => {
+    let str = `Redirecting to ${location}`;
+    res.writeHead(302, {
+      Location: location,
+      "Content-Type": "text/plain",
+      "Content-Length": str.length,
+    });
+    res.end(str);
+  };
+  next();
+});
+
 server
   .use(
     compression({ threshold: 0 }),
