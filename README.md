@@ -45,3 +45,13 @@ npm run build
 ```
 
 You can run the newly built app with `npm run start`.
+
+## Deploying to app engine
+
+Two environments have been provisioned in GCP with various backend services like
+bigquery and firestore. Deploy to app engine using the following commands.
+
+```bash
+gcloud app deploy app.nonprod.yaml --project owlrepo-nonprod
+gcloud app deploy app.prod.yaml --project owlrepo
+```
