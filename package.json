@@ -40,6 +40,7 @@
     "diff": "^5.0.0",
     "fast-levenshtein": "^3.0.0",
     "fuse.js": "^6.4.6",
+    "http-proxy-middleware": "^1.0.6",
     "jquery": "^3.6.0",
     "json-stable-stringify": "^1.0.1",
     "jsonschema": "^1.4.0",
