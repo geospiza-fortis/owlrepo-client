@@ -1,40 +1,9 @@
-<script>
-  import Table from "../../components/Table.svelte";
-  import { onMount } from "svelte";
+<script context="module">
   import moment from "moment";
   import { sortBy } from "lodash";
 
-  let last_modified;
-
-  let p25_thresh = 350000;
-  let search_thresh = 8;
-
-  const core_scrolls = [
-    "Dark scroll for Claw for ATT 30%",
-    "Scroll for Gloves for ATT 60%",
-    "Scroll for Overall Armor for DEX 60%",
-    "Dark Scroll for Pet Equip. for HP 30%",
-    "Scroll for Helmet for DEX 60%",
-    "Scroll for Overall Armor for INT 60%",
-  ];
-  let core_scroll_update = 4;
-  // this one is weird since we have some conditional text based on this
-
-  let predData; // unseenOptions
-  let data;
-  let coreData;
-  let staleData;
-  let etcData;
-  let coreOptions = createOptions([
-    { field: "search_item_timestamp", type: "!=", value: null },
-    { field: "days_since_update", type: ">=", value: core_scroll_update },
-  ]);
-  let staleOptions = createOptions([
-    { field: "search_item_timestamp", type: "!=", value: null },
-    { field: "days_since_update", type: ">", value: 28 },
-  ]);
-
-  let etcOptions = staleOptions;
+  const p25_thresh = 350000;
+  const search_thresh = 8;
 
   function sortData(data) {
     // Sort and concat the two fields. Somewhat of an inefficient solution.
@@ -47,19 +16,71 @@
     );
   }
 
-  async function getData(route) {
-    let resp = await fetch(route);
-    let data = await resp.json();
-    // NOTE: stateful, will globally set whatever was called last
-    last_modified = new Date(resp.headers.get("last-modified")).toISOString();
-    return sortData(
-      data.map((obj) => ({
+  export async function preload() {
+    let last_modified;
+    const getData = async (route) => {
+      let resp = await this.fetch(route);
+      let data = await resp.json();
+      // NOTE: stateful, will globally set whatever was called last
+      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
+      return sortData(
+        data.map((obj) => ({
+          ...obj,
+          days_since_update:
+            moment().diff(moment(obj.search_item_timestamp), "days") || -1,
+        }))
+      );
+    };
+    let predData = await getData("/api/v2/query/scrolls_predict");
+
+    // convert front page data for this page
+    let data = (await getData("/api/v2/query/search_item_index")).map(
+      (obj) => ({
         ...obj,
-        days_since_update:
-          moment().diff(moment(obj.search_item_timestamp), "days") || -1,
-      }))
+        name: obj.search_item,
+      })
     );
+
+    return { data, predData, last_modified };
   }
+</script>
+
+<script>
+  import Table from "../../components/Table.svelte";
+
+  export let data;
+  export let predData;
+  export let last_modified;
+
+  const core_scrolls = [
+    "Dark scroll for Claw for ATT 30%",
+    "Scroll for Gloves for ATT 60%",
+    "Scroll for Overall Armor for DEX 60%",
+    "Dark Scroll for Pet Equip. for HP 30%",
+    "Scroll for Helmet for DEX 60%",
+    "Scroll for Overall Armor for INT 60%",
+  ];
+  let core_scroll_update = 4;
+  // this one is weird since we have some conditional text based on this
+
+  // NOTE: I'm not sure if the names in scrolls_predict will line up exactly
+  // with the names in the search item index, but we can be sure etc will
+  // be fine
+  $: scroll_names = predData.map((obj) => obj.name);
+  $: coreData = data.filter((obj) => core_scrolls.includes(obj.name));
+  $: staleData = data.filter((obj) => scroll_names.includes(obj.name));
+  $: etcData = data.filter((obj) => !scroll_names.includes(obj.name));
+
+  let coreOptions = createOptions([
+    { field: "search_item_timestamp", type: "!=", value: null },
+    { field: "days_since_update", type: ">=", value: core_scroll_update },
+  ]);
+  let staleOptions = createOptions([
+    { field: "search_item_timestamp", type: "!=", value: null },
+    { field: "days_since_update", type: ">", value: 28 },
+  ]);
+
+  let etcOptions = staleOptions;
 
   function createOptions(initialFilter) {
     return {
@@ -108,24 +129,6 @@
     pagination: "local",
     paginationSize: 8,
   };
-
-  onMount(async () => {
-    predData = await getData("/api/v1/query/scrolls_predict");
-
-    // convert front page data for this page
-    data = (await getData("/api/v1/query/search_item_index")).map((obj) => ({
-      ...obj,
-      name: obj.search_item,
-    }));
-
-    // NOTE: I'm not sure if the names in scrolls_predict will line up exactly
-    // with the names in the search item index, but we can be sure etc will
-    // be fine
-    let scroll_names = predData.map((obj) => obj.name);
-    coreData = data.filter((obj) => core_scrolls.includes(obj.name));
-    staleData = data.filter((obj) => scroll_names.includes(obj.name));
-    etcData = data.filter((obj) => !scroll_names.includes(obj.name));
-  });
 </script>
 
 <svelte:head>

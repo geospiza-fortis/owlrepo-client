@@ -5,7 +5,6 @@
     let last_modified;
 
     const fetchData = async (url) => {
-      console.log(url);
       let resp = await this.fetch(url);
       last_modified = new Date(resp.headers.get("last-modified")).toISOString();
       return await resp.json();
