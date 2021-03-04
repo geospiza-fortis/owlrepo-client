@@ -1,27 +1,21 @@
 <script context="module">
-  import moment from "moment";
-
-  function transformPriceSummary(data) {
-    return data.map((obj) => ({
-      ...obj,
-      days_since_update:
-        moment().diff(moment(obj.search_item_timestamp), "days") || -1,
-    }));
-  }
+  import { transform as transformPriceSummary } from "../components/PriceSummary/columns.js";
 
   export async function preload() {
     let last_modified;
 
     const fetchData = async (url) => {
+      console.log(url);
       let resp = await this.fetch(url);
       last_modified = new Date(resp.headers.get("last-modified")).toISOString();
       return await resp.json();
     };
-    const random_listing = await fetchData("/api/v2/query/random_listing");
-    const heatmap = await fetchData("/api/v2/query/heatmap");
-    const price_summary = transformPriceSummary(
-      await fetchData("/api/v1/query/search_item_index")
-    );
+    const [random_listing, heatmap, search_item_index] = await Promise.all([
+      fetchData("/api/v2/query/random_listing"),
+      fetchData("/api/v2/query/heatmap"),
+      fetchData("/api/v2/query/search_item_index"),
+    ]);
+    const price_summary = transformPriceSummary(search_item_index);
 
     return { random_listing, heatmap, price_summary, last_modified };
   }
