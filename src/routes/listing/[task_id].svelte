@@ -1,24 +1,4 @@
-<script>
-  import { onMount } from "svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
-  import { resultColumns } from "./columns.js";
-
-  import Table from "../../components/Table.svelte";
-
-  import SummaryView from "./SummaryView.svelte";
-
-  import { stores } from "@sapper/app";
-  const { page } = stores();
-  const { slug } = $page.params;
-
-  let uid = slug;
-  let url = `/api/v1/data/${uid}/slim.json`;
-
-  let flattened = null;
-  let ready = true;
-  let table;
-  let cutoff = 3;
-
+<script context="module">
   function flatten(data) {
     return data.payload.flatMap((row) => {
       return row.body.entries.map((entry, entryIndex) => ({
@@ -31,16 +11,40 @@
     });
   }
 
-  onMount(async () => {
-    const resp = await fetch(url);
+  export async function preload(page) {
+    let { task_id } = page.params;
+
+    const url = `/api/v2/data/${task_id}/slim.json`;
+    const resp = await this.fetch(url);
+
+    let ready = false;
     if (resp.status == 404) {
-      console.log("data does not exist yet");
-      ready = false;
-      return;
+      return { ready };
     }
     let data = await resp.json();
-    flattened = flatten(data);
-  });
+    // TODO: trim columns
+    let flattened = flatten(data);
+    ready = true;
+    return { flattened, ready, task_id };
+  }
+</script>
+
+<script>
+  import { onMount } from "svelte";
+  import { Stretch } from "svelte-loading-spinners/src";
+  import { resultColumns } from "./columns.js";
+
+  import Table from "../../components/Table.svelte";
+  import SummaryView from "./SummaryView.svelte";
+
+  export let flattened = null;
+  export let ready = true;
+  export let task_id;
+
+  let table;
+  let cutoff = 3;
+
+  onMount(async () => {});
 </script>
 
 <svelte:head>
@@ -64,7 +68,7 @@
     Copy to Clipboard
   </button>
 {:else if !ready}
-  Data for {uid} is not ready yet. Results may take up to 10 minutes to appear.
+  Data for {task_id} is not ready yet. Results may take up to 10 minutes to appear.
 {:else}
   <div id="spinner">
     <Stretch size="60" color="#FF3E00" unit="px" />

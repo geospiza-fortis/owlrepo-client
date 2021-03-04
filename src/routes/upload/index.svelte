@@ -1,3 +1,15 @@
+<script context="module">
+  export async function preload() {
+    const fetchData = async (url) => {
+      let resp = await this.fetch(url);
+      return await resp.json();
+    };
+    const heatmap = await fetchData("/api/v2/query/heatmap");
+
+    return { heatmap };
+  }
+</script>
+
 <script>
   import Uploader from "../../components/Uploader.svelte";
   import IndexView from "../../components/IndexView.svelte";
@@ -6,18 +18,8 @@
   import ActivityHeatmap from "../../components/ActivityHeatmap.svelte";
   import PublicKey from "../../docs/PublicKey.svelte";
   import UploadInstructions from "../../docs/UploadInstructions.svx";
-  import { onMount } from "svelte";
 
-  let heatmap;
-
-  async function fetchData(url) {
-    let resp = await fetch(url);
-    return await resp.json();
-  }
-
-  onMount(async () => {
-    heatmap = await fetchData("/api/v1/query/heatmap");
-  });
+  export let heatmap;
 </script>
 
 <svelte:head>
@@ -57,6 +59,5 @@
 
 <IndexView limit={8} />
 
-{#if heatmap}
-  <ActivityHeatmap data={heatmap} max_range={14} />
-{/if}
+<br />
+<ActivityHeatmap data={heatmap} max_range={14} />

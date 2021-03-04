@@ -1,19 +1,30 @@
+<script context="module">
+  import { transform } from "./index.js";
+  export async function preload() {
+    const fetchData = async (url) => {
+      let resp = await this.fetch(url);
+      return await resp.json();
+    };
+    const [category, index] = await Promise.all([
+      fetchData("/api/v2/query/mllib_scrolls_category"),
+      fetchData("/api/v2/query/search_item_index"),
+    ]);
+    const price_data = transform(index, category);
+
+    return { price_data };
+  }
+</script>
+
 <script>
   import { onMount } from "svelte";
   // tabulator is a misnomer for a module name
   import { formatPrice } from "../../tabulator.js";
   import { sortBy } from "lodash";
   import localforage from "localforage";
-  import {
-    CATEGORIES,
-    getData,
-    chunkList,
-    getBackgroundColor,
-    transform,
-  } from "./index.js";
-  import { Tooltip } from "sveltestrap";
+  import { CATEGORIES, chunkList, getBackgroundColor } from "./index.js";
+  import { Tooltip } from "sveltestrap/src";
 
-  let price_data;
+  export let price_data;
 
   let threshold;
   $: threshold && localforage.setItem("guide-threshold", threshold);
@@ -21,9 +32,6 @@
   onMount(async () => {
     threshold = (await localforage.getItem("guide-threshold")) || 350000;
     // TODO: I wish I had some documentation on the schema of these...
-    let index = await getData("/api/v1/query/search_item_index");
-    let category = await getData("/api/v1/query/mllib_scrolls_category");
-    price_data = transform(index, category);
   });
 </script>
 

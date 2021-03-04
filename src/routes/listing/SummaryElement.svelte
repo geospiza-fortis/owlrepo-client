@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import { dropOutliers, generateSummary } from "./stats.js";
   import { summaryColumns } from "./columns.js";
   import Table from "../../components/Table.svelte";

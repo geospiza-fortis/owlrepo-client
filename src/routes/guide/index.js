@@ -60,12 +60,6 @@ const ETC_DATA = {
   },
 };
 
-async function getData(route) {
-  let resp = await fetch(route);
-  let data = await resp.json();
-  return data;
-}
-
 function chunkList(list, size) {
   // split it in half
   if (list.length > size) {
@@ -122,4 +116,4 @@ function transform(index, category) {
   return groupBy(price_data, (v) => v.percent);
 }
 
-export { CATEGORIES, getData, chunkList, getBackgroundColor, transform };
+export { CATEGORIES, chunkList, getBackgroundColor, transform };

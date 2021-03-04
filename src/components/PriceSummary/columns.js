@@ -1,3 +1,5 @@
+import moment from "moment";
+import { pickBy } from "lodash";
 import { shortFormatter } from "../../tabulator.js";
 
 const columns = [
@@ -86,4 +88,14 @@ const columns = [
   },
 ];
 
-export { columns };
+function transform(data) {
+  // a few fields for plots too
+  const fields = ["p0", "p75", "p100", ...columns.map((row) => row.field)];
+  return data.map((obj) => ({
+    ...pickBy(obj, (_, key) => fields.includes(key)),
+    days_since_update:
+      moment().diff(moment(obj.search_item_timestamp), "days") || -1,
+  }));
+}
+
+export { columns, transform };

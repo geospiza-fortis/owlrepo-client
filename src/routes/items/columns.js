@@ -1,4 +1,5 @@
 import { shortFormatter } from "../../tabulator.js";
+import { pickBy } from "lodash";
 
 const columns = [
   {
@@ -71,4 +72,12 @@ const columns = [
   },
 ];
 
-export { columns };
+function transform(data) {
+  // a few fields for plots too
+  const fields = columns.map((row) => row.field);
+  return data.map((obj) => ({
+    ...pickBy(obj, (_, key) => fields.includes(key)),
+  }));
+}
+
+export { columns, transform };

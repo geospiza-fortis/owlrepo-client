@@ -1,29 +1,43 @@
+<script context="module">
+  import { transform as transformPriceSummary } from "../components/PriceSummary/columns.js";
+
+  export async function preload() {
+    let last_modified;
+
+    const fetchData = async (url) => {
+      let resp = await this.fetch(url);
+      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
+      return await resp.json();
+    };
+    const [random_listing, heatmap, search_item_index] = await Promise.all([
+      fetchData("/api/v2/query/random_listing"),
+      fetchData("/api/v2/query/heatmap"),
+      fetchData("/api/v2/query/search_item_index"),
+    ]);
+    const price_summary = transformPriceSummary(search_item_index);
+
+    return { random_listing, heatmap, price_summary, last_modified };
+  }
+</script>
+
 <script>
   import IndexView from "../components/IndexView.svelte";
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
   import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
-  import SearchItemIndex from "../components/PriceSummary/View.svelte";
+  import PriceSummary from "../components/PriceSummary/View.svelte";
   import FrontMatter from "../docs/FrontMatter.svx";
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
   import CollapseInfo from "../components/CollapseInfo.svelte";
-  import { onMount } from "svelte";
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
   const BG_YELLOW = "#ffefae";
-  let random_listing;
-  let heatmap;
 
-  async function fetchData(url) {
-    let resp = await fetch(url);
-    return await resp.json();
-  }
-
-  onMount(async () => {
-    random_listing = await fetchData("/api/v1/query/random_listing");
-    heatmap = await fetchData("/api/v1/query/heatmap");
-  });
+  export let random_listing;
+  export let heatmap;
+  export let price_summary;
+  export let last_modified;
 </script>
 
 <svelte:head>
@@ -34,7 +48,7 @@
 
 <CollapseInfo component={IndexDescription} text="Tell me more!" />
 
-<SearchItemIndex />
+<PriceSummary itemData={price_summary} {last_modified} />
 
 <p>
   The repository history allows us to inspect the price and volume of items sold
@@ -44,12 +58,10 @@
   to see more plots this this.
 </p>
 
-{#if random_listing}
-  <PriceQuantityCharts
-    data={random_listing}
-    search_item_name={random_listing[0].search_item}
-  />
-{/if}
+<PriceQuantityCharts
+  data={random_listing}
+  search_item_name={random_listing[0].search_item}
+/>
 
 <h2>Contributions</h2>
 <p>
@@ -70,9 +82,7 @@
 </p>
 
 <h3>Upload Activity</h3>
-{#if heatmap}
-  <ActivityHeatmap data={heatmap} max_range={14} />
-{/if}
+<ActivityHeatmap data={heatmap} max_range={14} />
 
 <br />
 
