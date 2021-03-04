@@ -1,19 +1,16 @@
 <script>
-  import { onMount } from "svelte";
   import Table from "../Table.svelte";
   import SearchBox from "../SearchBox.svelte";
   import { Stretch } from "svelte-loading-spinners/src";
   import Settings from "./Settings.svelte";
   import Plot from "./Plot.svelte";
 
-  import moment from "moment";
   import { columns } from "./columns.js";
 
-  let itemsReady = false;
-  let itemsLastModified;
-
   let table;
-  let itemData;
+
+  export let itemData;
+  export let last_modified;
 
   let settings = {};
 
@@ -63,29 +60,11 @@
       }
     },
   };
-
-  async function loadSearchItems() {
-    let resp = await fetch("/api/v1/query/search_item_index");
-    let data = await resp.json();
-    itemsLastModified = new Date(
-      resp.headers.get("last-modified")
-    ).toISOString();
-    itemData = data.map((obj) => ({
-      ...obj,
-      days_since_update:
-        moment().diff(moment(obj.search_item_timestamp), "days") || -1,
-    }));
-    itemsReady = true;
-  }
-
-  onMount(async () => {
-    await loadSearchItems();
-  });
 </script>
 
 <Plot {table} row={selectedRow} />
 
-{#if !itemsReady}
+{#if !itemData}
   <div style=" text-align: center;">
     <Stretch size="60" color="#FF3E00" unit="px" />
   </div>
@@ -112,9 +91,7 @@
 
 <Table bind:table data={itemData} {options} />
 
-{#if itemsLastModified}
-  <p style="text-align: right">
-    <i>Last updated {itemsLastModified}</i>
-    <br />
-  </p>
-{/if}
+<p style="text-align: right">
+  <i>Last updated {last_modified}</i>
+  <br />
+</p>

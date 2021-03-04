@@ -1,13 +1,29 @@
 <script context="module">
+  import moment from "moment";
+
+  function transformPriceSummary(data) {
+    return data.map((obj) => ({
+      ...obj,
+      days_since_update:
+        moment().diff(moment(obj.search_item_timestamp), "days") || -1,
+    }));
+  }
+
   export async function preload() {
+    let last_modified;
+
     const fetchData = async (url) => {
       let resp = await this.fetch(url);
+      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
       return await resp.json();
     };
     const random_listing = await fetchData("/api/v2/query/random_listing");
     const heatmap = await fetchData("/api/v2/query/heatmap");
+    const price_summary = transformPriceSummary(
+      await fetchData("/api/v1/query/search_item_index")
+    );
 
-    return { random_listing, heatmap };
+    return { random_listing, heatmap, price_summary, last_modified };
   }
 </script>
 
@@ -15,7 +31,7 @@
   import IndexView from "../components/IndexView.svelte";
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
   import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
-  import SearchItemIndex from "../components/PriceSummary/View.svelte";
+  import PriceSummary from "../components/PriceSummary/View.svelte";
   import FrontMatter from "../docs/FrontMatter.svx";
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
@@ -27,6 +43,8 @@
 
   export let random_listing;
   export let heatmap;
+  export let price_summary;
+  export let last_modified;
 </script>
 
 <svelte:head>
@@ -37,7 +55,7 @@
 
 <CollapseInfo component={IndexDescription} text="Tell me more!" />
 
-<SearchItemIndex />
+<PriceSummary itemData={price_summary} {last_modified} />
 
 <p>
   The repository history allows us to inspect the price and volume of items sold
