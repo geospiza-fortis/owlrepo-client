@@ -13,6 +13,7 @@
   export let last_modified;
 
   let settings = {};
+  const initialSort = [{ column: "search_item_timestamp", dir: "desc" }];
 
   let selectedRow;
   $: table && !selectedRow && (selectedRow = table.getRows("active")[0]);
@@ -34,7 +35,7 @@
     tooltipsHeader: true,
     pagination: "local",
     paginationSize: settings.paginationSize,
-    initialSort: [{ column: settings.sortColumn, dir: settings.sortDir }],
+    initialSort: initialSort,
     dataLoading: (_) =>
       debounce(() => {
         selectedRow = null;
@@ -81,12 +82,7 @@
     </span>
     ]
   </span>
-  <SearchBox
-    {itemData}
-    {table}
-    keys={["search_item"]}
-    initialSort={[{ column: settings.sortColumn, dir: settings.sortDir }]}
-  />
+  <SearchBox {itemData} {table} keys={["search_item"]} {initialSort} />
 {/if}
 
 <Table bind:table data={itemData} {options} />
