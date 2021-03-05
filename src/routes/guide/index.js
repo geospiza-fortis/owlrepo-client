@@ -1,64 +1,75 @@
 import moment from "moment";
 import { groupBy } from "lodash";
 
-const CATEGORIES = ["10", "30", "60", "70", "100", "etc", "mastery"];
-const ETC_DATA = {
-  "Clean Slate Scroll 20%": {
-    percent: "etc",
-    category: "clean slate",
-    stat: "20%",
-  },
-  "Clean Slate Scroll 1%": {
-    percent: "etc",
-    category: "clean slate",
-    stat: "1%",
-  },
-  "Chaos Scroll 60%": {
-    percent: "etc",
-    category: "chaos scroll",
-    stat: "",
-  },
-  "White Scroll": {
-    percent: "etc",
-    category: "white scroll",
-    stat: "",
-  },
-  "Onyx Apple": {
-    percent: "etc",
-    category: "onyx apple",
-    stat: "",
-  },
-  "Zombie's Lost Gold Tooth": {
-    percent: "etc",
-    category: "gold tooth",
-    stat: "",
-  },
-  "Dragon Scale": {
-    percent: "etc",
-    category: "dragon scale",
-    stat: "",
-  },
-  "Piece of Time": {
-    percent: "etc",
-    category: "piece of time",
-    stat: "",
-  },
-  Heartstopper: {
-    percent: "etc",
-    category: "heartstopper",
-    stat: "",
-  },
-  "Mithril Ore": {
-    percent: "etc",
-    category: "mithril ore",
-    stat: "",
-  },
-  "Dark Crystal": {
-    percent: "etc",
-    category: "dark crystal",
-    stat: "",
-  },
-};
+const CATEGORIES = ["10", "30", "60", "70", "100", "etc", "ores", "mastery"];
+const ETC_DATA = Object.fromEntries(
+  Object.entries({
+    "Clean Slate Scroll 20%": {
+      category: "clean slate",
+      stat: "20%",
+    },
+    "Clean Slate Scroll 1%": {
+      category: "clean slate",
+      stat: "1%",
+    },
+    "Chaos Scroll 60%": {
+      category: "chaos scroll",
+    },
+    "White Scroll": {
+      category: "white scroll",
+    },
+    "Onyx Apple": {
+      category: "onyx apple",
+    },
+    "Zombie's Lost Gold Tooth": {
+      category: "gold tooth",
+    },
+    "Dragon Scale": {
+      category: "dragon scale",
+    },
+    "Piece of Time": {
+      category: "piece of time",
+    },
+    "Eye of Fire": {
+      category: "eye of fire",
+    },
+    Sunburst: {
+      category: "sunburst",
+    },
+    "Spirit of Fantasy Theme Park": {
+      category: "spirit of fantasy theme park",
+    },
+    Heartstopper: {
+      category: "heartstopper",
+    },
+  }).map(([key, value]) => [
+    key,
+    {
+      percent: "etc",
+      stat: "",
+      ...value,
+    },
+  ])
+);
+
+const ORES = Object.fromEntries(
+  [
+    "Power Crystal Ore",
+    "DEX Crystal Ore",
+    "LUK Crystal Ore",
+    "Black Crystal Ore",
+    "Dark Crystal Ore",
+    "Mithril Ore",
+    "Steel Ore",
+  ].map((row) => [
+    row,
+    {
+      percent: "ores",
+      category: row.toLowerCase().replace("ore", "").trim(),
+      stat: "",
+    },
+  ])
+);
 
 function chunkList(list, size) {
   // split it in half
@@ -102,6 +113,7 @@ function transform(index, category) {
     ),
     // other stuff
     ...ETC_DATA,
+    ...ORES,
   };
 
   let price_data = index

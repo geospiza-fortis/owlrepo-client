@@ -98,7 +98,7 @@
   <div class="guide-container">
     <div class="card-columns guide">
       {#each CATEGORIES as key}
-        {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > threshold || x.percent == "etc"), ["category", "stat"] ), 15) as chunk, i}
+        {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > threshold || ["etc", "ores"].includes(x.percent)), ["category", "stat"] ), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};"
@@ -110,7 +110,11 @@
               {#if parseInt(key)}
                 <h5>{key}% Scrolls</h5>
               {:else}
-                <h5>{{ mastery: "Mastery Book", etc: "Et cetera" }[key]}</h5>
+                <h5>
+                  {{ mastery: "Mastery Book", etc: "Et cetera", ores: "Ores" }[
+                    key
+                  ]}
+                </h5>
               {/if}
             </div>
 
