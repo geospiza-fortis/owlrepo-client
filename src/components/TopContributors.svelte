@@ -37,7 +37,7 @@
 
   onMount(async () => {
     contributor_id = await localforage.getItem("contributor-id");
-    let resp = await fetch("/api/v1/query/curation_top_contributors");
+    let resp = await fetch("/api/v2/query/curation_top_contributors");
     data = await resp.json();
     // add rank to the data
     for (let i = 0; i < data.length; i++) {

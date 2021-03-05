@@ -1,25 +1,3 @@
-<script context="module">
-  import { transform as transformPriceSummary } from "../components/PriceSummary/columns.js";
-
-  export async function preload() {
-    let last_modified;
-
-    const fetchData = async (url) => {
-      let resp = await this.fetch(url);
-      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
-      return await resp.json();
-    };
-    const [random_listing, heatmap, search_item_index] = await Promise.all([
-      fetchData("/api/v2/query/random_listing"),
-      fetchData("/api/v2/query/heatmap"),
-      fetchData("/api/v2/query/search_item_index"),
-    ]);
-    const price_summary = transformPriceSummary(search_item_index);
-
-    return { random_listing, heatmap, price_summary, last_modified };
-  }
-</script>
-
 <script>
   import IndexView from "../components/IndexView.svelte";
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
@@ -29,6 +7,9 @@
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
   import CollapseInfo from "../components/CollapseInfo.svelte";
+  import { transform as transformPriceSummary } from "../components/PriceSummary/columns.js";
+  import { Stretch } from "svelte-loading-spinners/src";
+  import { onMount } from "svelte";
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
@@ -38,6 +19,20 @@
   export let heatmap;
   export let price_summary;
   export let last_modified;
+
+  onMount(async () => {
+    const fetchData = async (url) => {
+      let resp = await fetch(url);
+      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
+      return await resp.json();
+    };
+
+    price_summary = transformPriceSummary(
+      await fetchData("/api/v2/query/search_item_index")
+    );
+    random_listing = await fetchData("/api/v2/query/random_listing");
+    heatmap = await fetchData("/api/v2/query/heatmap");
+  });
 </script>
 
 <svelte:head>
@@ -58,10 +53,16 @@
   to see more plots this this.
 </p>
 
-<PriceQuantityCharts
-  data={random_listing}
-  search_item_name={random_listing[0].search_item}
-/>
+{#if random_listing}
+  <PriceQuantityCharts
+    data={random_listing}
+    search_item_name={random_listing[0].search_item}
+  />
+{:else}
+  <div style="text-align: center;">
+    <Stretch size="60" color="#FF3E00" unit="px" />
+  </div>
+{/if}
 
 <h2>Contributions</h2>
 <p>
@@ -70,8 +71,10 @@
   Items marked in
   <span style="padding:0 3px; color: #333; background: {BG_YELLOW}">
     yellow
-  </span>
-  or
+  </span>,
+  <span style="padding:0 3px; color: #333; background: {BG_ORANGE}">
+    orange
+  </span>, or
   <span style="padding:0 3px; color: #333; background: {BG_RED}">red</span>
   are likely worth uploading. Look at the
   <a href="/recommendation">recommendations</a>
@@ -82,8 +85,13 @@
 </p>
 
 <h3>Upload Activity</h3>
-<ActivityHeatmap data={heatmap} max_range={14} />
-
+{#if heatmap}
+  <ActivityHeatmap data={heatmap} max_range={14} />
+{:else}
+  <div style="text-align: center;">
+    <Stretch size="60" color="#FF3E00" unit="px" />
+  </div>
+{/if}
 <br />
 
 <h3>Recent Uploads</h3>

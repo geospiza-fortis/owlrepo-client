@@ -1,27 +1,22 @@
-<script context="module">
-  import { transform } from "./columns.js";
-
-  export async function preload() {
-    let last_modified;
-    const fetchData = async (url) => {
-      let resp = await this.fetch(url);
-      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
-      return await resp.json();
-    };
-    const data = transform(
-      await fetchData("/api/v2/query/search_item_listing")
-    );
-    return { data, last_modified };
-  }
-</script>
-
 <script>
   import Table from "../../components/Table.svelte";
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
-  import { columns } from "./columns.js";
+  import { columns, transform } from "./columns.js";
+  import { onMount } from "svelte";
+  import { Stretch } from "svelte-loading-spinners/src";
 
   export let data;
   export let last_modified;
+
+  onMount(async () => {
+    last_modified;
+    const fetchData = async (url) => {
+      let resp = await fetch(url);
+      last_modified = new Date(resp.headers.get("last-modified")).toISOString();
+      return await resp.json();
+    };
+    data = transform(await fetchData("/api/v2/query/search_item_listing"));
+  });
 
   let is_chartable = false;
   let search_item_name;
@@ -61,9 +56,16 @@
 <h1>Items</h1>
 
 <Table {data} {options} />
-<p style="text-align: right">
-  <i>Last updated {last_modified}</i>
-</p>
+{#if last_modified}
+  <p style="text-align: right">
+    <i>Last updated {last_modified}</i>
+  </p>
+{:else}
+  <div style="text-align: center;">
+    <Stretch size="60" color="#FF3E00" unit="px" />
+  </div>
+{/if}
+
 {#if data && is_chartable}
   <PriceQuantityCharts {data} {search_item_name} />
 {/if}

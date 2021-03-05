@@ -29,6 +29,7 @@
       table.clearSort();
       results = itemData.length;
     } else {
+      table.clearSort();
       let data = fuse.search(value);
       await table.replaceData(data.map((d) => d.item));
       results = data.length;

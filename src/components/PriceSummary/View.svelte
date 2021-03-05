@@ -13,6 +13,7 @@
   export let last_modified;
 
   let settings = {};
+  const initialSort = [{ column: "search_item_timestamp", dir: "desc" }];
 
   let selectedRow;
   $: table && !selectedRow && (selectedRow = table.getRows("active")[0]);
@@ -34,7 +35,7 @@
     tooltipsHeader: true,
     pagination: "local",
     paginationSize: settings.paginationSize,
-    initialSort: [{ column: settings.sortColumn, dir: settings.sortDir }],
+    initialSort: initialSort,
     dataLoading: (_) =>
       debounce(() => {
         selectedRow = null;
@@ -52,6 +53,10 @@
       // 6 weeks is really old
       if (datum.days_since_update > 7 * 6) {
         dateElement.style.backgroundColor = BG_RED;
+        dateElement.style.color = "#333";
+        // 2 weeks is kind of old
+      } else if (datum.days_since_update > 7 * 4) {
+        dateElement.style.backgroundColor = BG_ORANGE;
         dateElement.style.color = "#333";
         // 2 weeks is kind of old
       } else if (datum.days_since_update > 7 * 2) {
@@ -76,22 +81,21 @@
       2 weeks
     </span>
     |
+    <span style="padding:0 3px; color: #333; background: {BG_ORANGE}">
+      4 weeks
+    </span>
+    |
     <span style="padding:0 3px; color: #333; background: {BG_RED}">
       6 weeks
     </span>
     ]
   </span>
-  <SearchBox
-    {itemData}
-    {table}
-    keys={["search_item"]}
-    initialSort={[{ column: settings.sortColumn, dir: settings.sortDir }]}
-  />
+  <SearchBox {itemData} {table} keys={["search_item"]} {initialSort} />
+
+  <Table bind:table data={itemData} {options} />
+
+  <p style="text-align: right">
+    <i>Last updated {last_modified}</i>
+    <br />
+  </p>
 {/if}
-
-<Table bind:table data={itemData} {options} />
-
-<p style="text-align: right">
-  <i>Last updated {last_modified}</i>
-  <br />
-</p>
