@@ -1,21 +1,18 @@
-<script context="module">
-  export async function preload() {
-    const fetchData = async (url) => {
-      let resp = await this.fetch(url);
-      return await resp.json();
-    };
-    const listingData = await fetchData("/api/v2/query/search_item_listing");
-
-    return { listingData };
-  }
-</script>
-
 <script>
   import Table from "../../components/Table.svelte";
   import SearchBox from "../../components/SearchBox.svelte";
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
+  import { onMount } from "svelte";
 
   export let listingData = [];
+
+  onMount(async () => {
+    const fetchData = async (url) => {
+      let resp = await fetch(url);
+      return await resp.json();
+    };
+    listingData = await fetchData("/api/v2/query/search_item_listing");
+  });
 
   let table;
 

@@ -1,30 +1,31 @@
-<script context="module">
-  import { transform } from "./index.js";
-  export async function preload() {
-    const fetchData = async (url) => {
-      let resp = await this.fetch(url);
-      return await resp.json();
-    };
-    const [category, index] = await Promise.all([
-      fetchData("/api/v2/query/mllib_scrolls_category"),
-      fetchData("/api/v2/query/search_item_index"),
-    ]);
-    const price_data = transform(index, category);
-
-    return { price_data };
-  }
-</script>
-
 <script>
   import { onMount } from "svelte";
   // tabulator is a misnomer for a module name
   import { formatPrice } from "../../tabulator.js";
   import { sortBy } from "lodash";
   import localforage from "localforage";
-  import { CATEGORIES, chunkList, getBackgroundColor } from "./index.js";
+  import {
+    CATEGORIES,
+    chunkList,
+    getBackgroundColor,
+    transform,
+  } from "./index.js";
   import { Tooltip } from "sveltestrap/src";
+  import { Stretch } from "svelte-loading-spinners/src";
 
   export let price_data;
+
+  onMount(async () => {
+    const fetchData = async (url) => {
+      let resp = await fetch(url);
+      return await resp.json();
+    };
+    const [category, index] = await Promise.all([
+      fetchData("/api/v2/query/mllib_scrolls_category"),
+      fetchData("/api/v2/query/search_item_index"),
+    ]);
+    price_data = transform(index, category);
+  });
 
   let threshold;
   $: threshold && localforage.setItem("guide-threshold", threshold);
@@ -93,9 +94,9 @@
 </details>
 <br />
 
-<div class="guide-container">
-  <div class="card-columns guide">
-    {#if price_data}
+{#if price_data}
+  <div class="guide-container">
+    <div class="card-columns guide">
       {#each CATEGORIES as key}
         {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > threshold || x.percent == "etc"), ["category", "stat"] ), 15) as chunk, i}
           <div
@@ -160,9 +161,13 @@
           </div>
         {/each}
       {/each}
-    {/if}
+    </div>
   </div>
-</div>
+{:else}
+  <div style="text-align: center;">
+    <Stretch size="60" color="#FF3E00" unit="px" />
+  </div>
+{/if}
 
 <style>
   /* https://stackoverflow.com/a/24895631 */

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import Table from "./Table.svelte";
   import { getThumbprint } from "../token.js";
+  import { Stretch } from "svelte-loading-spinners/src";
 
   // from the guide colors
   const BG_GREEN = "#a3c3b0";
@@ -36,7 +37,7 @@
   onMount(async () => {
     client_thumbprint = await getThumbprint();
 
-    let resp = await fetch("/api/v1/query/top_uploaders");
+    let resp = await fetch("/api/v2/query/top_uploaders");
     data = await resp.json();
     // add rank to the data
     for (let i = 0; i < data.length; i++) {
@@ -45,4 +46,10 @@
   });
 </script>
 
-<Table {data} {options} />
+{#if data}
+  <Table {data} {options} />
+{:else}
+  <div style="text-align: center;">
+    <Stretch size="60" color="#FF3E00" unit="px" />
+  </div>
+{/if}

@@ -1,4 +1,26 @@
 <script context="module">
+  export async function preload(page) {
+    let { task_id } = page.params;
+    return { task_id };
+  }
+</script>
+
+<script>
+  import { onMount } from "svelte";
+  import { Stretch } from "svelte-loading-spinners/src";
+  import { resultColumns } from "./columns.js";
+
+  import Table from "../../components/Table.svelte";
+  import SummaryView from "./SummaryView.svelte";
+
+  export let task_id;
+
+  let flattened = null;
+  let status = null;
+
+  let table;
+  let cutoff = 3;
+
   function flatten(data) {
     return data.payload.flatMap((row) => {
       return row.body.entries.map((entry, entryIndex) => ({
@@ -11,40 +33,16 @@
     });
   }
 
-  export async function preload(page) {
-    let { task_id } = page.params;
-
+  onMount(async () => {
     const url = `/api/v2/data/${task_id}/slim.json`;
-    const resp = await this.fetch(url);
+    const resp = await fetch(url);
 
-    let ready = false;
-    if (resp.status == 404) {
-      return { ready };
+    status = resp.status;
+    if (status == 404) {
+      return;
     }
-    let data = await resp.json();
-    // TODO: trim columns
-    let flattened = flatten(data);
-    ready = true;
-    return { flattened, ready, task_id };
-  }
-</script>
-
-<script>
-  import { onMount } from "svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
-  import { resultColumns } from "./columns.js";
-
-  import Table from "../../components/Table.svelte";
-  import SummaryView from "./SummaryView.svelte";
-
-  export let flattened = null;
-  export let ready = true;
-  export let task_id;
-
-  let table;
-  let cutoff = 3;
-
-  onMount(async () => {});
+    flattened = flatten(await resp.json());
+  });
 </script>
 
 <svelte:head>
@@ -67,10 +65,10 @@
   <button class="btn btn-info" on:click={table.copyToClipboard("active", true)}>
     Copy to Clipboard
   </button>
-{:else if !ready}
+{:else if status == 404}
   Data for {task_id} is not ready yet. Results may take up to 10 minutes to appear.
 {:else}
-  <div id="spinner">
+  <div style="text-align: center;">
     <Stretch size="60" color="#FF3E00" unit="px" />
   </div>
 {/if}
@@ -84,10 +82,3 @@
     columns: resultColumns,
   }}
 />
-
-<style>
-  #spinner {
-    width: 100px;
-    margin: 0 auto;
-  }
-</style>
