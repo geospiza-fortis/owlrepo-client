@@ -55,6 +55,10 @@
         dateElement.style.backgroundColor = BG_RED;
         dateElement.style.color = "#333";
         // 2 weeks is kind of old
+      } else if (datum.days_since_update > 7 * 4) {
+        dateElement.style.backgroundColor = BG_ORANGE;
+        dateElement.style.color = "#333";
+        // 2 weeks is kind of old
       } else if (datum.days_since_update > 7 * 2) {
         dateElement.style.backgroundColor = BG_YELLOW;
         dateElement.style.color = "#333";
@@ -75,6 +79,10 @@
     older than [
     <span style="padding:0 3px; color: #333; background: {BG_YELLOW}">
       2 weeks
+    </span>
+    |
+    <span style="padding:0 3px; color: #333; background: {BG_ORANGE}">
+      4 weeks
     </span>
     |
     <span style="padding:0 3px; color: #333; background: {BG_RED}">

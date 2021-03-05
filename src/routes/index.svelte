@@ -71,8 +71,10 @@
   Items marked in
   <span style="padding:0 3px; color: #333; background: {BG_YELLOW}">
     yellow
-  </span>
-  or
+  </span>,
+  <span style="padding:0 3px; color: #333; background: {BG_ORANGE}">
+    orange
+  </span>, or
   <span style="padding:0 3px; color: #333; background: {BG_RED}">red</span>
   are likely worth uploading. Look at the
   <a href="/recommendation">recommendations</a>
