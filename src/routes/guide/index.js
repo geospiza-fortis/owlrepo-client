@@ -125,7 +125,7 @@ function transform(index, category) {
         moment().diff(moment(row.search_item_timestamp), "days") || -1,
     }));
 
-  return groupBy(price_data, (v) => v.percent);
+  return price_data;
 }
 
 export { CATEGORIES, chunkList, getBackgroundColor, transform };

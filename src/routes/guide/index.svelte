@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   // tabulator is a misnomer for a module name
   import { formatPrice } from "../../tabulator.js";
-  import { sortBy } from "lodash";
+  import { sortBy, groupBy } from "lodash";
   import localforage from "localforage";
   import {
     CATEGORIES,
@@ -12,8 +12,19 @@
   } from "./index.js";
   import { Tooltip } from "sveltestrap/src";
   import { Stretch } from "svelte-loading-spinners/src";
+  import SearchBox from "./SearchBox.svelte";
 
-  export let price_data;
+  export let price_data = [];
+  let filtered_price_data = [];
+
+  let threshold;
+
+  $: threshold && localforage.setItem("guide-threshold", threshold);
+  $: user_filtered_price_data = price_data.filter(
+    (x) => x.p50 > threshold || ["etc", "ores"].includes(x.percent)
+  );
+  $: grouped_price_data = groupBy(filtered_price_data, (v) => v.percent);
+  $: valid_categories = CATEGORIES.filter((key) => key in grouped_price_data);
 
   onMount(async () => {
     const fetchData = async (url) => {
@@ -26,9 +37,6 @@
     ]);
     price_data = transform(index, category);
   });
-
-  let threshold;
-  $: threshold && localforage.setItem("guide-threshold", threshold);
 
   onMount(async () => {
     threshold = (await localforage.getItem("guide-threshold")) || 350000;
@@ -46,28 +54,43 @@
   <div class="row">
     <div class="col">
       <p>
-        Only scrolls worth more than {formatPrice(threshold)} median. Prices more
-        than 1 month old are greyed out.
+        Only scrolls worth more than {formatPrice(threshold)} mesos median. Prices
+        more than 1 month old are greyed out. See the <a href="/">home page</a> for
+        all items in the repository.
       </p>
     </div>
     <div class="col">
-      <label
-        >Minimum price
-        <input type="number" bind:value={threshold} />
+      <label>
+        <input
+          type="range"
+          min="0"
+          max="1000000"
+          step="50000"
+          bind:value={threshold}
+        />
+        filtering prices less than {formatPrice(threshold)}
       </label>
-      <input
-        type="range"
-        min="0"
-        max="1000000"
-        step="50000"
-        bind:value={threshold}
-      />
+
+      {#if price_data}
+        <div>
+          <SearchBox
+            data={user_filtered_price_data}
+            bind:result={filtered_price_data}
+          />
+        </div>
+      {/if}
     </div>
   </div>
 </div>
 
 <details>
   <summary>Click here for changelog</summary>
+  <b>Update 2021-03-04</b>
+  <ul>
+    <li>add ores as a separate section</li>
+    <li>add more items to etc</li>
+    <li>add search box</li>
+  </ul>
   <b>Update 2021-03-02</b>
   <ul>
     <li>add configurable minimum price threshold</li>
@@ -94,11 +117,11 @@
 </details>
 <br />
 
-{#if price_data}
+{#if grouped_price_data}
   <div class="guide-container">
     <div class="card-columns guide">
-      {#each CATEGORIES as key}
-        {#each chunkList(sortBy( price_data[key].filter((x) => x.p50 > threshold || ["etc", "ores"].includes(x.percent)), ["category", "stat"] ), 15) as chunk, i}
+      {#each valid_categories as key}
+        {#each chunkList(sortBy(grouped_price_data[key]), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};"
@@ -111,9 +134,11 @@
                 <h5>{key}% Scrolls</h5>
               {:else}
                 <h5>
-                  {{ mastery: "Mastery Book", etc: "Et cetera", ores: "Ores" }[
-                    key
-                  ]}
+                  {{
+                    mastery: "Mastery Book",
+                    etc: "Et cetera",
+                    ores: "Ores",
+                  }[key]}
                 </h5>
               {/if}
             </div>
