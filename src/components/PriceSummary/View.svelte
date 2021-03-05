@@ -91,11 +91,11 @@
     ]
   </span>
   <SearchBox {itemData} {table} keys={["search_item"]} {initialSort} />
+
+  <Table bind:table data={itemData} {options} />
+
+  <p style="text-align: right">
+    <i>Last updated {last_modified}</i>
+    <br />
+  </p>
 {/if}
-
-<Table bind:table data={itemData} {options} />
-
-<p style="text-align: right">
-  <i>Last updated {last_modified}</i>
-  <br />
-</p>
