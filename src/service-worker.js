@@ -32,6 +32,35 @@ self.addEventListener("activate", (event) => {
 });
 
 /**
+ * Caches that expire based on expires headers
+ */
+async function sessionFetchOrCache(request, postMessage = (_) => {}) {
+  // session cache
+  postMessage({
+    reason: "log request",
+    url: request.url,
+    headers: request.headers,
+  });
+
+  const cache = await caches.open(`session${timestamp}`);
+  let response = await cache.match(request);
+
+  // GCS-related responses sets expires headers
+  if (response) {
+    let expires = response.headers.get("expires");
+    let stale = !expires || new Date(expires).getTime() < new Date().getTime();
+    if (!stale) {
+      return response;
+    }
+  }
+
+  // otherwise, try from the network and the offline cache
+  response = await fetchAndCache(request);
+  cache.put(request, response.clone());
+  return response;
+}
+
+/**
  * Fetch the asset from the network and store it in the cache.
  * Fall back to the cache if the user is offline.
  */
@@ -58,8 +87,8 @@ self.addEventListener("fetch", (event) => {
 
   // don't try to handle e.g. data: URIs
   const isHttp = url.protocol.startsWith("http");
-  const isDevServerRequest =
-    url.hostname === self.location.hostname && url.port !== self.location.port;
+  const isDevServerRequest = false;
+  //   url.hostname === self.location.hostname && url.port !== self.location.port;
   const isStaticAsset =
     url.host === self.location.host && staticAssets.has(url.pathname);
   const skipBecauseUncached =
@@ -68,6 +97,12 @@ self.addEventListener("fetch", (event) => {
   if (isHttp && !isDevServerRequest && !skipBecauseUncached) {
     event.respondWith(
       (async () => {
+        // for debugging
+        const client = await clients.get(event.clientId);
+        const postMessage = client
+          ? (msg) => client.postMessage(msg)
+          : (_) => {};
+
         // always serve static files and bundler-generated assets from cache.
         // if your application has other URLs with data that will never change,
         // set this variable to true for them and they will only be fetched once.
@@ -82,8 +117,7 @@ self.addEventListener("fetch", (event) => {
 					return caches.match('/service-worker-index.html');
 				}
 				*/
-
-        return cachedAsset || fetchAndCache(event.request);
+        return cachedAsset || sessionFetchOrCache(event.request, postMessage);
       })()
     );
   }
