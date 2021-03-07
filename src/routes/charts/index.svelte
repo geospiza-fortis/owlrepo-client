@@ -4,6 +4,7 @@
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
   import { onMount } from "svelte";
   import { chunk } from "lodash";
+  import moment from "moment";
 
   export let listingData = [];
 
@@ -66,6 +67,19 @@
       },
     ],
   };
+
+  let max_months = moment().diff(moment("2020-04-01"), "months");
+  let months = 6;
+  $: range = 28 * months;
+  $: core_layout = {
+    xaxis: {
+      range: [
+        moment().utc().subtract(range, "days").format(),
+        moment().utc().format(),
+      ],
+      type: "date",
+    },
+  };
 </script>
 
 <svelte:head>
@@ -76,12 +90,27 @@
 
 <h2>Core scrolls</h2>
 
+<p>
+  Plots of scrolls that are indicative of the market. Observations are generally
+  collected weekly.
+</p>
+
+<label>
+  <input type="range" min="1" max={max_months} step="1" bind:value={months} />
+  Showing {months}
+  months of history
+</label>
+
 <div class="chart-container">
   {#each chunked_scrolls as row}
     <div class="row">
       {#each row as col}
-        <div class="col-sm">
-          <PriceQuantityCharts data={listingData} search_item_name={col} />
+        <div class="col-md">
+          <PriceQuantityCharts
+            data={listingData}
+            search_item_name={col}
+            layout={core_layout}
+          />
         </div>
       {/each}
     </div>

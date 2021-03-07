@@ -3,6 +3,7 @@
 
   export let data = [];
   export let search_item_name;
+  export let layout = {};
 
   function transform(data, search_item) {
     let items = data.filter(
@@ -40,7 +41,7 @@
       ]);
   }
 
-  const layout = {
+  const price_layout = {
     title: `${search_item_name} over time`,
     legend: { orientation: "h" },
     yaxis: {
@@ -64,4 +65,11 @@
   };
 </script>
 
-<Plot {data} transform={(data) => transform(data, search_item_name)} {layout} />
+<Plot
+  {data}
+  transform={(data) => transform(data, search_item_name)}
+  layout={{
+    ...price_layout,
+    ...layout,
+  }}
+/>
