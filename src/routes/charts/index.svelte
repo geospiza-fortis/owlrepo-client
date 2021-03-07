@@ -3,6 +3,7 @@
   import SearchBox from "../../components/SearchBox.svelte";
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
   import { onMount } from "svelte";
+  import { chunk } from "lodash";
 
   export let listingData = [];
 
@@ -13,6 +14,16 @@
     };
     listingData = await fetchData("/api/v2/query/search_item_listing");
   });
+
+  const core_scrolls = [
+    "Dark scroll for Claw for ATT 30%",
+    "Scroll for Gloves for ATT 60%",
+    "Scroll for Overall Armor for DEX 60%",
+    "Dark Scroll for Pet Equip. for HP 30%",
+    "Scroll for Helmet for DEX 60%",
+    "Scroll for Overall Armor for INT 60%",
+  ];
+  $: chunked_scrolls = chunk(core_scrolls, 3);
 
   let table;
 
@@ -63,7 +74,33 @@
 
 <h1>Charts</h1>
 
+<h2>Core scrolls</h2>
+
+<div class="chart-container">
+  {#each chunked_scrolls as row}
+    <div class="row">
+      {#each row as col}
+        <div class="col-sm">
+          <PriceQuantityCharts data={listingData} search_item_name={col} />
+        </div>
+      {/each}
+    </div>
+  {/each}
+</div>
+
+<h2>Search against all scrolls</h2>
+
 <SearchBox {itemData} {table} keys={["search_item"]} {initialSort} />
 <Table bind:table data={itemData} {options} />
 
 <PriceQuantityCharts data={listingData} {search_item_name} />
+
+<style>
+  /* https://stackoverflow.com/a/24895631 */
+  .chart-container {
+    width: 100vw;
+    position: relative;
+    left: calc(-50vw + 50%);
+    padding: 0 2rem;
+  }
+</style>
