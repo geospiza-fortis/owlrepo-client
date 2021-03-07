@@ -1,4 +1,5 @@
 <script>
+  import { merge } from "lodash";
   export let data;
   export let transform = (res) => res;
   export let layout = {};
@@ -27,15 +28,17 @@
     Plotly.newPlot(
       plotElement,
       transform(data),
+      merge(
         {
           margin: {
             l: 50,
             r: 0,
             b: 50,
           },
-        ...darkStyle,
-        ...layout
-      }
+        },
+        darkStyle,
+        layout
+      ),
       { responsive: true }
     );
 </script>
