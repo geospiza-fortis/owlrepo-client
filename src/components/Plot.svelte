@@ -10,6 +10,15 @@
     },
     paper_bgcolor: "#222222",
     plot_bgcolor: "#222222",
+    xaxis: {
+      gridcolor: "#333",
+    },
+    yaxis: {
+      gridcolor: "#333",
+    },
+    yaxis2: {
+      gridcolor: "#333",
+    },
   };
 
   $: plotElement &&
@@ -18,15 +27,15 @@
     Plotly.newPlot(
       plotElement,
       transform(data),
-      {
-        margin: {
-          l: 50,
-          r: 0,
-          b: 50,
-        },
+        {
+          margin: {
+            l: 50,
+            r: 0,
+            b: 50,
+          },
         ...darkStyle,
-        ...layout,
-      },
+        ...layout
+      }
       { responsive: true }
     );
 </script>
