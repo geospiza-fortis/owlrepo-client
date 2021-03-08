@@ -73,8 +73,8 @@ const columns = [
 ];
 
 function transform(data) {
-  // a few fields for plots too
-  const fields = columns.map((row) => row.field);
+  // make sure to include fields used by dependencies
+  const fields = ["task_id", ...columns.map((row) => row.field)];
   return data.map((obj) => ({
     ...pickBy(obj, (_, key) => fields.includes(key)),
   }));
