@@ -32,16 +32,24 @@
     return date.isBetween(moment("2015-04-01"), moment().add(1, "day"));
   }
 
+  // TODO: add rigorous testing of some kind...
   function validateFilenameMac(filename) {
     let re = /Screen[ _]Shot[_ ](.*).png/;
     let results = re.exec(filename);
     if (!results || results.length != 2) {
       return false;
     }
-    let date = moment(
-      results[1].replace(/_/g, " "),
-      "YYYY-MM-DD at hh.mm.ss A"
-    );
+    let target = results[1].replace(/_/g, " ");
+    // local AM/PM mode, ensure that this is being parsed strictly
+    let date = moment(target, "YYYY-MM-DD at hh.mm.ss A", true);
+    if (!date.isValid()) {
+      // try again in 24 hour mode
+      date = moment(target, "YYYY-MM-DD at HH.mm.ss", true);
+      if (!date.isValid) {
+        console.log("Not a mac date in AM/PM or 24 hour format");
+        return false;
+      }
+    }
     return date.isBetween(moment("2015-04-01"), moment().add(1, "day"));
   }
 
@@ -213,19 +221,28 @@
           <br />
         {/each}
       </div>
-      <div id="upload-button-container">
-        <button onclick="document.getElementById('fileInput').click();">
-          Browse...
-        </button>
-        {#if files.length > 0}
-          <div class="divider" />
-          <button
-            id="upload-button"
-            onclick="document.getElementById('fileSubmit').click();"
-          >
-            Upload
-          </button>
-        {/if}
+      <div id="upload-button-container" class="container">
+        <div class="row">
+          <div class="col">
+            <button
+              class="btn btn-primary"
+              onclick="document.getElementById('fileInput').click();"
+            >
+              Browse...
+            </button>
+          </div>
+          {#if files.length > 0}
+            <div class="col">
+              <button
+                id="upload-button"
+                class="btn btn-primary"
+                onclick="document.getElementById('fileSubmit').click();"
+              >
+                Upload
+              </button>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
 
@@ -287,17 +304,7 @@
     position: sticky;
     bottom: 0;
     height: 60px;
-  }
-
-  /* divider https://stackoverflow.com/a/5119860 */
-  .divider {
-    width: 120px;
-    height: auto;
-    display: inline-block;
-  }
-
-  #upload-button {
-    margin-top: 15px;
+    padding-top: 20px;
   }
 
   #screenshots {
