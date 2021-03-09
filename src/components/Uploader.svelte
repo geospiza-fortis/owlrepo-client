@@ -32,16 +32,24 @@
     return date.isBetween(moment("2015-04-01"), moment().add(1, "day"));
   }
 
+  // TODO: add rigorous testing of some kind...
   function validateFilenameMac(filename) {
     let re = /Screen[ _]Shot[_ ](.*).png/;
     let results = re.exec(filename);
     if (!results || results.length != 2) {
       return false;
     }
-    let date = moment(
-      results[1].replace(/_/g, " "),
-      "YYYY-MM-DD at hh.mm.ss A"
-    );
+    let target = results[1].replace(/_/g, " ");
+    // local AM/PM mode, ensure that this is being parsed strictly
+    let date = moment(target, "YYYY-MM-DD at hh.mm.ss A", true);
+    if (!date.isValid()) {
+      // try again in 24 hour mode
+      date = moment(target, "YYYY-MM-DD at HH.mm.ss", true);
+      if (!date.isValid) {
+        console.log("Not a mac date in AM/PM or 24 hour format");
+        return false;
+      }
+    }
     return date.isBetween(moment("2015-04-01"), moment().add(1, "day"));
   }
 
