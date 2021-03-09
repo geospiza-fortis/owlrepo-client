@@ -221,19 +221,28 @@
           <br />
         {/each}
       </div>
-      <div id="upload-button-container">
-        <button onclick="document.getElementById('fileInput').click();">
-          Browse...
-        </button>
-        {#if files.length > 0}
-          <div class="divider" />
-          <button
-            id="upload-button"
-            onclick="document.getElementById('fileSubmit').click();"
-          >
-            Upload
-          </button>
-        {/if}
+      <div id="upload-button-container" class="container">
+        <div class="row">
+          <div class="col">
+            <button
+              class="btn btn-primary"
+              onclick="document.getElementById('fileInput').click();"
+            >
+              Browse...
+            </button>
+          </div>
+          {#if files.length > 0}
+            <div class="col">
+              <button
+                id="upload-button"
+                class="btn btn-primary"
+                onclick="document.getElementById('fileSubmit').click();"
+              >
+                Upload
+              </button>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
 
@@ -295,17 +304,7 @@
     position: sticky;
     bottom: 0;
     height: 60px;
-  }
-
-  /* divider https://stackoverflow.com/a/5119860 */
-  .divider {
-    width: 120px;
-    height: auto;
-    display: inline-block;
-  }
-
-  #upload-button {
-    margin-top: 15px;
+    padding-top: 20px;
   }
 
   #screenshots {
