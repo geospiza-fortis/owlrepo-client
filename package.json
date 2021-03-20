@@ -1,6 +1,6 @@
 {
   "name": "owlrepo-client",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "scripts": {
@@ -26,7 +26,7 @@
     "mdsvex": "^0.8.9",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "rollup": "^2.41.0",
+    "rollup": "^2.42.0",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
