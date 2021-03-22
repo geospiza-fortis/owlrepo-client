@@ -41,7 +41,7 @@
       ]);
   }
 
-  const price_layout = {
+  $: price_layout = {
     title: `${search_item_name} over time`,
     legend: { orientation: "h" },
     yaxis: {
