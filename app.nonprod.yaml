@@ -1,7 +1,15 @@
 runtime: nodejs14
 entrypoint: node __sapper__/build
 
+automatic_scaling:
+  max_instances: 3
+  target_cpu_utilization: 0.9
+  max_concurrent_requests: 50
+
 handlers:
+  - url: /client
+    static_files: __sapper__/build/client
+    upload: __sapper__/build/client
   - url: /.*
     script: auto
     secure: always
