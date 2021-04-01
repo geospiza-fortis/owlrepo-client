@@ -1,23 +1,23 @@
-# OwlRepo
+# OwORepo
 
 <!-- Sourced from https://maplelegends.com/lib/npc?id=9030000 -->
 
 <img src="/fredrick.png" align="right" alt="Fredrick, the local merchant" width="200"
   style="padding: 30px" />
 
-This is a site to browse and share Owl of Minerva search results from
-[MapleLegends](https://maplelegends.com/). Screenshots are cropped and
-machine-read to create a repository of owl search results. Please see the
-[forum post][forum_post] or contact [`geospiza`](https://geospiza.me/) to leave
+This is a site to bwowse and shawe Oww of Minyewva seawch wesuwts fwom
+[MapweWegends](https://maplelegends.com/). Scweenshots awe cwopped and
+machinye-wead to cweate a wepositowy of oww seawch wesuwts. Pwease see the
+[fowum post][forum_post] ow contact [`geospiza`](https://geospiza.me/) to weave
 feedback.
 
 <div style="text-align:center;">
-<button class="btn btn-info" type="button" on:click={()=>(location.href="/guide")}>Click here for the scroll guide.</button>
+<button class="btn btn-info" type="button" on:click={()=>(location.href="/guide")}>Cwick hewe fow the scwoww guide.</button>
 </div>
 <br />
 
-The most recent [upload](/upload) for each item is summarized here. Click on the
-item name to see its history and plots. Click on a row to update the box plot
-above the table.
+The most wecent [upwoad](/upload) fow each item is summawized hewe. Cwick on the
+item nyame to see its histowy and pwots. Cwick on a wow to update the box pwot
+abuv the tabwe.
 
 [forum_post]: https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/

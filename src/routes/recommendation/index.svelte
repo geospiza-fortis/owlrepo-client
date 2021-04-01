@@ -48,7 +48,7 @@
 </script>
 
 <svelte:head>
-  <title>OwlRepo | Recommendation</title>
+  <title>OwORepo | Recommendation</title>
 </svelte:head>
 
 <h1>Recommendations</h1>

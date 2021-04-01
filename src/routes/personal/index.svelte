@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-  <title>OwlRepo | Personal</title>
+  <title>OwORepo | Personal</title>
 </svelte:head>
 
 <h1>Personal Statistics</h1>
