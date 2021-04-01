@@ -36,12 +36,12 @@
 </script>
 
 <svelte:head>
-  <title>OwlRepo | Home</title>
+  <title>OwORepo | Home</title>
 </svelte:head>
 
 <FrontMatter />
 
-<CollapseInfo component={IndexDescription} text="Tell me more!" />
+<CollapseInfo component={IndexDescription} text="OwO What's This?" />
 
 <PriceSummary itemData={price_summary} {last_modified} />
 

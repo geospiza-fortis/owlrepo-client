@@ -192,7 +192,7 @@
 </script>
 
 <svelte:head>
-  <title>OwlRepo | Curation</title>
+  <title>OwORepo | Curation</title>
 </svelte:head>
 
 <h1>Curation</h1>
