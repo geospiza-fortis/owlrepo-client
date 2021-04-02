@@ -44,7 +44,7 @@
   {#if !isOpen}
     <NavbarBrand href="/">
       <img src="/favicon.png" alt="owl of minerva" />
-      oworepo
+      owlrepo
     </NavbarBrand>
   {/if}
   <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
@@ -52,7 +52,7 @@
     <Nav class="mx-auto">
       <NavbarBrand href="/">
         <img src="/favicon.png" alt="owl of minerva" />
-        oworepo
+        owlrepo
       </NavbarBrand>
       {#each items as item, index}
         {#if index < breakpoint}

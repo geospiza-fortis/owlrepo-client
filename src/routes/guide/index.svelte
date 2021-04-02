@@ -45,18 +45,18 @@
 </script>
 
 <svelte:head>
-  <title>OwORepo | Guide</title>
+  <title>OwlRepo | Guide</title>
 </svelte:head>
 
-<h1>Scwoww Guide</h1>
+<h1>Scroll Guide</h1>
 
 <div class="container">
   <div class="row">
     <div class="col">
       <p>
-        Onwy scwowws wowth mowe than {formatPrice(threshold)} mesos median. Pwices
-        mowe than 1 month owd awe gweyed out. See the <a href="/">home page</a> fow
-        aww items in the wepositowy.
+        Only scrolls worth more than {formatPrice(threshold)} mesos median. Prices
+        more than 1 month old are greyed out. See the <a href="/">home page</a> for
+        all items in the repository.
       </p>
     </div>
     <div class="col">

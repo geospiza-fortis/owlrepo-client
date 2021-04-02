@@ -83,7 +83,7 @@
 </script>
 
 <svelte:head>
-  <title>OwORepo | Charts</title>
+  <title>OwlRepo | Charts</title>
 </svelte:head>
 
 <h1>Charts</h1>

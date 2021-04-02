@@ -23,7 +23,7 @@
 </script>
 
 <svelte:head>
-  <title>OwORepo | Upload</title>
+  <title>OwlRepo | Upload</title>
 </svelte:head>
 
 <h1>Upload Owls</h1>
