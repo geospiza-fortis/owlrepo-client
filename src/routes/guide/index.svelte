@@ -10,9 +10,9 @@
     getBackgroundColor,
     transform,
   } from "./index.js";
-  import { Tooltip } from "sveltestrap/src";
   import { Stretch } from "svelte-loading-spinners/src";
   import SearchBox from "./SearchBox.svelte";
+  import CardRow from "./CardRow.svelte";
 
   export let price_data = [];
   let filtered_price_data = [];
@@ -152,39 +152,7 @@
               >
                 <tbody>
                   {#each chunk as row, j}
-                    <Tooltip placement="top" target={`row${key}-${i}-${j}`}
-                      ><div>
-                        Updated {row.days_since_update} days ago ({row.search_item_timestamp.slice(
-                          0,
-                          10
-                        )})
-                      </div>
-                    </Tooltip>
-                    <tr
-                      id={`row${key}-${i}-${j}`}
-                      on:click={() => {
-                        window.location = `/items?keyword=${encodeURIComponent(
-                          row.search_item
-                        )}`;
-                      }}
-                    >
-                      <td>
-                        {row.category
-                          .replace("one-handed", "1h")
-                          .replace("two-handed", "2h")}
-                      </td>
-                      <td>{row.stat}</td>
-                      <td>
-                        <span
-                          style="background-color: {row.days_since_update >
-                          7 * 4
-                            ? 'grey'
-                            : 'transparent'}"
-                        >
-                          {formatPrice(row.p50)}
-                        </span>
-                      </td>
-                    </tr>
+                    <CardRow {row} id={`row${key}-${i}-${j}`} />
                   {/each}
                 </tbody>
               </table>
