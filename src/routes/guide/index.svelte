@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  // tabulator is a misnomer for a module name
-  import { formatPrice } from "../../tabulator.js";
+  import { formatPrice } from "../../utils.js";
   import { sortBy, groupBy } from "lodash";
   import localforage from "localforage";
   import {

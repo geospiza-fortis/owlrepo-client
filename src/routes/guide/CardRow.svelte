@@ -1,5 +1,5 @@
 <script>
-  import { formatPrice } from "../../tabulator.js";
+  import { formatPrice } from "../../utils.js";
   import { Tooltip } from "sveltestrap/src";
   export let row;
   export let id;

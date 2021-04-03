@@ -1,4 +1,4 @@
-import { shortFormatter } from "../../tabulator.js";
+import { shortFormatter } from "../../utils.js";
 import { pickBy } from "lodash";
 
 const columns = [
