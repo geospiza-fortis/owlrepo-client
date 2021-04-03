@@ -1,6 +1,6 @@
 import moment from "moment";
 import { pickBy } from "lodash";
-import { shortFormatter } from "../../tabulator.js";
+import { shortFormatter } from "../../utils.js";
 
 const columns = [
   {

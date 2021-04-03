@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  // tabulator is a misnomer for a module name
-  import { formatPrice } from "../../tabulator.js";
+  import { formatPrice } from "../../utils.js";
   import { sortBy, groupBy } from "lodash";
   import localforage from "localforage";
   import {
@@ -10,18 +9,30 @@
     getBackgroundColor,
     transform,
   } from "./index.js";
-  import { Tooltip } from "sveltestrap/src";
   import { Stretch } from "svelte-loading-spinners/src";
   import SearchBox from "./SearchBox.svelte";
+  import CardRow from "./CardRow.svelte";
+
+  const metric_choices = ["p25", "p50", "p75", "mean"];
+  const metric_names = {
+    p25: "25th percentile",
+    p50: "median",
+    p75: "75th percentile",
+    mean: "mean",
+  };
 
   export let price_data = [];
   let filtered_price_data = [];
 
+  let age;
   let threshold;
+  let metric;
 
+  $: age && localforage.setItem("guide-age", age);
   $: threshold && localforage.setItem("guide-threshold", threshold);
+  $: metric && localforage.setItem("guide-metric", metric);
   $: user_filtered_price_data = price_data.filter(
-    (x) => x.p50 > threshold || ["etc", "ores"].includes(x.percent)
+    (x) => x[metric] > threshold || ["etc", "ores"].includes(x.percent)
   );
   $: grouped_price_data = groupBy(filtered_price_data, (v) => v.percent);
   $: valid_categories = CATEGORIES.filter((key) => key in grouped_price_data);
@@ -39,7 +50,9 @@
   });
 
   onMount(async () => {
+    age = (await localforage.getItem("guide-age")) || 28;
     threshold = (await localforage.getItem("guide-threshold")) || 350000;
+    metric = (await localforage.getItem("guide-metric")) || "p50";
     // TODO: I wish I had some documentation on the schema of these...
   });
 </script>
@@ -54,23 +67,43 @@
   <div class="row">
     <div class="col">
       <p>
-        Only scrolls worth more than {formatPrice(threshold)} mesos median. Prices
-        more than 1 month old are greyed out. See the <a href="/">home page</a> for
-        all items in the repository.
+        Only scrolls worth more than {formatPrice(threshold)} mesos ({metric_names[
+          metric
+        ]}). Prices more than {age} days old are greyed out. See the
+        <a href="/">home page</a> for all items in the repository.
       </p>
     </div>
     <div class="col">
-      <label>
-        <input
-          type="range"
-          min="0"
-          max="1000000"
-          step="50000"
-          bind:value={threshold}
-        />
-        filtering prices less than {formatPrice(threshold)}
-      </label>
-
+      <div>
+        <label>
+          <input type="range" min={3} max={28} bind:value={age} />
+          grey out prices greater than {age} days
+        </label>
+      </div>
+      <div>
+        <label>
+          <input
+            type="range"
+            min="0"
+            max="1000000"
+            step="50000"
+            bind:value={threshold}
+          />
+          filtering prices less than {formatPrice(threshold)}
+        </label>
+      </div>
+      {#if metric}
+        <div>
+          <label>
+            <select bind:value={metric}>
+              {#each metric_choices as choice}
+                <option value={choice}>{metric_names[choice]}</option>
+              {/each}
+            </select>
+            price summary
+          </label>
+        </div>
+      {/if}
       {#if price_data}
         <div>
           <SearchBox
@@ -85,6 +118,11 @@
 
 <details>
   <summary>Click here for changelog</summary>
+  <b>Update 2021-04-02</b>
+  <ul>
+    <li>sort items within each category</li>
+    <li>add age and summary choices</li>
+  </ul>
   <b>Update 2021-03-04</b>
   <ul>
     <li>add ores as a separate section</li>
@@ -121,7 +159,9 @@
   <div class="guide-container">
     <div class="card-columns guide">
       {#each valid_categories as key}
-        {#each chunkList(sortBy(grouped_price_data[key]), 15) as chunk, i}
+        {#each chunkList(sortBy(grouped_price_data[key], [
+            "category",
+          ]), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};"
@@ -150,39 +190,7 @@
               >
                 <tbody>
                   {#each chunk as row, j}
-                    <Tooltip placement="top" target={`row${key}-${i}-${j}`}
-                      ><div>
-                        Updated {row.days_since_update} days ago ({row.search_item_timestamp.slice(
-                          0,
-                          10
-                        )})
-                      </div>
-                    </Tooltip>
-                    <tr
-                      id={`row${key}-${i}-${j}`}
-                      on:click={() => {
-                        window.location = `/items?keyword=${encodeURIComponent(
-                          row.search_item
-                        )}`;
-                      }}
-                    >
-                      <td>
-                        {row.category
-                          .replace("one-handed", "1h")
-                          .replace("two-handed", "2h")}
-                      </td>
-                      <td>{row.stat}</td>
-                      <td>
-                        <span
-                          style="background-color: {row.days_since_update >
-                          7 * 4
-                            ? 'grey'
-                            : 'transparent'}"
-                        >
-                          {formatPrice(row.p50)}
-                        </span>
-                      </td>
-                    </tr>
+                    <CardRow {row} {metric} {age} id={`row${key}-${i}-${j}`} />
                   {/each}
                 </tbody>
               </table>
@@ -207,6 +215,7 @@
   }
 
   .guide {
+    color: #000;
     padding: 0 2em;
   }
 
@@ -214,11 +223,6 @@
     .guide {
       padding: 0 0.5rem;
     }
-  }
-
-  .guide,
-  td {
-    color: #000;
   }
 
   /* https://stackoverflow.com/a/43117538 */

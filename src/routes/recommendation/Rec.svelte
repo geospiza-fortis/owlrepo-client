@@ -3,6 +3,7 @@
 
   export let predData;
   export let data;
+  export let threshold_age = 28;
 
   const core_scrolls = [
     "Dark scroll for Claw for ATT 30%",
@@ -23,16 +24,15 @@
   $: staleData = data.filter((obj) => scroll_names.includes(obj.name));
   $: etcData = data.filter((obj) => !scroll_names.includes(obj.name));
 
-  let coreOptions = createOptions([
+  $: coreOptions = createOptions([
     { field: "search_item_timestamp", type: "!=", value: null },
     { field: "days_since_update", type: ">=", value: core_scroll_update },
   ]);
-  let staleOptions = createOptions([
+  $: staleOptions = createOptions([
     { field: "search_item_timestamp", type: "!=", value: null },
-    { field: "days_since_update", type: ">", value: 28 },
+    { field: "days_since_update", type: ">", value: threshold_age },
   ]);
-
-  let etcOptions = staleOptions;
+  $: etcOptions = staleOptions;
 
   function createOptions(initialFilter) {
     return {
@@ -85,19 +85,11 @@
 
 <h2>Core Scrolls</h2>
 <p>
-  These scrolls are strong indicators of the market. They should be measured
-  every ~{core_scroll_update} days.
+  These scrolls are indicators of the common items sold on the market. They
+  should be measured every ~{core_scroll_update} days.
 </p>
-{#if !coreData}
-  <ul>
-    {#each core_scrolls as scroll}
-      <li>{scroll}</li>
-    {/each}
-  </ul>
-  <p>Core scrolls are up to date.</p>
-{:else}
-  <Table data={coreData} options={coreOptions} />
-{/if}
+
+<Table data={coreData} options={coreOptions} />
 
 <h2>Stale Scrolls</h2>
 <Table data={staleData} options={staleOptions} />
