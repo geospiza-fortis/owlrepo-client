@@ -118,6 +118,11 @@
 
 <details>
   <summary>Click here for changelog</summary>
+  <b>Update 2021-04-02</b>
+  <ul>
+    <li>sort items within each category</li>
+    <li>add age and summary choices</li>
+  </ul>
   <b>Update 2021-03-04</b>
   <ul>
     <li>add ores as a separate section</li>
