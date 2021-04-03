@@ -121,7 +121,9 @@
   <div class="guide-container">
     <div class="card-columns guide">
       {#each valid_categories as key}
-        {#each chunkList(sortBy(grouped_price_data[key]), 15) as chunk, i}
+        {#each chunkList(sortBy(grouped_price_data[key], [
+            "category",
+          ]), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};"
