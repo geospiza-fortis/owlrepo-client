@@ -24,9 +24,11 @@
   export let price_data = [];
   let filtered_price_data = [];
 
+  let age;
   let threshold;
   let metric;
 
+  $: age && localforage.setItem("guide-age", age);
   $: threshold && localforage.setItem("guide-threshold", threshold);
   $: metric && localforage.setItem("guide-metric", metric);
   $: user_filtered_price_data = price_data.filter(
@@ -48,6 +50,7 @@
   });
 
   onMount(async () => {
+    age = (await localforage.getItem("guide-age")) || 28;
     threshold = (await localforage.getItem("guide-threshold")) || 350000;
     metric = (await localforage.getItem("guide-metric")) || "p50";
     // TODO: I wish I had some documentation on the schema of these...
@@ -66,11 +69,17 @@
       <p>
         Only scrolls worth more than {formatPrice(threshold)} mesos ({metric_names[
           metric
-        ]}). Prices more than 1 month old are greyed out. See the
+        ]}). Prices more than {age} days old are greyed out. See the
         <a href="/">home page</a> for all items in the repository.
       </p>
     </div>
     <div class="col">
+      <div>
+        <label>
+          <input type="range" min={3} max={28} bind:value={age} />
+          grey out prices greater than {age} days
+        </label>
+      </div>
       <div>
         <label>
           <input
@@ -176,7 +185,7 @@
               >
                 <tbody>
                   {#each chunk as row, j}
-                    <CardRow {row} {metric} id={`row${key}-${i}-${j}`} />
+                    <CardRow {row} {metric} {age} id={`row${key}-${i}-${j}`} />
                   {/each}
                 </tbody>
               </table>

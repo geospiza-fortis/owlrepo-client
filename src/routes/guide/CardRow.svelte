@@ -4,6 +4,7 @@
   export let row;
   export let id;
   export let metric;
+  export let age = 28;
 </script>
 
 <Tooltip placement="top" target={id}
@@ -26,7 +27,7 @@
   <td>{row.stat}</td>
   <td>
     <span
-      style="background-color: {row.days_since_update > 7 * 4
+      style="background-color: {row.days_since_update > age
         ? 'grey'
         : 'transparent'}"
     >
