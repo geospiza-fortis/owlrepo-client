@@ -3,6 +3,7 @@
   import { Tooltip } from "sveltestrap/src";
   export let row;
   export let id;
+  export let metric;
 </script>
 
 <Tooltip placement="top" target={id}
@@ -29,7 +30,7 @@
         ? 'grey'
         : 'transparent'}"
     >
-      {formatPrice(row.p50)}
+      {formatPrice(row[metric])}
     </span>
   </td>
 </tr>

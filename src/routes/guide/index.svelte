@@ -13,14 +13,24 @@
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
 
+  const metric_choices = ["p25", "p50", "p75", "mean"];
+  const metric_names = {
+    p25: "25th percentile",
+    p50: "median",
+    p75: "75th percentile",
+    mean: "mean",
+  };
+
   export let price_data = [];
   let filtered_price_data = [];
 
   let threshold;
+  let metric;
 
   $: threshold && localforage.setItem("guide-threshold", threshold);
+  $: metric && localforage.setItem("guide-metric", metric);
   $: user_filtered_price_data = price_data.filter(
-    (x) => x.p50 > threshold || ["etc", "ores"].includes(x.percent)
+    (x) => x[metric] > threshold || ["etc", "ores"].includes(x.percent)
   );
   $: grouped_price_data = groupBy(filtered_price_data, (v) => v.percent);
   $: valid_categories = CATEGORIES.filter((key) => key in grouped_price_data);
@@ -39,6 +49,7 @@
 
   onMount(async () => {
     threshold = (await localforage.getItem("guide-threshold")) || 350000;
+    metric = (await localforage.getItem("guide-metric")) || "p50";
     // TODO: I wish I had some documentation on the schema of these...
   });
 </script>
@@ -53,23 +64,35 @@
   <div class="row">
     <div class="col">
       <p>
-        Only scrolls worth more than {formatPrice(threshold)} mesos median. Prices
-        more than 1 month old are greyed out. See the <a href="/">home page</a> for
-        all items in the repository.
+        Only scrolls worth more than {formatPrice(threshold)} mesos ({metric_names[
+          metric
+        ]}). Prices more than 1 month old are greyed out. See the
+        <a href="/">home page</a> for all items in the repository.
       </p>
     </div>
     <div class="col">
-      <label>
-        <input
-          type="range"
-          min="0"
-          max="1000000"
-          step="50000"
-          bind:value={threshold}
-        />
-        filtering prices less than {formatPrice(threshold)}
-      </label>
-
+      <div>
+        <label>
+          <input
+            type="range"
+            min="0"
+            max="1000000"
+            step="50000"
+            bind:value={threshold}
+          />
+          filtering prices less than {formatPrice(threshold)}
+        </label>
+      </div>
+      <div>
+        <label>
+          <select bind:value={metric}>
+            {#each metric_choices as choice}
+              <option value={choice}>{metric_names[choice]}</option>
+            {/each}
+          </select>
+          price summary
+        </label>
+      </div>
       {#if price_data}
         <div>
           <SearchBox
@@ -151,7 +174,7 @@
               >
                 <tbody>
                   {#each chunk as row, j}
-                    <CardRow {row} id={`row${key}-${i}-${j}`} />
+                    <CardRow {row} {metric} id={`row${key}-${i}-${j}`} />
                   {/each}
                 </tbody>
               </table>
@@ -176,6 +199,7 @@
   }
 
   .guide {
+    color: #000;
     padding: 0 2em;
   }
 
@@ -183,11 +207,6 @@
     .guide {
       padding: 0 0.5rem;
     }
-  }
-
-  .guide,
-  td {
-    color: #000;
   }
 
   /* https://stackoverflow.com/a/43117538 */
