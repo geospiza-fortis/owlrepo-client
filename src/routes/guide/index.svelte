@@ -83,16 +83,18 @@
           filtering prices less than {formatPrice(threshold)}
         </label>
       </div>
-      <div>
-        <label>
-          <select bind:value={metric}>
-            {#each metric_choices as choice}
-              <option value={choice}>{metric_names[choice]}</option>
-            {/each}
-          </select>
-          price summary
-        </label>
-      </div>
+      {#if metric}
+        <div>
+          <label>
+            <select bind:value={metric}>
+              {#each metric_choices as choice}
+                <option value={choice}>{metric_names[choice]}</option>
+              {/each}
+            </select>
+            price summary
+          </label>
+        </div>
+      {/if}
       {#if price_data}
         <div>
           <SearchBox
