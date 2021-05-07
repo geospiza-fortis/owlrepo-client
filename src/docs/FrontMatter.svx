@@ -1,9 +1,14 @@
 # OwlRepo
 
-<!-- Sourced from https://maplelegends.com/lib/npc?id=9030000 -->
+<!-- Drawn by higurashi: https://forum.maplelegends.com/index.php?threads/higurashi-doodle-shop.39515/page-2#post-266461 -->
 
-<img src="/fredrick.png" align="right" alt="Fredrick, the local merchant" width="200"
-  style="padding: 30px" />
+<a href="https://forum.maplelegends.com/index.php?threads/higurashi-doodle-shop.39515/">
+  <img src="/geospiza-higurashi.png"
+      alt="geospiza drawn by higurashi"
+      align="right"
+      width="200"
+      style="padding: 30px"/>
+</a>
 
 This is a site to browse and share Owl of Minerva search results from
 [MapleLegends](https://maplelegends.com/). Screenshots are cropped and
