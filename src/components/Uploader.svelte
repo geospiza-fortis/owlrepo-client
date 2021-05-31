@@ -41,7 +41,7 @@
     }
     let target = results[1].replace(/_/g, " ");
     // local AM/PM mode, ensure that this is being parsed strictly
-    let date = moment(target, "YYYY-MM-DD at hh.mm.ss A", true);
+    let date = moment(target, "YYYY-MM-DD at h.mm.ss A", true);
     if (!date.isValid()) {
       // try again in 24 hour mode
       date = moment(target, "YYYY-MM-DD at HH.mm.ss", true);
