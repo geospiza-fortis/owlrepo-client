@@ -94,6 +94,11 @@
           // if the resize is a no-op, then add a 6 pixel offset for whatever
           // reason. See the notebook for details on cropping.
           cropDim = getDim(185 + (uncropped.width == 912 ? 6 : 0), 238);
+        } else if (uncropped.height == 1804 && uncropped.width == 2272) {
+          // NOTE: I've only tested this on a personal macbook, so I haven't taken
+          // into account retina displays, etc. The logic may look the same as above.
+          dataUrl = await resizeImage(dataUrl, 1136, 902);
+          cropDim = getDim(269, 350);
         } else {
           console.error(`${file.name}: bad dimensions for file`);
           error += 1;
