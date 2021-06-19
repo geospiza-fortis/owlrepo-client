@@ -85,4 +85,19 @@ async function requestUploadToken() {
   return await resp.json();
 }
 
-export { getOrCreateJWK, requestUploadToken, getThumbprint };
+async function signMessage(message) {
+  let private_jwk = await getOrCreateJWK("contributor-keys", false);
+
+  // include the timestamp and the key fingerprint
+  let data = {
+    timestamp: moment().format(),
+    thumbprint: await getThumbprint(),
+    message: message,
+  };
+  let sig = await JWS.createSign(private_jwk)
+    .update(JSON.stringify(data))
+    .final();
+  return sig;
+}
+
+export { getOrCreateJWK, requestUploadToken, getThumbprint, signMessage };
