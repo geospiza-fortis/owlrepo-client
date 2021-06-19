@@ -1,32 +1,91 @@
 <script>
-  import { signMessage } from "../../token.js";
+  import { signMessage, verifyMessage } from "../../token.js";
 
-  let message;
-  $: signedMessage = message ? signMessage(message) : null;
+  let plaintext;
+  let ciphertext;
+  let signedArea;
+
+  $: signed = plaintext ? signMessage(plaintext) : null;
+  $: verified = ciphertext ? verifyMessage(JSON.parse(ciphertext)) : null;
+
+  function copySignedArea() {
+    signedArea.select();
+    document.execCommand("copy");
+  }
 </script>
 
 <svelte:head>
-  <title>OwlRepo | Sign</title>
+  <title>OwlRepo | Sign and Verify</title>
 </svelte:head>
 
-<h1>Sign</h1>
+<h1>Sign and Verify</h1>
 
-<p>Use this page to sign messages in OwlRepo.</p>
+<h2>Sign</h2>
+
+<p>Sign messages using your private key.</p>
 
 <form>
   <div class="form-group">
     <label for="message">Message</label>
-    <textarea class="form-control" id="message" rows="3" bind:value={message} />
+    <textarea
+      class="form-control"
+      id="message"
+      rows="3"
+      bind:value={plaintext}
+    />
   </div>
-  {#if message}
-    {#await signedMessage then data}
+  {#if signed}
+    {#await signed then data}
       <div class="form-group">
         <label for="signed-message">Signed Message</label>
         <textarea
           class="form-control"
           id="signed-message"
           rows="3"
+          bind:this={signedArea}
           value={JSON.stringify(data, 2)}
+        />
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        on:click|preventDefault={copySignedArea}>Copy to Clipboard</button
+      >
+    {/await}
+  {/if}
+</form>
+
+<h2>Verify</h2>
+
+<p>Verify and display the contents of a message.</p>
+
+<form>
+  <div class="form-group">
+    <label for="message">Signed Message</label>
+    <textarea
+      class="form-control"
+      id="message"
+      rows="3"
+      bind:value={ciphertext}
+    />
+  </div>
+  {#if verified}
+    {#await verified then data}
+      <div class="form-group">
+        <input
+          class="form-control"
+          type="text"
+          value={data.header.jwk.kid}
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="verified-message">Verified Message</label>
+        <textarea
+          class="form-control"
+          id="verified-message"
+          rows="3"
+          value={JSON.parse(data.payload)}
         />
       </div>
     {/await}
