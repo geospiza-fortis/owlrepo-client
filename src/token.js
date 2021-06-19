@@ -85,4 +85,26 @@ async function requestUploadToken() {
   return await resp.json();
 }
 
-export { getOrCreateJWK, requestUploadToken, getThumbprint };
+async function signMessage(message) {
+  let private_jwk = await getOrCreateJWK("contributor-keys", false);
+
+  let sig = await JWS.createSign(
+    { fields: { typ: "jwk+json" } },
+    { key: private_jwk, reference: "jwk" }
+  )
+    .update(JSON.stringify(message))
+    .final();
+  return sig;
+}
+
+async function verifyMessage(message) {
+  return await JWS.createVerify().verify(message, { allowEmbeddedKey: true });
+}
+
+export {
+  getOrCreateJWK,
+  requestUploadToken,
+  getThumbprint,
+  signMessage,
+  verifyMessage,
+};

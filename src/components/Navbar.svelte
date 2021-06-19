@@ -7,6 +7,7 @@
     { text: "Recommendation", href: "recommendation" },
     { text: "Curate", href: "curate" },
     { text: "Personal", href: "personal" },
+    { text: "Sign and Verify", href: "sign" },
     {
       text: "Forum",
       href:
