@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { formatPrice } from "../../utils.js";
-  import { sortBy, groupBy } from "lodash";
+  import { sortBy, groupBy, random } from "lodash";
   import localforage from "localforage";
   import {
     CATEGORIES,
@@ -12,6 +12,8 @@
   import { Stretch } from "svelte-loading-spinners/src";
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
+  import { Alert } from "sveltestrap/src";
+  import moment from "moment";
 
   const metric_choices = ["p25", "p50", "p75", "mean"];
   const metric_names = {
@@ -23,6 +25,7 @@
 
   export let price_data = [];
   let filtered_price_data = [];
+  let uploads = [];
 
   let age;
   let threshold;
@@ -37,7 +40,16 @@
   $: grouped_price_data = groupBy(filtered_price_data, (v) => v.percent);
   $: valid_categories = CATEGORIES.filter((key) => key in grouped_price_data);
 
+  // data for the alert
+  $: week_old = price_data.filter((x) => x.days_since_update > 7);
+  $: random_item = week_old[random(0, week_old.length)];
+
+  $: prompt_upload =
+    uploads.length == 0 ||
+    moment().diff(moment(uploads[uploads.length - 1].timestamp), "hours") >= 16;
+
   onMount(async () => {
+    uploads = (await localforage.getItem("personal-uploads")) || [];
     const fetchData = async (url) => {
       let resp = await fetch(url);
       return await resp.json();
@@ -62,6 +74,19 @@
 </svelte:head>
 
 <h1>Scroll Guide</h1>
+
+{#if random_item && prompt_upload}
+  <Alert color="info" fade={false} dismissible={true}>
+    {#if uploads.length == 0}
+      Want to help out?
+    {:else}
+      Thank you for the {uploads.length} owl contribution{#if uploads.length > 1}s{/if}.
+    {/if}
+    Search for <i>{random_item.search_item}</i>
+    ({random_item.days_since_update} days old) and
+    <a href="/upload">make an upload</a> today!
+  </Alert>
+{/if}
 
 <div class="container">
   <div class="row">

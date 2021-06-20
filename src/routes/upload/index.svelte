@@ -18,8 +18,15 @@
   import ActivityHeatmap from "../../components/ActivityHeatmap.svelte";
   import PublicKey from "../../docs/PublicKey.svelte";
   import UploadInstructions from "../../docs/UploadInstructions.svx";
+  import localforage from "localforage";
+  import { onMount } from "svelte";
 
   export let heatmap;
+  let uploads = [];
+
+  onMount(async () => {
+    uploads = (await localforage.getItem("personal-uploads")) || [];
+  });
 </script>
 
 <svelte:head>
@@ -40,7 +47,8 @@
 
 <p>
   These are the top uploaders for the past week. Your upload position is
-  highlighted.
+  highlighted. You have contributed {uploads.length} owl{#if uploads.length != 1}s{/if}
+  to date.
 </p>
 
 <CollapseInfo
