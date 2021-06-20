@@ -57,7 +57,7 @@
     "simple-statistics": "^7.6.0",
     "sirv": "^1.0.11",
     "svelte-loading-spinners": "^0.1.4",
-    "sveltestrap": "^3.13.0",
+    "sveltestrap": "^4.2.1",
     "tabulator-tables": "^4.9.3",
     "url": "^0.11.0",
     "uuid": "^8.3.2"
