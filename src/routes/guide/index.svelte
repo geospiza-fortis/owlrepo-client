@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { formatPrice } from "../../utils.js";
-  import { sortBy, groupBy } from "lodash";
+  import { sortBy, groupBy, random } from "lodash";
   import localforage from "localforage";
   import {
     CATEGORIES,
@@ -12,6 +12,7 @@
   import { Stretch } from "svelte-loading-spinners/src";
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
+  import { Alert } from "sveltestrap/src";
 
   const metric_choices = ["p25", "p50", "p75", "mean"];
   const metric_names = {
@@ -36,6 +37,9 @@
   );
   $: grouped_price_data = groupBy(filtered_price_data, (v) => v.percent);
   $: valid_categories = CATEGORIES.filter((key) => key in grouped_price_data);
+
+  $: week_old = price_data.filter((x) => x.days_since_update > 7);
+  $: random_item = week_old[random(0, week_old.length)];
 
   onMount(async () => {
     const fetchData = async (url) => {
@@ -62,6 +66,14 @@
 </svelte:head>
 
 <h1>Scroll Guide</h1>
+
+{#if random_item}
+  <Alert color="info" fade={false} dismissible={true}>
+    Want to help out? Search for <i>{random_item.search_item}</i>
+    ({random_item.days_since_update} days old) and
+    <a href="/upload">make an upload</a> today!
+  </Alert>
+{/if}
 
 <div class="container">
   <div class="row">
