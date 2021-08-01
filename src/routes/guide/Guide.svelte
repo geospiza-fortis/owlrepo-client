@@ -143,6 +143,12 @@
 
 <details>
   <summary>Click here for changelog</summary>
+  <b>Update 2021-08-01</b>
+  <ul>
+    <li>updated color palette to match scrolls in-game</li>
+    <li>nudge now updates every 3 days</li>
+    <li>guide is now found on the home page</li>
+  </ul>
   <b>Update 2021-04-02</b>
   <ul>
     <li>sort items within each category</li>

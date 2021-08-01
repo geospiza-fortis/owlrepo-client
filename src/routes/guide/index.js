@@ -1,5 +1,4 @@
 import moment from "moment";
-import { groupBy } from "lodash";
 
 const CATEGORIES = ["10", "30", "60", "70", "100", "etc", "ores", "mastery"];
 const ETC_DATA = Object.fromEntries(
@@ -83,13 +82,17 @@ function chunkList(list, size) {
 
 function getBackgroundColor(percent, opacity = 1.0) {
   // https://www.schemecolor.com/pastel-calm.php
+  // https://www.colorhexa.com/b19cd9
+  // https://www.colorhexa.com/cfcfc4
   const colors = [
-    `rgba(165, 200, 228, ${opacity})`,
-    `rgba(192, 236, 204, ${opacity})`,
-    `rgba(242, 221, 192, ${opacity})`,
-    `rgba(249, 240, 193, ${opacity})`,
-    `rgba(244, 205, 166, ${opacity})`,
-    `rgba(246, 168, 166, ${opacity})`,
+    `rgba(249, 240, 193, ${opacity})`, // yellow
+    `rgba(177, 156, 217, ${opacity})`, // purple
+    `rgba(244, 205, 166, ${opacity})`, // orange
+    `rgba(207, 207, 196, ${opacity})`, // grey
+    `rgba(165, 200, 228, ${opacity})`, // blue
+    `rgba(192, 236, 204, ${opacity})`, // green
+    // `rgba(242, 221, 192, ${opacity})`, // brown
+    `rgba(246, 168, 166, ${opacity})`, // red
   ];
   return colors[CATEGORIES.indexOf(percent) % colors.length];
 }
