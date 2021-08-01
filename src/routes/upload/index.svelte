@@ -37,11 +37,7 @@
 
 <Uploader />
 
-<CollapseInfo
-  component={UploadInstructions}
-  componentId="uploadInstructions"
-  text="How do I upload?"
-/>
+<UploadInstructions />
 
 <h2>Top Uploaders</h2>
 
