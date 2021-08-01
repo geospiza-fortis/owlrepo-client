@@ -22,4 +22,5 @@ several days before uploading if you do not want to share current prices -- the
 value in this tool is keeping track of history and watching supply and demand in
 action.
 
-Thank you for contributing and happy mapling!
+Please report any issues to [`geospiza`](https://geospiza.me/). Thank you for
+contributing and happy mapling!

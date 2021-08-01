@@ -1,28 +1,17 @@
-# OwlRepo
-
 <!-- Drawn by higurashi: https://forum.maplelegends.com/index.php?threads/higurashi-doodle-shop.39515/page-2#post-266461 -->
 
-<a href="https://forum.maplelegends.com/index.php?threads/higurashi-doodle-shop.39515/">
+<!-- <a href="https://forum.maplelegends.com/index.php?threads/higurashi-doodle-shop.39515/">
   <img src="/geospiza-higurashi.png"
       alt="geospiza drawn by higurashi"
       align="right"
       width="200"
       style="padding: 30px"/>
-</a>
+</a> -->
 
 This is a site to browse and share Owl of Minerva search results from
 [MapleLegends](https://maplelegends.com/). Screenshots are cropped and
 machine-read to create a repository of owl search results. Please see the
 [forum post][forum_post] or contact [`geospiza`](https://geospiza.me/) to leave
 feedback.
-
-<div style="text-align:center;">
-<button class="btn btn-info" type="button" on:click={()=>(location.href="/guide")}>Click here for the scroll guide.</button>
-</div>
-<br />
-
-The most recent [upload](/upload) for each item is summarized here. Click on the
-item name to see its history and plots. Click on a row to update the box plot
-above the table.
 
 [forum_post]: https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/
