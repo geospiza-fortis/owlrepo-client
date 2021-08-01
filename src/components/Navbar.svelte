@@ -1,9 +1,10 @@
 <script context="module">
   const items = [
-    { text: "Guide", href: "guide" },
+    { text: "Summary", href: "summary" },
     { text: "Items", href: "items" },
-    { text: "Charts", href: "charts" },
     { text: "Upload", href: "upload" },
+    { text: "Charts", href: "charts" },
+    { text: "About", href: "about" },
     { text: "Recommendation", href: "recommendation" },
     { text: "Curate", href: "curate" },
     { text: "Personal", href: "personal" },
@@ -31,7 +32,7 @@
     DropdownItem,
   } from "sveltestrap/src";
 
-  const breakpoint = 4;
+  const breakpoint = 5;
   let isOpen = false;
 
   export let segment;

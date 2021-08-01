@@ -1,11 +1,6 @@
-<script>
-  import Guide from "./Guide.svelte";
+<script context="module">
+  export async function preload(page, session) {
+    // This route no longer exists, redirect to the home page
+    return this.redirect(301, "/");
+  }
 </script>
-
-<svelte:head>
-  <title>OwlRepo | Guide</title>
-</svelte:head>
-
-<h1>Scroll Guide</h1>
-
-<Guide />

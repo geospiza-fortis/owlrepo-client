@@ -14,6 +14,7 @@
   import CardRow from "./CardRow.svelte";
   import { Alert } from "sveltestrap/src";
   import moment from "moment";
+  import FrontMatter from "../../docs/FrontMatter.svx";
 
   const metric_choices = ["p25", "p50", "p75", "mean"];
   const metric_names = {
@@ -22,6 +23,8 @@
     p75: "75th percentile",
     mean: "mean",
   };
+
+  export let home = false;
 
   export let price_data = [];
   let filtered_price_data = [];
@@ -85,11 +88,14 @@
 <div class="container">
   <div class="row">
     <div class="col">
+      {#if home}
+        <FrontMatter />
+      {/if}
       <p>
         Only scrolls worth more than {formatPrice(threshold)} mesos ({metric_names[
           metric
         ]}). Prices more than {age} days old are greyed out. See the
-        <a href="/">home page</a> for all items in the repository.
+        <a href="/summary">summary page</a> for all items in the repository.
       </p>
     </div>
     <div class="col">
