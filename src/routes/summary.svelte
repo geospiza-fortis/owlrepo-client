@@ -1,7 +1,5 @@
 <script>
-  import IndexView from "../components/IndexView.svelte";
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
-  import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
   import PriceSummary from "../components/PriceSummary/View.svelte";
   import { transform as transformPriceSummary } from "../components/PriceSummary/columns.js";
   import { Stretch } from "svelte-loading-spinners/src";
@@ -11,7 +9,6 @@
   const BG_ORANGE = "#ffc6ae";
   const BG_YELLOW = "#ffefae";
 
-  export let random_listing;
   export let heatmap;
   export let price_summary;
   export let last_modified;

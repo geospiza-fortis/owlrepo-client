@@ -4,6 +4,7 @@
   import { columns, transform } from "./columns.js";
   import { onMount } from "svelte";
   import { Stretch } from "svelte-loading-spinners/src";
+  import { browser } from "$app/env";
 
   export let data;
   export let last_modified;
@@ -22,7 +23,7 @@
   let search_item_name;
 
   let keyword;
-  $: process.browser &&
+  $: browser &&
     (keyword = new URLSearchParams(window.location.search).get("keyword"));
 
   $: options = {
