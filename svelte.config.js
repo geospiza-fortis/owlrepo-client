@@ -1,8 +1,11 @@
 import node from "@sveltejs/adapter-node";
+import nodePolyfills from "rollup-plugin-polyfill-node";
 import replace from "@rollup/plugin-replace";
 import { mdsvex } from "mdsvex";
 import dotenv from "dotenv";
 import child_process from "child_process";
+import inject from "@rollup/plugin-inject";
+
 // import pkg from "./package.json";
 
 dotenv.config();
@@ -51,7 +54,16 @@ const config = {
     router: true,
     ssr: true,
     vite: () => ({
-      plugins: [replaceVersion()],
+      plugins: [
+        replaceVersion(),
+        // fix missing moment import inside of tabulator
+        inject({
+          exclude: "**/*.css",
+          moment: "moment",
+          url: "url",
+        }),
+        nodePolyfills(),
+      ],
     }),
   },
 

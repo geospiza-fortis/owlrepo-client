@@ -12,6 +12,7 @@
   export let heatmap;
   export let price_summary;
   export let last_modified;
+  let random_listing;
 
   onMount(async () => {
     const fetchData = async (url) => {
