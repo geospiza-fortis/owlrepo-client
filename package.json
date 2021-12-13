@@ -1,6 +1,6 @@
 {
   "name": "owlrepo-client",
-  "version": "5.0.0-pre",
+  "version": "5.0.0",
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "type": "module",
@@ -37,7 +37,6 @@
     "jsonschema": "^1.4.0",
     "localforage": "^1.9.0",
     "lodash": "^4.17.21",
-    "lodash-es": "^4.17.21",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
     "p-retry": "^4.4.0",
