@@ -1,5 +1,5 @@
-runtime: nodejs14
-entrypoint: node __sapper__/build
+runtime: nodejs16
+entrypoint: node build
 
 automatic_scaling:
   max_instances: 3
@@ -9,9 +9,9 @@ automatic_scaling:
   max_concurrent_requests: 80
 
 handlers:
-  - url: /client
-    static_files: __sapper__/build/client
-    upload: __sapper__/build/client
+  - url: /_app
+    static_files: build/assets/_app
+    upload: build/assets/_app
   - url: /.*
     script: auto
     secure: always
@@ -19,4 +19,4 @@ handlers:
 
 env_variables:
   VITE_PROJECT_ID: owlrepo
-  OWLREPO_URL: https://api-v1-6jpxgj6jpa-uc.a.run.app
+  VITE_OWLREPO_URL: https://api-v1-6jpxgj6jpa-uc.a.run.app
