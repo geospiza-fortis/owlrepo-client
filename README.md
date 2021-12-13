@@ -11,7 +11,7 @@ cd owlrepo-client
 npm install
 ```
 
-Copy over the `.env.template` to `.env` to define the testing server. Then start
+Copy over the `.env.staging` to `.env` to define the testing server. Then start
 [Rollup](https://rollupjs.org):
 
 ```bash
