@@ -18,5 +18,5 @@ handlers:
     redirect_http_response_code: 301
 
 env_variables:
-  PROJECT_ID: owlrepo-nonprod
-  OWLREPO_URL: https://api-v1-3s5yebp5cq-uc.a.run.app
+  VITE_PROJECT_ID: owlrepo-nonprod
+  VITE_OWLREPO_URL: https://api-v1-3s5yebp5cq-uc.a.run.app

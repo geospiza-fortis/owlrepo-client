@@ -84,7 +84,7 @@ async function requestUploadToken() {
       jwk: public_jwk_raw,
     })
     .sign();
-  let resp = await fetch(`__OWLREPO_URL__/api/v1/token`, {
+  let resp = await fetch(`${import.meta.env.VITE_OWLREPO_URL}/api/v1/token`, {
     headers: {
       "Content-Type": "application/json",
     },

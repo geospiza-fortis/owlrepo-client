@@ -18,7 +18,9 @@
       return;
     }
     let cache = await caches.open("index-cache");
-    let url = `__OWLREPO_URL__/api/v1/list?offset=${offset}&limit=${limit}`;
+    let url = `${
+      import.meta.env.VITE_OWLREPO_URL
+    }/api/v1/list?offset=${offset}&limit=${limit}`;
     var resp = await cache.match(url);
     if (!resp) {
       is_cached = false;
