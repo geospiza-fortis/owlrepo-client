@@ -22,6 +22,7 @@ let replaceVersion = () =>
       .toString()
       .trim()
       .slice(0, 8),
+    __BUILD_TIME__: new Date().toISOString(),
     preventAssignment: true,
   });
 
@@ -58,6 +59,7 @@ const config = {
     router: true,
     ssr: true,
     vite: () => ({
+      mode: process.env.MODE || "development",
       ssr: {
         noExternal: Object.keys(pkg.dependencies || {}),
       },
