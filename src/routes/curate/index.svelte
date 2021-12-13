@@ -31,7 +31,9 @@
   let task_validator;
 
   onMount(async () => {
-    let resp = await fetch("/api/v1/query/curation_candidate");
+    let resp = await fetch(
+      `${import.meta.env.VITE_OWLREPO_URL}/api/v1/query/curation_candidate`
+    );
     data = await resp.json();
 
     contributor_id = await localforage.getItem("contributor-id");
@@ -51,7 +53,7 @@
 
   async function fetchTask(task_id, screenshot_sha1) {
     // NOTE: don't actually need the screenshot name
-    let base = `/api/v1/data/${task_id}`;
+    let base = `${import.meta.env.VITE_OWLREPO_URL}/api/v1/data/${task_id}`;
     let resp = await fetch(`${base}/slim.json`);
     let slim = await resp.json();
 
@@ -166,13 +168,16 @@
       console.log(task_validator);
       return;
     }
-    let resp = await fetch("/api/v1/submit_curate_task", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(submission),
-      method: "post",
-    });
+    let resp = await fetch(
+      `${import.meta.env.VITE_OWLREPO_URL}/api/v1/submit_curate_task`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submission),
+        method: "post",
+      }
+    );
     if (resp.status == 200) {
       await updatePersonalCurations(
         task_data.task_id,

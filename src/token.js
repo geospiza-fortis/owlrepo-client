@@ -84,7 +84,7 @@ async function requestUploadToken() {
       jwk: public_jwk_raw,
     })
     .sign();
-  let resp = await fetch("/api/v1/token", {
+  let resp = await fetch(`${import.meta.env.VITE_OWLREPO_URL}/api/v1/token`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -110,7 +110,6 @@ async function signMessage(message) {
     .setProtectedHeader({
       alg: "ES256",
       jwk: pubjwk(await jose.exportJWK(private_jwk)),
-      typ: "jwk+json",
     })
     .sign();
   return sig;
