@@ -167,6 +167,9 @@
 
     try {
       let token = await requestUploadToken();
+      if (!token) {
+        throw "got undefined upload token";
+      }
       console.log(`Got access token ${token.access_token}`);
       let resp = await fetch("/api/v1/upload", {
         method: "post",

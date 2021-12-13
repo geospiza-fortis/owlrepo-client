@@ -27,7 +27,6 @@
       await cache.put(url, resp);
       resp = await cache.match(url);
     }
-    console.log(resp);
     listings = await resp.json();
     if (listings.length === 0) {
       // TODO: this makes an assumption that the offset is moved in

@@ -1,12 +1,12 @@
 <script context="module">
-  export async function preload() {
+  export async function load({ fetch }) {
     const fetchData = async (url) => {
-      let resp = await this.fetch(url);
+      let resp = await fetch(url);
       return await resp.json();
     };
     const heatmap = await fetchData("/api/v2/query/heatmap");
 
-    return { heatmap };
+    return { props: { heatmap } };
   }
 </script>
 

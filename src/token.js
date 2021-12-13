@@ -50,12 +50,15 @@ async function getOrCreateJWKRaw(path = "contributor-keys", is_public = false) {
   } else {
     // create the key and ignore the output
     await getOrCreateCryptoKey(path, is_public);
-    return await getOrCreateJWK(path, is_public);
+    return await getOrCreateJWKRaw(path, is_public);
   }
 }
 
 async function getOrCreateJWK(path = "contributor-keys", is_public = false) {
-  return await jose.importJWK(getOrCreateJWKRaw(path, is_public), "ES256");
+  return await jose.importJWK(
+    await getOrCreateJWKRaw(path, is_public),
+    "ES256"
+  );
 }
 
 async function getThumbprint() {
@@ -65,21 +68,28 @@ async function getThumbprint() {
 
 async function requestUploadToken() {
   let private_jwk = await getOrCreateJWK("contributor-keys", false);
-  let public_jwk = await getOrCreateJWK("contributor-keys", true);
-
+  let public_jwk_raw = await getOrCreateJWKRaw("contributor-keys", true);
   // include the timestamp and the key fingerprint
   let data = {
     timestamp: moment().format(),
     // 32 bit string?
     thumbprint: await getThumbprint(),
   };
-  let sig = await new jose.SignJWT(JSON.stringify(data)).sign(private_jwk);
+  let sig = await new jose.GeneralSign(
+    new TextEncoder().encode(JSON.stringify(data))
+  )
+    .addSignature(private_jwk)
+    .setProtectedHeader({
+      alg: "ES256",
+      jwk: public_jwk_raw,
+    })
+    .sign();
   let resp = await fetch("/api/v1/token", {
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      public_key: public_jwk.toJSON(),
+      public_key: public_jwk_raw,
       signed_data: sig,
     }),
     method: "post",

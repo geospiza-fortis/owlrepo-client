@@ -1,7 +1,6 @@
 <script context="module">
-  export async function preload(page) {
-    let { task_id } = page.params;
-    return { task_id };
+  export async function load({ page }) {
+    return { props: page.params };
   }
 </script>
 
@@ -14,7 +13,6 @@
   import SummaryView from "./SummaryView.svelte";
 
   export let task_id;
-
   let flattened = null;
   let status = null;
 

@@ -1,14 +1,12 @@
 import node from "@sveltejs/adapter-node";
-import nodePolyfills from "rollup-plugin-polyfill-node";
 import replace from "@rollup/plugin-replace";
 import { mdsvex } from "mdsvex";
 import dotenv from "dotenv";
 import child_process from "child_process";
 import inject from "@rollup/plugin-inject";
 
-// import pkg from "./package.json";
-
 dotenv.config();
+const { OWLREPO_URL } = process.env;
 
 let replaceVersion = () =>
   replace({
@@ -54,6 +52,14 @@ const config = {
     router: true,
     ssr: true,
     vite: () => ({
+      server: {
+        proxy: {
+          "/api/v1": {
+            target: OWLREPO_URL,
+            changeOrigin: true,
+          },
+        },
+      },
       plugins: [
         replaceVersion(),
         // fix missing moment import inside of tabulator
