@@ -1,4 +1,4 @@
-const BUCKET = process.env.PROJECT_ID;
+const BUCKET = import.meta.env.VITE_PROJECT_ID;
 
 export async function get({ params }) {
   const { prefix } = params;

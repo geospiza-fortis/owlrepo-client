@@ -4,6 +4,12 @@ import { mdsvex } from "mdsvex";
 import dotenv from "dotenv";
 import child_process from "child_process";
 import inject from "@rollup/plugin-inject";
+import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
+import fs from "fs";
+
+const pkg = JSON.parse(
+  fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
+);
 
 dotenv.config();
 const { OWLREPO_URL } = process.env;
@@ -52,13 +58,8 @@ const config = {
     router: true,
     ssr: true,
     vite: () => ({
-      server: {
-        proxy: {
-          "/api/v1": {
-            target: OWLREPO_URL,
-            changeOrigin: true,
-          },
-        },
+      ssr: {
+        noExternal: Object.keys(pkg.dependencies || {}),
       },
       plugins: [
         replaceVersion(),
@@ -68,6 +69,7 @@ const config = {
           moment: "moment",
           url: "url",
         }),
+        optimizeLodashImports(),
       ],
     }),
   },
