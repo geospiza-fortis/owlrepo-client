@@ -64,4 +64,7 @@
 <IndexView limit={8} />
 
 <br />
-<ActivityHeatmap data={heatmap} max_range={14} />
+
+{#if heatmap}
+  <ActivityHeatmap data={heatmap} max_range={14} />
+{/if}

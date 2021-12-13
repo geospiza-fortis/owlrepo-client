@@ -62,7 +62,6 @@ const config = {
           moment: "moment",
           url: "url",
         }),
-        nodePolyfills(),
       ],
     }),
   },
