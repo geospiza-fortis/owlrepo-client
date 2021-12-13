@@ -1,5 +1,5 @@
 import localforage from "localforage";
-import { JWS, JWK, util } from "node-jose";
+import * as jose from "jose";
 import moment from "moment";
 
 async function getOrCreateCryptoKey(
@@ -41,43 +41,55 @@ async function getOrCreateCryptoKey(
   }
 }
 
-async function getOrCreateJWK(path = "contributor-keys", is_public = false) {
+async function getOrCreateJWKRaw(path = "contributor-keys", is_public = false) {
   // There are quite a few reads if the key doesn't exist, but this layered
   // approach should make sense.
   let storage = await localforage.getItem(path);
   if (storage) {
-    return await JWK.asKey(storage[is_public ? "public" : "private"]);
+    return storage[is_public ? "public" : "private"];
   } else {
     // create the key and ignore the output
     await getOrCreateCryptoKey(path, is_public);
-    return await getOrCreateJWK(path, is_public);
+    return await getOrCreateJWKRaw(path, is_public);
   }
 }
 
+async function getOrCreateJWK(path = "contributor-keys", is_public = false) {
+  return await jose.importJWK(
+    await getOrCreateJWKRaw(path, is_public),
+    "ES256"
+  );
+}
+
 async function getThumbprint() {
-  let public_jwk = await getOrCreateJWK("contributor-keys", true);
-  return util.base64url.encode(await public_jwk.thumbprint("SHA-256"));
+  let public_jwk = await getOrCreateJWKRaw("contributor-keys", true);
+  return await jose.calculateJwkThumbprint(public_jwk);
 }
 
 async function requestUploadToken() {
   let private_jwk = await getOrCreateJWK("contributor-keys", false);
-  let public_jwk = await getOrCreateJWK("contributor-keys", true);
-
+  let public_jwk_raw = await getOrCreateJWKRaw("contributor-keys", true);
   // include the timestamp and the key fingerprint
   let data = {
     timestamp: moment().format(),
     // 32 bit string?
     thumbprint: await getThumbprint(),
   };
-  let sig = await JWS.createSign(private_jwk)
-    .update(JSON.stringify(data))
-    .final();
-  let resp = await fetch("/api/v1/token", {
+  let sig = await new jose.GeneralSign(
+    new TextEncoder().encode(JSON.stringify(data))
+  )
+    .addSignature(private_jwk)
+    .setProtectedHeader({
+      alg: "ES256",
+      jwk: public_jwk_raw,
+    })
+    .sign();
+  let resp = await fetch(`${import.meta.env.VITE_OWLREPO_URL}/api/v1/token`, {
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      public_key: public_jwk.toJSON(),
+      public_key: public_jwk_raw,
       signed_data: sig,
     }),
     method: "post",
@@ -85,24 +97,40 @@ async function requestUploadToken() {
   return await resp.json();
 }
 
+function pubjwk(jwk) {
+  const { d, p, q, dp, dq, qi, ext, alg, ...publicJwk } = jwk;
+  return { ...publicJwk };
+}
+
 async function signMessage(message) {
   let private_jwk = await getOrCreateJWK("contributor-keys", false);
 
-  let sig = await JWS.createSign(
-    { fields: { typ: "jwk+json" } },
-    { key: private_jwk, reference: "jwk" }
-  )
-    .update(JSON.stringify(message))
-    .final();
+  let sig = await new jose.GeneralSign(new TextEncoder().encode(message))
+    .addSignature(private_jwk)
+    .setProtectedHeader({
+      alg: "ES256",
+      jwk: pubjwk(await jose.exportJWK(private_jwk)),
+    })
+    .sign();
   return sig;
 }
 
 async function verifyMessage(message) {
-  return await JWS.createVerify().verify(message, { allowEmbeddedKey: true });
+  const { payload, protectedHeader } = await jose.generalVerify(
+    message,
+    jose.EmbeddedJWK
+  );
+  let data = {
+    payload: new TextDecoder().decode(payload),
+    thumbprint: await jose.calculateJwkThumbprint(protectedHeader.jwk),
+  };
+  console.log(data);
+  return data;
 }
 
 export {
   getOrCreateJWK,
+  getOrCreateJWKRaw,
   requestUploadToken,
   getThumbprint,
   signMessage,

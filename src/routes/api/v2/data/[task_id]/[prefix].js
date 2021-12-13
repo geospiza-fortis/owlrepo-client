@@ -1,8 +1,11 @@
-const BUCKET = process.env.PROJECT_ID;
+const BUCKET = import.meta.env.VITE_PROJECT_ID;
 
-export async function get(req, res, next) {
-  const { task_id, prefix } = req.params;
-  res.redirect(
-    `https://storage.googleapis.com/${BUCKET}/v1/uploads/${task_id}/${prefix}`
-  );
+export async function get({ params }) {
+  const { task_id, prefix } = params;
+  return {
+    headers: {
+      Location: `https://storage.googleapis.com/${BUCKET}/v1/uploads/${task_id}/${prefix}`,
+    },
+    status: 302,
+  };
 }

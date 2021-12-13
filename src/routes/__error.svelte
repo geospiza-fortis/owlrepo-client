@@ -1,7 +1,19 @@
+<script context="module">
+  /** @type {import('@sveltejs/kit').ErrorLoad} */
+  export function load({ error, status }) {
+    return {
+      props: {
+        status: status,
+        error: error,
+      },
+    };
+  }
+</script>
+
 <script>
   export let status;
   export let error;
-  const dev = process.env.NODE_ENV === "development";
+  const dev = import.meta.env.DEV;
 </script>
 
 <svelte:head>

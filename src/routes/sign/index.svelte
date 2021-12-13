@@ -75,7 +75,7 @@
         <input
           class="form-control"
           type="text"
-          value={data.header.jwk.kid}
+          value={data.thumbprint}
           readonly
         />
       </div>
@@ -85,7 +85,7 @@
           class="form-control"
           id="verified-message"
           rows="3"
-          value={JSON.parse(data.payload)}
+          value={data.payload}
         />
       </div>
     {/await}

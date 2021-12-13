@@ -1,13 +1,13 @@
 <script>
   import { onMount } from "svelte";
-  import { getOrCreateJWK, getThumbprint } from "../token.js";
+  import { getOrCreateJWKRaw, getThumbprint } from "../token.js";
 
   let client_thumbprint;
   let client_public_key;
 
   onMount(async () => {
     client_thumbprint = await getThumbprint();
-    client_public_key = await getOrCreateJWK("contributor-keys", true);
+    client_public_key = await getOrCreateJWKRaw("contributor-keys", true);
   });
 </script>
 
@@ -19,7 +19,7 @@
     <a href="https://tools.ietf.org/html/rfc7517">JWK public key</a>
     is:
     <code>
-      <pre>{JSON.stringify(client_public_key.toJSON(), null, 4)}</pre>
+      <pre>{JSON.stringify(client_public_key, null, 4)}</pre>
     </code>
     This is a cryptographic key that can be used to prove your identity. Feel free
     to share your public key as you see fit. For the technically savvy, do not share

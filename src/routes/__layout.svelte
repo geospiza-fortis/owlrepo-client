@@ -1,6 +1,6 @@
 <script>
-  import { stores } from "@sapper/app";
-  const { page } = stores();
+  import { page } from "$app/stores";
+  import { browser } from "$app/env";
   import Navbar from "../components/Navbar.svelte";
 
   // bunch of css import for various modules
@@ -9,7 +9,7 @@
   export let segment;
 
   // pageview for analytics
-  $: process.browser && $page && gtag("config", "G-NBGZYVSFSH");
+  $: browser && $page && gtag("config", "G-NBGZYVSFSH");
 </script>
 
 <Navbar {segment} />

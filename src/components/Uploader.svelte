@@ -167,14 +167,20 @@
 
     try {
       let token = await requestUploadToken();
+      if (!token) {
+        throw "got undefined upload token";
+      }
       console.log(`Got access token ${token.access_token}`);
-      let resp = await fetch("/api/v1/upload", {
-        method: "post",
-        headers: new Headers({
-          Authorization: `Bearer ${token.access_token}`,
-        }),
-        body: formData,
-      });
+      let resp = await fetch(
+        `${import.meta.env.VITE_OWLREPO_URL}/api/v1/upload`,
+        {
+          method: "post",
+          headers: new Headers({
+            Authorization: `Bearer ${token.access_token}`,
+          }),
+          body: formData,
+        }
+      );
       let data = await resp.json();
 
       let preview = files[0];
