@@ -1,6 +1,7 @@
 import node from "@sveltejs/adapter-node";
 import replace from "@rollup/plugin-replace";
 import { mdsvex } from "mdsvex";
+import dotenv from "dotenv";
 import child_process from "child_process";
 import inject from "@rollup/plugin-inject";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
@@ -9,6 +10,9 @@ import fs from "fs";
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
 );
+
+dotenv.config();
+const { OWLREPO_URL } = process.env;
 
 let replaceVersion = () =>
   replace({

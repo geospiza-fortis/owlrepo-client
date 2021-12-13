@@ -17,4 +17,3 @@ node_modules/
 __sapper__/
 build/
 .svelte-kit/
-.env

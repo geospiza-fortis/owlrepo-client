@@ -17,6 +17,7 @@
     "@optimize-lodash/rollup-plugin": "^2.1.0",
     "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
+    "dotenv": "^8.2.0",
     "mdsvex": "^0.9.8",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
