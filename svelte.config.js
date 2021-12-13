@@ -12,7 +12,6 @@ const pkg = JSON.parse(
 );
 
 dotenv.config();
-const { OWLREPO_URL } = process.env;
 
 let replaceVersion = () =>
   replace({
@@ -62,6 +61,12 @@ const config = {
         noExternal: Object.keys(pkg.dependencies || {}),
       },
       plugins: [
+        replace({
+          // replace with variables at build-time
+          __OWLREPO_URL__: process.env.OWLREPO_URL,
+          __PROJECT_ID__: process.env.PROJECT_ID,
+          preventAssignment: true,
+        }),
         replaceVersion(),
         // fix missing moment import inside of tabulator
         inject({

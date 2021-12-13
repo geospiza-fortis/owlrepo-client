@@ -5,7 +5,6 @@
       return await resp.json();
     };
     const heatmap = await fetchData("/api/v2/query/heatmap");
-
     return { props: { heatmap } };
   }
 </script>
