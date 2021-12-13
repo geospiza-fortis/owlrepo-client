@@ -11,8 +11,8 @@ cd owlrepo-client
 npm install
 ```
 
-Copy over the `.env.staging` to `.env` to define the testing server. Then start
-[Rollup](https://rollupjs.org):
+Copy over the `.env.staging` to `.env` to define the testing server. Remove the
+NODE_ENV variable. Then start [Rollup](https://rollupjs.org):
 
 ```bash
 npm run dev
@@ -38,7 +38,13 @@ npm run test
 
 ## Building and running in production mode
 
-To create an optimised version of the app:
+To create an optimised version of the app in a non-production mode:
+
+```bash
+npm run build:dev
+```
+
+For production:
 
 ```bash
 npm run build
@@ -52,6 +58,9 @@ Two environments have been provisioned in GCP with various backend services like
 bigquery and firestore. Deploy to app engine using the following commands.
 
 ```bash
-gcloud app deploy app.nonprod.yaml --project owlrepo-nonprod
-gcloud app deploy app.prod.yaml --project owlrepo
+# deploy to owlrepo-nonprod
+python deploy.py staging
+
+# deploy to owlrepo
+python deploy.py production
 ```
