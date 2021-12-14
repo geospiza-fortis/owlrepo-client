@@ -99,6 +99,8 @@
           // into account retina displays, etc. The logic may look the same as above.
           dataUrl = await resizeImage(dataUrl, 1136, 902);
           cropDim = getDim(269, 350);
+        } else if (uncropped.height == 902 && uncropped.width == 1136) {
+          cropDim = getDim(269, 350);
         } else {
           console.error(`${file.name}: bad dimensions for file`);
           error += 1;
