@@ -12,7 +12,6 @@ const pkg = JSON.parse(
 );
 
 dotenv.config();
-const { OWLREPO_URL } = process.env;
 
 let replaceVersion = () =>
   replace({
@@ -61,7 +60,10 @@ const config = {
     vite: () => ({
       mode: process.env.MODE || "development",
       ssr: {
-        noExternal: Object.keys(pkg.dependencies || {}),
+        noExternal:
+          process.env.NODE_ENV == "development"
+            ? []
+            : Object.keys(pkg.dependencies || {}),
       },
       plugins: [
         replaceVersion(),
