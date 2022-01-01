@@ -192,6 +192,7 @@
       {#each valid_categories as key}
         {#each chunkList(sortBy(grouped_price_data[key], [
             "category",
+            "stat",
           ]), 15) as chunk, i}
           <div
             class="card"
@@ -206,6 +207,7 @@
               {:else}
                 <h5>
                   {{
+                    coins: "Prestigious Coin",
                     mastery: "Mastery Book",
                     etc: "Et cetera",
                     ores: "Ores",

@@ -1,6 +1,16 @@
 import moment from "moment";
 
-const CATEGORIES = ["10", "30", "60", "70", "100", "etc", "ores", "mastery"];
+const CATEGORIES = [
+  "10",
+  "30",
+  "60",
+  "70",
+  "100",
+  "coins",
+  "etc",
+  "ores",
+  "mastery",
+];
 const ETC_DATA = Object.fromEntries(
   Object.entries({
     "Clean Slate Scroll 20%": {
@@ -117,6 +127,25 @@ function transform(index, category) {
     // other stuff
     ...ETC_DATA,
     ...ORES,
+    ...Object.fromEntries(
+      index
+        .filter(
+          (row) =>
+            row.search_item.includes("Prestigious Coin") ||
+            row.search_item.includes("Mysterious Coin Pouch")
+        )
+        .map((row) => [
+          row.search_item,
+          {
+            percent: "coins",
+            category: row.search_item
+              .replace(/(\d+)$/g, "")
+              .trim()
+              .toLowerCase(),
+            stat: (row.search_item.match(/(\d+)$/g) || [""])[0],
+          },
+        ])
+    ),
   };
 
   let price_data = index
