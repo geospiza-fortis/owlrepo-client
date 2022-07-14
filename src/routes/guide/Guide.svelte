@@ -12,7 +12,7 @@
   import { Stretch } from "svelte-loading-spinners/src";
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
-  import { Alert } from "sveltestrap/src";
+  import { Alert } from "sveltestrap";
   import moment from "moment";
   import FrontMatter from "../../docs/FrontMatter.svx";
 

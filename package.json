@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "svelte-kit dev",
-    "build": "cross-env MODE=production svelte-kit build",
-    "build:dev": "cross-env MODE=staging svelte-kit build",
+    "build": "cross-env MODE=production vite build",
+    "build:dev": "cross-env MODE=staging vite build",
+    "build:tauri": "cross-env MODE=staging VITE_TAURI=true vite build",
     "preview": "svelte-kit preview",
     "gcp-build": "npm run build",
     "start": "node build",
@@ -17,8 +18,10 @@
     "@optimize-lodash/rollup-plugin": "^2.1.0",
     "@rollup/plugin-inject": "^4.0.2",
     "@rollup/plugin-replace": "^2.4.1",
-    "@sveltejs/adapter-node": "next",
-    "@sveltejs/kit": "next",
+    "@sveltejs/adapter-node": "^1.0.0-next.79",
+    "@sveltejs/adapter-static": "^1.0.0-next.36",
+    "@sveltejs/kit": "^1.0.0-next.372",
+    "@tauri-apps/cli": "^1.0.3",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "mdsvex": "^0.9.8",
@@ -26,7 +29,7 @@
     "prettier-plugin-svelte": "^2.2.0",
     "rollup": "^2.42.0",
     "svelte": "^3.44.2",
-    "@tauri-apps/cli": "^1.0.0-rc.13"
+    "vite": "^3.0.0"
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
@@ -52,6 +55,6 @@
     "tabulator-tables": "^4.9.3",
     "url": "^0.11.0",
     "uuid": "^8.3.2",
-    "@tauri-apps/api": "^1.0.0-rc.7"
+    "@tauri-apps/api": "^1.0.2"
   }
 }
