@@ -29,8 +29,8 @@
 </footer>
 
 <style>
-  /* 
-    https://jrl.ninja/etc/1/ 
+  /*
+    https://jrl.ninja/etc/1/
     https://jgthms.com/web-design-in-4-minutes/#centering
   */
   main {
