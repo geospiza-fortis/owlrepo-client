@@ -11,6 +11,10 @@ const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
 );
 
+const tauri_conf = JSON.parse(
+  fs.readFileSync(new URL("src-tauri/tauri.conf.json", import.meta.url), "utf8")
+);
+
 dotenv.config();
 
 let replaceVersion = () =>
@@ -22,6 +26,7 @@ let replaceVersion = () =>
       .trim()
       .slice(0, 8),
     __BUILD_TIME__: new Date().toISOString(),
+    __TAURI_VERSION__: tauri_conf.package.version,
     preventAssignment: true,
   });
 
