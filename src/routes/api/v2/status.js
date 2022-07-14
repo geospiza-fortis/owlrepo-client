@@ -8,6 +8,7 @@ export async function get({ params }) {
       version: "__VERSION__",
       git_sha: "__GIT_COMMIT__",
       build_time: "__BUILD_TIME__",
+      tauri: import.meta.env.VITE_TAURI == "true",
     },
     status: 200,
   };

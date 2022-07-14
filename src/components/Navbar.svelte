@@ -62,6 +62,7 @@
             <NavLink
               href={item.href}
               active={!segment ? "" == item.href : segment == item.href}
+              target={item.href.startsWith("https://") ? "_blank" : ""}
             >
               {item.text}
             </NavLink>
@@ -73,7 +74,11 @@
         <DropdownMenu right>
           {#each items as item, index}
             {#if index >= breakpoint}
-              <DropdownItem href={item.href}>{item.text}</DropdownItem>
+              <DropdownItem
+                href={item.href}
+                target={item.href.startsWith("https://") ? "_blank" : ""}
+                >{item.text}</DropdownItem
+              >
             {/if}
           {/each}
         </DropdownMenu>
