@@ -2,7 +2,6 @@ import { sveltekit } from "@sveltejs/kit/vite";
 import dotenv from "dotenv";
 import child_process from "child_process";
 import inject from "@rollup/plugin-inject";
-import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 import fs from "fs";
 import replace from "@rollup/plugin-replace";
 
@@ -34,7 +33,7 @@ const config = {
   ssr: {
     noExternal:
       process.env.NODE_ENV == "development"
-        ? []
+        ? ["@popperjs/core"]
         : Object.keys(pkg.dependencies || {}),
   },
   plugins: [
@@ -45,7 +44,6 @@ const config = {
       moment: "moment",
       url: "url",
     }),
-    optimizeLodashImports(),
     sveltekit(),
   ],
 };
