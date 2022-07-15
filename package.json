@@ -5,11 +5,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "vite dev",
     "build": "cross-env MODE=production vite build",
     "build:dev": "cross-env MODE=staging vite build",
     "build:tauri": "cross-env MODE=staging VITE_TAURI=true vite build",
-    "preview": "svelte-kit preview",
+    "preview": "vite preview",
     "gcp-build": "npm run build",
     "start": "node build",
     "tauri": "cross-env VITE_TAURI=true tauri"
