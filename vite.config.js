@@ -32,7 +32,7 @@ const config = {
   mode: process.env.MODE || "development",
   ssr: {
     noExternal:
-      process.env.NODE_ENV == "development"
+      process.env.NODE_ENV != "production"
         ? ["@popperjs/core"]
         : Object.keys(pkg.dependencies || {}),
   },

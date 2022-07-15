@@ -10,7 +10,12 @@ const config = {
   extensions: [".svelte", ".svx"],
 
   kit: {
-    adapter: process.env.VITE_TAURI == "true" ? adapterStatic() : node(),
+    adapter:
+      process.env.VITE_TAURI == "true"
+        ? adapterStatic({
+            fallback: "index.html",
+          })
+        : node(),
   },
 
   // options passed to svelte.preprocess (https://svelte.dev/docs#svelte_preprocess)
