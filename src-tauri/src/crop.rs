@@ -1,4 +1,4 @@
-use image::{imageops, io, ImageBuffer, ImageError, Rgba, RgbaImage};
+use image::{imageops, io, ImageBuffer, ImageError, ImageFormat, Rgba, RgbaImage};
 use ndarray::{stack, Array2, ArrayBase, Axis, ViewRepr};
 use nshare::ToNdarray2;
 use rustfft::{num_complex::Complex, FftDirection, FftPlanner};
@@ -19,7 +19,11 @@ pub fn imread(source: &Path) -> Result<Image, ImageError> {
 }
 
 pub fn imsave(output: &Path, img: &Image) -> Result<(), ImageError> {
-    img.save(&path_as_string(output))
+    img.save(output)
+}
+
+pub fn imsave_png(output: &Path, img: &Image) -> Result<(), ImageError> {
+    img.save_with_format(output, ImageFormat::Png)
 }
 
 // header is 435 x 25 pixels

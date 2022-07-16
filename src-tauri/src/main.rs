@@ -9,6 +9,8 @@ use glob::glob;
 use owlrepo_client::crop;
 use rayon::prelude::*;
 use regex::Regex;
+use std::fs::File;
+use std::io::Read;
 use std::path::Path;
 
 /// Extract the datestring from a MapleLegends screenshot, windows only
@@ -25,7 +27,7 @@ fn convert_datestring_into_datetime(ds: &str) -> Result<DateTime<Local>, ()> {
     Ok(dt)
 }
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, serde::Deserialize)]
 struct Screenshot {
     name: String,
     datetime: DateTime<Local>,
@@ -101,9 +103,29 @@ async fn list_screenshots(
     Ok(screenshots)
 }
 
+#[tauri::command]
+async fn get_screenshot_uri(screenshot: Screenshot) -> Result<String, String> {
+    let mut img = crop::imread(Path::new(&screenshot.name)).expect("unable to read image");
+    let cropped = crop::crop_owl(&mut img, screenshot.crop_x, screenshot.crop_y)
+        .expect("unable to crop image");
+    let file = tempfile::NamedTempFile::new().expect("cant create tempfile");
+    let path = file.into_temp_path();
+    crop::imsave_png(path.as_ref(), &cropped).expect("unable to write image");
+    // read the file into memory and base64 encode the value
+    let mut file = File::open(path).expect("unable to open file");
+    let mut contents = Vec::new();
+    file.read_to_end(&mut contents)
+        .expect("unable to read file");
+    let encoded = base64::encode(&contents);
+    Ok(format!("data:image/png;base64,{}", encoded))
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![list_screenshots])
+        .invoke_handler(tauri::generate_handler![
+            list_screenshots,
+            get_screenshot_uri
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
