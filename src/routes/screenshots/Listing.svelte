@@ -1,29 +1,38 @@
 <script>
-  import { readDir } from "@tauri-apps/api/fs";
   import { open } from "@tauri-apps/api/dialog";
-  import { resolve, homeDir } from "@tauri-apps/api/path";
-  import { onMount } from "svelte";
+  import { invoke } from "@tauri-apps/api/tauri";
 
-  let screenshotPath = null;
-
-  onMount(async () => {
-    let entries = await readDir("screenshots", "C://MapleLegendsHD");
-    console.log(entries);
-  });
+  let screenshotPath = "C://MapleLegendsHD/Screenshots";
+  let screenshots = [];
+  $: screenshotPath &&
+    invoke("list_screenshots", { path: screenshotPath }).then((res) => {
+      screenshots = res;
+    });
+  $: console.log(screenshotPath, screenshots);
 
   async function askPath() {
     let path = await open({
       directory: true,
-      defaultPath: await resolve(
-        await homeDir(),
-        "..",
-        "..",
-        "MapleLegendsHD",
-        "screenshots"
-      ),
+      defaultPath: screenshotPath,
     });
+    if (!path) {
+      return;
+    }
     screenshotPath = path;
   }
 </script>
 
-<button on:click={askPath}>choose a directory</button>
+<div>
+  <p>Current directory: {screenshotPath}</p>
+  <button on:click={askPath}>choose a directory</button>
+</div>
+
+<div>
+  {#if screenshots}
+    <ul>
+      {#each screenshots as path}
+        <li>{path}</li>
+      {/each}
+    </ul>
+  {/if}
+</div>

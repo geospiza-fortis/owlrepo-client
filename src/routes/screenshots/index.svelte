@@ -12,12 +12,17 @@
       window.location.href = "/";
     }
   });
+
+  // https://tauri.app/v1/guides/development/security/#tauri-api
+  // TODO: save directory, list files in the last x days, copy files into a new
+  // directory, upload files
+  // list(timestamp)
+  // filter by owl
 </script>
 
 <h1>Screenshots</h1>
 
 {#if tauri}
-  <p>Hello</p>
   <Listing />
 {:else}
   <p>
