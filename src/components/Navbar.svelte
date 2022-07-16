@@ -1,14 +1,13 @@
 <script context="module">
   const items = [
-    { text: "Summary", href: "summary" },
-    { text: "Items", href: "items" },
-    { text: "Upload", href: "upload" },
-    { text: "Charts", href: "charts" },
-    { text: "About", href: "about" },
-    { text: "Recommendation", href: "recommendation" },
-    { text: "Curate", href: "curate" },
-    { text: "Personal", href: "personal" },
-    { text: "Sign and Verify", href: "sign" },
+    { text: "Summary", href: "/summary" },
+    { text: "Items", href: "/items" },
+    { text: "Upload", href: "/upload" },
+    { text: "Charts", href: "/charts" },
+    { text: "About", href: "/about" },
+    { text: "Recommendation", href: "/recommendation" },
+    { text: "Personal", href: "/personal" },
+    { text: "Sign and Verify", href: "/sign" },
     {
       text: "Forum",
       href:

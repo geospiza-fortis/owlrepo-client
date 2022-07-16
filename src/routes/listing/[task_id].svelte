@@ -1,6 +1,6 @@
 <script context="module">
-  export async function load({ page }) {
-    return { props: page.params };
+  export async function load({ params }) {
+    return { props: params };
   }
 </script>
 

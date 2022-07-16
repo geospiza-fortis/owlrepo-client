@@ -1,6 +1,6 @@
 {
   "name": "owlrepo-client",
-  "version": "5.3.0",
+  "version": "6.0.0",
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "type": "module",
@@ -39,28 +39,20 @@
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
-    "buffer": "^6.0.3",
     "convolve": "^0.1.0",
-    "diff": "^5.0.0",
-    "fast-levenshtein": "^3.0.0",
     "fuse.js": "^6.4.6",
     "jose": "^4.3.7",
     "jquery": "^3.6.0",
-    "json-stable-stringify": "^1.0.1",
-    "jsonschema": "^1.4.0",
     "localforage": "^1.9.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
-    "p-retry": "^4.4.0",
-    "p-timeout": "^4.1.0",
     "popper.js": "^1.16.1",
     "simple-statistics": "^7.6.0",
     "svelte-loading-spinners": "^0.1.4",
     "sveltestrap": "^4.2.1",
     "tabulator-tables": "^4.9.3",
     "url": "^0.11.0",
-    "uuid": "^8.3.2",
     "@tauri-apps/api": "^1.0.2"
   }
 }

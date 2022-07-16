@@ -1,5 +1,4 @@
 import node from "@sveltejs/adapter-node";
-import adapterStatic from "@sveltejs/adapter-static";
 import { mdsvex } from "mdsvex";
 
 const config = {
