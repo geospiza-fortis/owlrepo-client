@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { groupBy } from "lodash";
+  import { groupBy } from "lodash-es";
   import SummaryElement from "./SummaryElement.svelte";
 
   export let flattened;

@@ -1,5 +1,5 @@
 <script>
-  import { merge } from "lodash";
+  import { merge } from "lodash-es";
   export let data;
   export let transform = (res) => res;
   export let layout = {};

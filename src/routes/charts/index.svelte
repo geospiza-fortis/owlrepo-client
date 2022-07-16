@@ -3,7 +3,7 @@
   import SearchBox from "../../components/SearchBox.svelte";
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
   import { onMount } from "svelte";
-  import { chunk } from "lodash";
+  import { chunk } from "lodash-es";
   import moment from "moment";
 
   export let listingData = [];

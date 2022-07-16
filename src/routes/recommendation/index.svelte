@@ -1,6 +1,6 @@
 <script>
   import moment from "moment";
-  import { sortBy } from "lodash";
+  import { sortBy } from "lodash-es";
   import { onMount } from "svelte";
   import Recommendations from "./Rec.svelte";
   import { Stretch } from "svelte-loading-spinners";

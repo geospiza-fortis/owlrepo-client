@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { formatPrice } from "../../utils.js";
-  import { sortBy, groupBy, random } from "lodash";
+  import { sortBy, groupBy, random } from "lodash-es";
   import localforage from "localforage";
   import {
     CATEGORIES,
