@@ -35,7 +35,7 @@ struct Screenshot {
 }
 
 #[tauri::command]
-fn list_screenshots(
+async fn list_screenshots(
     path: String,
     limit: Option<usize>,
     min_date: Option<DateTime<Local>>,
@@ -60,7 +60,14 @@ fn list_screenshots(
         .filter(|s| {
             // n * m running time complexity, lets go
             if let Some(exclude_names) = &exclude_names {
-                exclude_names.contains(&s.name)
+                !exclude_names.contains(&s.name)
+            } else {
+                true
+            }
+        })
+        .filter(|s| {
+            if let Some(min_date) = min_date {
+                s.datetime >= min_date
             } else {
                 true
             }
@@ -68,14 +75,6 @@ fn list_screenshots(
         .collect();
     // sort in descending order
     screenshots.par_sort_by(|a, b| b.datetime.partial_cmp(&a.datetime).unwrap());
-
-    // filter out dates if we set a threshold
-    if let Some(min_date) = min_date {
-        screenshots = screenshots
-            .into_par_iter()
-            .filter(|s| s.datetime >= min_date)
-            .collect();
-    }
 
     // limit to the first n screenshots
     if let Some(limit) = limit {
@@ -88,12 +87,11 @@ fn list_screenshots(
             let mut img = crop::imread(Path::new(&s.name)).expect("unable to read image");
             let (x, y) = crop::match_owl_header(&img).expect("unable to match");
             // let cropped = crop::crop_owl(&mut img, x, y).expect("unable to crop image");
-            let header = crop::crop_header(&mut img, x, y).expect("unable to crop header");
             Screenshot {
                 crop_x: x,
                 crop_y: y,
                 mse: crop::mse(
-                    &header,
+                    &crop::crop_header(&mut img, x, y).expect("unable to crop header"),
                     &crop::get_owl_header().expect("unable to get header"),
                 ),
                 ..s
