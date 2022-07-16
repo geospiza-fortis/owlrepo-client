@@ -31,7 +31,7 @@
   {#if screenshots}
     <ul>
       {#each screenshots as path}
-        <li>{path}</li>
+        <li>{path.datetime}</li>
       {/each}
     </ul>
   {/if}
