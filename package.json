@@ -4,7 +4,7 @@
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "type": "module",
-  "bin": "build/index.mjs",
+  "bin": "index.js",
   "scripts": {
     "dev": "vite dev",
     "build": "cross-env MODE=production vite build",
@@ -13,11 +13,7 @@
     "gcp-build": "npm run build",
     "start": "node build",
     "tauri": "cross-env VITE_TAURI=true tauri",
-    "package": "npm run build && ncc build build/index.js && pkg . --output src-tauri/target/app && node scripts/move-binary.js"
-  },
-  "pkg": {
-    "scripts": "build/**/*.js",
-    "assets": "build/**/*"
+    "package": "cross-env VITE_TAURI=true npm run build && node scripts/build-binary.js"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^4.0.2",
@@ -26,17 +22,17 @@
     "@sveltejs/kit": "^1.0.0-next.377",
     "@tauri-apps/cli": "^1.0.3",
     "@vercel/ncc": "^0.34.0",
+    "caxa": "^2.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "execa": "^6.1.0",
     "mdsvex": "^0.9.8",
-    "pkg": "^5.8.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "rollup": "^2.42.0",
+    "rollup": "^2.77.0",
     "svelte": "^3.44.2",
-    "vite": "^3.0.0",
-    "svelte-loading-spinners": "^0.1.7"
+    "svelte-loading-spinners": "^0.1.7",
+    "vite": "^3.0.0"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",

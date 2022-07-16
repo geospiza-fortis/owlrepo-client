@@ -64,3 +64,11 @@ python deploy.py staging
 # deploy to owlrepo
 python deploy.py production
 ```
+
+## Other notes
+
+It's sometimes useful to debug node itself. From Windows:
+
+```
+$env:NODE_DEBUG="cluster,net,http,fs,tls,module,timers"
+```
