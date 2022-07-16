@@ -30,8 +30,9 @@
     DropdownMenu,
     DropdownItem,
   } from "sveltestrap";
+  import { browser } from "$app/env";
 
-  const breakpoint = 5;
+  const breakpoint = 5 - (browser && window.__TAURI__ ? 2 : 0);
   let isOpen = false;
 
   export let segment;
@@ -57,6 +58,11 @@
         <img src="/favicon.png" alt="owl of minerva" />
         owlrepo
       </NavbarBrand>
+      {#if window.__TAURI__}
+        <NavItem>
+          <NavLink href="/screenshots">Screenshots</NavLink>
+        </NavItem>
+      {/if}
       {#each items as item, index}
         {#if index < breakpoint}
           <NavItem>

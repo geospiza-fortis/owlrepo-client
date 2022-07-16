@@ -4,7 +4,7 @@
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "",
     "devPath": "http://localhost:5173",
-    "distDir": "https://owlrepo.com"
+    "distDir": "https://owlrepo-nonprod.wl.r.appspot.com"
   },
   "package": {
     "productName": "owlrepo-client",
