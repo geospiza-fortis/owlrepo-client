@@ -4,26 +4,33 @@
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "type": "module",
+  "bin": "build/index.mjs",
   "scripts": {
     "dev": "vite dev",
     "build": "cross-env MODE=production vite build",
     "build:dev": "cross-env MODE=staging vite build",
-    "build:tauri": "cross-env MODE=staging VITE_TAURI=true vite build",
     "preview": "vite preview",
     "gcp-build": "npm run build",
     "start": "node build",
-    "tauri": "cross-env VITE_TAURI=true tauri"
+    "tauri": "cross-env VITE_TAURI=true tauri",
+    "package": "npm run build && ncc build build/index.js && pkg . --output src-tauri/target/app && node scripts/move-binary.js"
+  },
+  "pkg": {
+    "scripts": "build/**/*.js",
+    "assets": "build/**/*"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^4.0.2",
     "@rollup/plugin-replace": "^2.4.1",
     "@sveltejs/adapter-node": "^1.0.0-next.79",
-    "@sveltejs/adapter-static": "^1.0.0-next.36",
     "@sveltejs/kit": "^1.0.0-next.372",
     "@tauri-apps/cli": "^1.0.3",
+    "@vercel/ncc": "^0.34.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
+    "execa": "^6.1.0",
     "mdsvex": "^0.9.8",
+    "pkg": "^5.8.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
     "rollup": "^2.42.0",

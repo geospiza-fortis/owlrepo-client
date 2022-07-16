@@ -14,7 +14,7 @@ fn main() {
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             tauri::async_runtime::spawn(async move {
-                let (mut rx, mut child) = Command::new_sidecar("target/node.exe")
+                let (mut rx, mut child) = Command::new_sidecar("app")
                     .expect("failed to setup `app` sidecar")
                     .spawn()
                     .expect("Failed to spawn packaged node");

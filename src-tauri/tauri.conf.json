@@ -15,7 +15,7 @@
       "all": true,
       "shell": {
         "sidecar": true,
-        "scope": [{ "name": "target/node.exe", "sidecar": true }]
+        "scope": [{ "name": "target/app", "sidecar": true }]
       }
     },
     "bundle": {
@@ -25,7 +25,7 @@
       "deb": {
         "depends": []
       },
-      "externalBin": ["target/node.exe"],
+      "externalBin": ["target/app"],
       "icon": ["icons/icon.ico"],
       "identifier": "com.owlrepo.dev",
       "longDescription": "",
