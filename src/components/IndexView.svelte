@@ -1,5 +1,5 @@
 <script>
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 
   let listings = [];

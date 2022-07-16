@@ -30,11 +30,9 @@ let replaceVersion = () =>
 
 const config = {
   mode: process.env.MODE || "development",
+  // https://github.com/sveltejs/kit/issues/5549
   ssr: {
-    noExternal:
-      process.env.NODE_ENV != "production"
-        ? ["@popperjs/core"]
-        : Object.keys(pkg.dependencies || {}),
+    noExternal: ["@popperjs/core/**", "svelte-loading-spinners/**"],
   },
   plugins: [
     replaceVersion(),

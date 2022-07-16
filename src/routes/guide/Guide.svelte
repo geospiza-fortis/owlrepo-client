@@ -9,7 +9,7 @@
     getBackgroundColor,
     transform,
   } from "./index.js";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
   import { Alert } from "sveltestrap";

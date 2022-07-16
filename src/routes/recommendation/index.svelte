@@ -3,7 +3,7 @@
   import { sortBy } from "lodash";
   import { onMount } from "svelte";
   import Recommendations from "./Rec.svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import localforage from "localforage";
 
   function sortData(data, threshold_search, threshold_price) {

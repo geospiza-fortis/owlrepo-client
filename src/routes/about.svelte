@@ -3,7 +3,7 @@
   import PriceQuantityCharts from "../components/PriceQuantityCharts.svelte";
   import IndexDescription from "../docs/IndexDescription.svx";
   import References from "../docs/References.svx";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 
   export let random_listing;

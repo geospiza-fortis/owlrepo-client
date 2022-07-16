@@ -1,5 +1,5 @@
 <script>
-  import { Collapse } from "sveltestrap/src";
+  import { Collapse } from "sveltestrap";
   import localforage from "localforage";
   export let settings;
 

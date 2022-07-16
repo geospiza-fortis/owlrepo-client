@@ -25,20 +25,16 @@
     Nav,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
+    Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-  } from "sveltestrap/src";
+  } from "sveltestrap";
 
   const breakpoint = 5;
   let isOpen = false;
 
   export let segment;
-
-  function handleUpdate(event) {
-    isOpen = event.detail.isOpen;
-  }
 </script>
 
 <Navbar class="navbar-dark bg-primary" expand="md">
@@ -49,7 +45,13 @@
     </NavbarBrand>
   {/if}
   <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
-  <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
+  <Collapse
+    {isOpen}
+    navbar
+    expand="md"
+    on:open={() => (isOpen = true)}
+    on:close={() => (isOpen = false)}
+  >
     <Nav class="mx-auto">
       <NavbarBrand href="/">
         <img src="/favicon.png" alt="owl of minerva" />
@@ -68,7 +70,7 @@
           </NavItem>
         {/if}
       {/each}
-      <UncontrolledDropdown>
+      <Dropdown>
         <DropdownToggle nav caret>Other</DropdownToggle>
         <DropdownMenu right>
           {#each items as item, index}
@@ -81,7 +83,7 @@
             {/if}
           {/each}
         </DropdownMenu>
-      </UncontrolledDropdown>
+      </Dropdown>
       <NavItem>
         <NavLink href="https://maplelegends.com/" target="_blank">
           MapleLegends

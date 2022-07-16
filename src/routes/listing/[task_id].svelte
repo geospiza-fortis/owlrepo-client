@@ -6,7 +6,7 @@
 
 <script>
   import { onMount } from "svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import { resultColumns } from "./columns.js";
 
   import Table from "../../components/Table.svelte";
