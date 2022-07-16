@@ -5,9 +5,11 @@
   let screenshotPath = "C://MapleLegendsHD/Screenshots";
   let screenshots = [];
   $: screenshotPath &&
-    invoke("list_screenshots", { path: screenshotPath }).then((res) => {
-      screenshots = res;
-    });
+    invoke("list_screenshots", { path: screenshotPath, limit: 20 }).then(
+      (res) => {
+        screenshots = res;
+      }
+    );
   $: console.log(screenshotPath, screenshots);
 
   async function askPath() {
@@ -31,7 +33,7 @@
   {#if screenshots}
     <ul>
       {#each screenshots as path}
-        <li>{path.datetime}</li>
+        <li>{path.datetime} - {path.mse}</li>
       {/each}
     </ul>
   {/if}
