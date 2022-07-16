@@ -12,8 +12,7 @@
     "preview": "vite preview",
     "gcp-build": "npm run build",
     "start": "node build",
-    "tauri": "cross-env VITE_TAURI=true tauri",
-    "tauri:build": "cross-env VITE_TAURI=true npm run build && node scripts/build-binary.js"
+    "tauri": "cross-env VITE_TAURI=true tauri"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^4.0.2",
@@ -21,7 +20,6 @@
     "@sveltejs/adapter-node": "^1.0.0-next.79",
     "@sveltejs/kit": "^1.0.0-next.377",
     "@tauri-apps/cli": "^1.0.3",
-    "@vercel/ncc": "^0.34.0",
     "caxa": "^2.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",

@@ -2,7 +2,7 @@
   "$schema": "..\\node_modules/@tauri-apps/cli\\schema.json",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run tauri:build",
+    "beforeBuildCommand": "",
     "devPath": "http://localhost:5173",
     "distDir": "https://owlrepo.com"
   },
@@ -12,11 +12,7 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true,
-      "shell": {
-        "sidecar": true,
-        "scope": [{ "name": "target/owlrepo-localhost", "sidecar": true }]
-      }
+      "all": true
     },
     "bundle": {
       "active": true,
@@ -25,7 +21,7 @@
       "deb": {
         "depends": []
       },
-      "externalBin": ["target/owlrepo-localhost"],
+      "externalBin": [],
       "icon": ["icons/icon.ico"],
       "identifier": "com.owlrepo.dev",
       "longDescription": "",
