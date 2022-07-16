@@ -13,7 +13,7 @@
     "gcp-build": "npm run build",
     "start": "node build",
     "tauri": "cross-env VITE_TAURI=true tauri",
-    "package": "cross-env VITE_TAURI=true npm run build && node scripts/build-binary.js"
+    "tauri:build": "cross-env VITE_TAURI=true npm run build && node scripts/build-binary.js"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^4.0.2",

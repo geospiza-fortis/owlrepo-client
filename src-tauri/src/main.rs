@@ -3,32 +3,31 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{
-    api::process::{Command, CommandEvent},
-    Manager,
-};
+use tauri::{api::process::Command, window::WindowBuilder, WindowUrl};
 
 // https://github.com/tauri-apps/tauri/blob/dev/examples/sidecar/package.json
+// https://github.com/tauri-apps/tauri-plugin-localhost
 fn main() {
+    let port = portpicker::pick_unused_port().expect("failed to find unused port");
     tauri::Builder::default()
-        .setup(|app| {
-            let window = app.get_window("main").unwrap();
-            tauri::async_runtime::spawn(async move {
-                let (mut rx, mut child) = Command::new_sidecar("app")
-                    .expect("failed to setup `app` sidecar")
-                    .spawn()
-                    .expect("Failed to spawn packaged node");
-
-                while let Some(event) = rx.recv().await {
-                    if let CommandEvent::Stdout(line) = event {
-                        window
-                            .emit("message", Some(format!("'{}'", line)))
-                            .expect("failed to emit event");
-                        child.write("message from Rust\n".as_bytes()).unwrap();
-                    }
-                }
-            });
-
+        .plugin(tauri_plugin_localhost::Builder::new(port).build())
+        .setup(move |app| {
+            if !cfg!(debug_assertions) {
+                tauri::async_runtime::spawn(async move {
+                    Command::new_sidecar("owlrepo-localhost")
+                        .expect("failed to setup `owlrepo-localhost` sidecar")
+                        .args([format!("{}", port)])
+                        .spawn()
+                        .expect("Failed to spawn packaged node");
+                });
+                WindowBuilder::new(
+                    app,
+                    "main".to_string(),
+                    WindowUrl::External(format!("http://localhost:{}", port).parse().unwrap()),
+                )
+                .title("Localhost Example")
+                .build()?;
+            }
             Ok(())
         })
         .run(tauri::generate_context!())

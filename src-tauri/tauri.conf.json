@@ -2,9 +2,9 @@
   "$schema": "..\\node_modules/@tauri-apps/cli\\schema.json",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:3000",
-    "distDir": "../build"
+    "beforeBuildCommand": "npm run tauri:build",
+    "devPath": "http://localhost:5173",
+    "distDir": "https://owlrepo.com"
   },
   "package": {
     "productName": "owlrepo-client",
@@ -15,7 +15,7 @@
       "all": true,
       "shell": {
         "sidecar": true,
-        "scope": [{ "name": "target/app", "sidecar": true }]
+        "scope": [{ "name": "target/owlrepo-localhost", "sidecar": true }]
       }
     },
     "bundle": {
@@ -25,7 +25,7 @@
       "deb": {
         "depends": []
       },
-      "externalBin": ["target/app"],
+      "externalBin": ["target/owlrepo-localhost"],
       "icon": ["icons/icon.ico"],
       "identifier": "com.owlrepo.dev",
       "longDescription": "",

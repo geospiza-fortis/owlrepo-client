@@ -1,4 +1,4 @@
-export async function get({ params }) {
+export async function GET({ params }) {
   const { prefix } = params;
   return {
     body: {
