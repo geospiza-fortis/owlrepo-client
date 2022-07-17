@@ -2,6 +2,7 @@ import localforage from "localforage";
 import { orderBy } from "lodash-es";
 
 const SCREENSHOTS_STORAGE_KEY = "screenshots-listing";
+const SCREENSHOTS_BATCH_KEY = "screenshots-listing-batches";
 
 // update our screenshots with a list of screenshots
 async function updateScreenshots(screenshots, path = SCREENSHOTS_STORAGE_KEY) {
@@ -16,4 +17,9 @@ async function getScreenshots(path = SCREENSHOTS_STORAGE_KEY) {
   return orderBy(Object.values(items), ["datetime"], ["desc"]);
 }
 
-export { updateScreenshots, getScreenshots };
+export {
+  SCREENSHOTS_STORAGE_KEY,
+  SCREENSHOTS_BATCH_KEY,
+  updateScreenshots,
+  getScreenshots,
+};

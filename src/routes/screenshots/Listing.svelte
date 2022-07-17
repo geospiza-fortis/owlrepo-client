@@ -1,19 +1,21 @@
 <script>
-  import { open } from "@tauri-apps/api/dialog";
   import { invoke } from "@tauri-apps/api/tauri";
   import moment from "moment";
   import { updateScreenshots, getScreenshots } from "./storage.js";
+  import { screenshotPath, batchPath, isProcessingBatch } from "./store.js";
 
-  let screenshotPath = "C://MapleLegendsHD/Screenshots";
   let screenshots = [];
   let isProcessing = true;
+  let imageUri;
 
   // min date is 2016-04-01
   $: minDate = moment().subtract(54, "week").toISOString(true);
   // sets screenshots
-  $: screenshotPath && parseScreenshots(screenshotPath, minDate);
+  $: isProcessing &&
+    $screenshotPath &&
+    parseScreenshots($screenshotPath, minDate);
   $: owlScreenshots = screenshots.filter((s) => s.mse < 100);
-  $: imageUri = showImage(owlScreenshots[0]);
+  $: owlScreenshots.length && (imageUri = showImage(owlScreenshots[0]));
 
   /// parse the screenshots in a large loop, to provide incremental progress and
   /// to avoid extra computation
@@ -34,30 +36,28 @@
     isProcessing = false;
   }
 
-  async function askPath() {
-    let path = await open({
-      directory: true,
-      defaultPath: screenshotPath,
-    });
-    if (!path) {
-      return;
-    }
-    screenshotPath = path;
+  async function showImage(screenshot) {
+    console.log(screenshot);
+    imageUri = await invoke("get_screenshot_uri", { screenshot: screenshot });
   }
 
-  async function showImage(screenshot) {
-    imageUri = await invoke("get_screenshot_uri", { screenshot: screenshot });
+  async function processBatch(owlScreenshots) {
+    isProcessingBatch.set(true);
+    await invoke("create_cropped_batch", {
+      screenshots: owlScreenshots,
+      baseBatchPath: $batchPath,
+    });
+    isProcessingBatch.set(false);
   }
 </script>
 
-<div>
-  <button on:click={askPath}>choose a directory</button>
-  <p>Current directory: {screenshotPath}</p>
-</div>
+<h2>Unprocessed Owl Screenshots</h2>
 
-<h2>owl listing</h2>
-{#if isProcessing}
+{#if isProcessing || $isProcessingBatch}
   <p>Processing images...</p>
+{:else}
+  <button on:click={() => (isProcessing = true)}>Reprocess screenshots</button>
+  <button on:click={() => processBatch(owlScreenshots)}>Process Batch</button>
 {/if}
 
 <p>{owlScreenshots.length}/{screenshots.length} owl screenshots found</p>
@@ -69,7 +69,7 @@
         <ul>
           {#each owlScreenshots as path}
             <li on:click={() => showImage(path)}>
-              <a href={""}>{path.datetime}</a>
+              <a href={"javascript:void(0)"}>{path.datetime}</a>
             </li>
           {/each}
         </ul>

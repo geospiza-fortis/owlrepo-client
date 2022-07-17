@@ -1,7 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import { browser } from "$app/env";
+  import Settings from "./Settings.svelte";
   import Listing from "./Listing.svelte";
+  import Batch from "./Batch.svelte";
 
   $: tauri = browser && window.__TAURI__;
 
@@ -14,16 +16,15 @@
   });
 
   // https://tauri.app/v1/guides/development/security/#tauri-api
-  // TODO: save directory, list files in the last x days, copy files into a new
-  // directory, upload files
-  // list(timestamp)
-  // filter by owl
+  // TODO: save directory copy files into a new, directory, upload files
 </script>
 
 <h1>Screenshots</h1>
 
 {#if tauri}
+  <Settings />
   <Listing />
+  <Batch />
 {:else}
   <p>
     Download the owlrepo localhost client for this functionality, redirecting in
