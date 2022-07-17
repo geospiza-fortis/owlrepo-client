@@ -31,6 +31,7 @@ rayon = "1.5"
 
 tempfile = "3.3.0"
 base64 = "0.13.0"
+trash = "2.0"
 
 [features]
 # by default Tauri runs in production mode

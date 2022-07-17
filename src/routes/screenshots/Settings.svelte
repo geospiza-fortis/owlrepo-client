@@ -1,6 +1,8 @@
 <script>
   import { open } from "@tauri-apps/api/dialog";
-  import { screenshotPath, batchPath } from "./store.js";
+  import { screenshotPath, batchPath, trashOnProcessing } from "./store.js";
+  import localforage from "localforage";
+  import { onMount } from "svelte";
 
   async function askPath(store, defaultPath) {
     let path = await open({
@@ -12,6 +14,14 @@
     }
     store.set(path);
   }
+
+  onMount(async () => {
+    let val = await localforage.getItem("screenshots:trashOnProcessing");
+    $trashOnProcessing = val == null ? true : val;
+    trashOnProcessing.subscribe(async (value) => {
+      await localforage.setItem("screenshots:trashOnProcessing", value);
+    });
+  });
 </script>
 
 <h2>Settings</h2>
@@ -30,4 +40,13 @@
     >Batch Directory</button
   >
   <label for="batchPath">{$batchPath}</label>
+</div>
+
+<div>
+  <input
+    type="checkbox"
+    id="trashOnProcessing"
+    bind:checked={$trashOnProcessing}
+  />
+  <label for="trashOnProcessing">Trash on processing</label>
 </div>

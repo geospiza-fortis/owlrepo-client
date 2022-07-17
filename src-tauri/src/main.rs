@@ -113,8 +113,7 @@ async fn list_screenshots(
     list_screenshots_sync(path, limit, min_date, exclude_names)
 }
 
-#[tauri::command]
-async fn get_screenshot_uri(screenshot: Screenshot) -> Result<String, String> {
+fn get_screenshot_uri_sync(screenshot: Screenshot) -> Result<String, String> {
     let mut img = crop::imread(Path::new(&screenshot.name)).expect("unable to read image");
     let cropped = crop::crop_owl(&mut img, screenshot.crop_x, screenshot.crop_y)
         .expect("unable to crop image");
@@ -128,6 +127,19 @@ async fn get_screenshot_uri(screenshot: Screenshot) -> Result<String, String> {
         .expect("unable to read file");
     let encoded = base64::encode(&contents);
     Ok(format!("data:image/png;base64,{}", encoded))
+}
+
+#[tauri::command]
+async fn get_screenshot_uri(screenshot: Screenshot) -> Result<String, String> {
+    get_screenshot_uri_sync(screenshot)
+}
+
+#[tauri::command]
+async fn get_screenshot_uri_batch(screenshots: Vec<Screenshot>) -> Result<Vec<String>, String> {
+    Ok(screenshots
+        .into_par_iter()
+        .map(|s| get_screenshot_uri_sync(s).unwrap())
+        .collect())
 }
 
 #[tauri::command]
@@ -158,7 +170,7 @@ async fn create_cropped_batch(
             .expect(&format!("unable to write image: {}", &path));
         if let Some(should_delete) = should_delete {
             if should_delete {
-                std::fs::remove_file(Path::new(&s.name)).expect("unable to delete file");
+                trash::delete(&s.name).expect("unable to delete file");
             }
         }
     });
@@ -208,6 +220,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             list_screenshots,
             get_screenshot_uri,
+            get_screenshot_uri_batch,
             create_cropped_batch,
             list_batches
         ])

@@ -18,12 +18,13 @@
   }
   async function triggerUpload(batch) {
     let res = [];
-    for (let screenshot of batch.items) {
-      let dataUri = await invoke("get_screenshot_uri", {
-        screenshot: screenshot,
-      });
+    // perform getting uri's in batch since it's parallelized
+    let dataUris = await invoke("get_screenshot_uri_batch", {
+      screenshots: batch.items,
+    });
+    for (let [i, screenshot] of batch.items.entries()) {
       let name = /MapleLegends[_ ](.*).png/.exec(screenshot.name)[0];
-      let item = await parseFile(name, dataUri);
+      let item = await parseFile(name, dataUris[i]);
       res.push(item);
       console.log(item);
     }
