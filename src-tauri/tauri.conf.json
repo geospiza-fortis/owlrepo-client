@@ -4,11 +4,11 @@
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "",
     "devPath": "http://localhost:5173",
-    "distDir": "https://owlrepo-nonprod.wl.r.appspot.com"
+    "distDir": "https://owlrepo.com"
   },
   "package": {
     "productName": "owlrepo-client",
-    "version": "0.1.0"
+    "version": "6.0.0"
   },
   "tauri": {
     "allowlist": {
