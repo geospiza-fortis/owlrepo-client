@@ -11,3 +11,5 @@ __sapper__/
 yarn-error.log
 .svelte-kit/
 build/
+target/
+WixTools

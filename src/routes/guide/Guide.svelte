@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { formatPrice } from "../../utils.js";
-  import { sortBy, groupBy, random } from "lodash";
+  import { sortBy, groupBy, random } from "lodash-es";
   import localforage from "localforage";
   import {
     CATEGORIES,
@@ -9,10 +9,10 @@
     getBackgroundColor,
     transform,
   } from "./index.js";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
-  import { Alert } from "sveltestrap/src";
+  import { Alert } from "sveltestrap";
   import moment from "moment";
   import FrontMatter from "../../docs/FrontMatter.svx";
 

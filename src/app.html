@@ -35,14 +35,15 @@
       gtag("js", new Date());
     </script>
 
-    <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
+    <!-- <link rel="manifest" href="manifest.json" crossorigin="use-credentials" /> -->
     <link rel="icon" type="image/png" href="favicon.png" />
 
     <!-- This contains the contents of the <svelte:head> component, if
 	     the current page has one -->
-    %svelte.head%
+    %sveltekit.head%
   </head>
+
   <body>
-    %svelte.body%
+    %sveltekit.body%
   </body>
 </html>

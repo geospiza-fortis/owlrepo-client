@@ -11,7 +11,7 @@
 </script>
 
 <script>
-  import Uploader from "../../components/Uploader.svelte";
+  import Uploader from "../../components/uploader/Uploader.svelte";
   import IndexView from "../../components/IndexView.svelte";
   import CollapseInfo from "../../components/CollapseInfo.svelte";
   import TopUploaders from "../../components/TopUploaders.svelte";

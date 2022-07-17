@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Table from "./Table.svelte";
   import { getThumbprint } from "../token.js";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
 
   // from the guide colors
   const BG_GREEN = "#a3c3b0";

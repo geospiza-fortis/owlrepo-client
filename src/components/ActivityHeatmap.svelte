@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import moment from "moment";
 
   export let data;

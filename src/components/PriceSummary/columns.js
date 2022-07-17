@@ -1,5 +1,5 @@
 import moment from "moment";
-import { pickBy } from "lodash";
+import { pickBy } from "lodash-es";
 import { shortFormatter } from "../../utils.js";
 
 const columns = [

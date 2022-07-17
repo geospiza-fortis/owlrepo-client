@@ -1,5 +1,4 @@
-export async function get({ params }) {
-  const { prefix } = params;
+export async function GET({ params }) {
   return {
     body: {
       status: "ok",
@@ -8,6 +7,13 @@ export async function get({ params }) {
       version: "__VERSION__",
       git_sha: "__GIT_COMMIT__",
       build_time: "__BUILD_TIME__",
+      tauri_version: "__TAURI_VERSION__",
+      ...(import.meta.env.MODE == "development"
+        ? {
+            tauri: import.meta.env.VITE_TAURI == "true",
+            owlrepo_api_url: import.meta.env.VITE_OWLREPO_URL,
+          }
+        : {}),
     },
     status: 200,
   };

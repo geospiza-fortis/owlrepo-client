@@ -19,7 +19,7 @@
 
 <hr />
 <footer>
-  OwlRepo __VERSION__ (
+  <a href="/version">OwlRepo __VERSION__</a> (
   <a
     href="https://github.com/geospiza-fortis/owlrepo-client/commit/__GIT_COMMIT__"
   >
@@ -29,8 +29,8 @@
 </footer>
 
 <style>
-  /* 
-    https://jrl.ninja/etc/1/ 
+  /*
+    https://jrl.ninja/etc/1/
     https://jgthms.com/web-design-in-4-minutes/#centering
   */
   main {

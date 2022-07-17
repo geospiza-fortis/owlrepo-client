@@ -3,7 +3,7 @@
   import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
   import { columns, transform } from "./columns.js";
   import { onMount } from "svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import { browser } from "$app/env";
 
   export let data;

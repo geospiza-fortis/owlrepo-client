@@ -65,8 +65,9 @@ async function validateOwl(dataUrl, threshold = 100, verbose = false) {
 
   let params = [0, 0, validationCanvas.width, validationCanvas.height];
   let data = canvas.getContext("2d").getImageData(...params).data;
-  let validationData = validationCanvas.getContext("2d").getImageData(...params)
-    .data;
+  let validationData = validationCanvas
+    .getContext("2d")
+    .getImageData(...params).data;
 
   if (verbose) {
     console.log(canvas.toDataURL());

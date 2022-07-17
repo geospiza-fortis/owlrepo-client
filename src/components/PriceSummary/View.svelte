@@ -1,7 +1,7 @@
 <script>
   import Table from "../Table.svelte";
   import SearchBox from "../SearchBox.svelte";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import Settings from "./Settings.svelte";
   import Plot from "./Plot.svelte";
 

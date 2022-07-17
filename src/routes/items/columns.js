@@ -1,5 +1,5 @@
 import { shortFormatter } from "../../utils.js";
-import { pickBy } from "lodash";
+import { pickBy } from "lodash-es";
 
 const columns = [
   {

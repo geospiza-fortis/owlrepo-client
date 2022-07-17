@@ -12,9 +12,4 @@
 # below:
 .gitignore
 
-# Node.js dependencies:
-node_modules/
-__sapper__/
-build/
-.svelte-kit/
-.env
+#!include:.gitignore

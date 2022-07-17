@@ -1,6 +1,6 @@
 <script>
   import { formatPrice } from "../../utils.js";
-  import { Tooltip } from "sveltestrap/src";
+  import { Tooltip } from "sveltestrap";
   export let row;
   export let id;
   export let metric;

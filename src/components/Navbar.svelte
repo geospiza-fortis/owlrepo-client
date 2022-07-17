@@ -1,14 +1,13 @@
 <script context="module">
   const items = [
-    { text: "Summary", href: "summary" },
-    { text: "Items", href: "items" },
-    { text: "Upload", href: "upload" },
-    { text: "Charts", href: "charts" },
-    { text: "About", href: "about" },
-    { text: "Recommendation", href: "recommendation" },
-    { text: "Curate", href: "curate" },
-    { text: "Personal", href: "personal" },
-    { text: "Sign and Verify", href: "sign" },
+    { text: "Summary", href: "/summary" },
+    { text: "Items", href: "/items" },
+    { text: "Upload", href: "/upload" },
+    { text: "Charts", href: "/charts" },
+    { text: "About", href: "/about" },
+    { text: "Recommendation", href: "/recommendation" },
+    { text: "Personal", href: "/personal" },
+    { text: "Sign and Verify", href: "/sign" },
     {
       text: "Forum",
       href:
@@ -26,20 +25,17 @@
     Nav,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
+    Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-  } from "sveltestrap/src";
+  } from "sveltestrap";
+  import { browser } from "$app/env";
 
-  const breakpoint = 5;
+  const breakpoint = 5 - (browser && window.__TAURI__ ? 2 : 0);
   let isOpen = false;
 
   export let segment;
-
-  function handleUpdate(event) {
-    isOpen = event.detail.isOpen;
-  }
 </script>
 
 <Navbar class="navbar-dark bg-primary" expand="md">
@@ -50,34 +46,50 @@
     </NavbarBrand>
   {/if}
   <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
-  <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
+  <Collapse
+    {isOpen}
+    navbar
+    expand="md"
+    on:open={() => (isOpen = true)}
+    on:close={() => (isOpen = false)}
+  >
     <Nav class="mx-auto">
       <NavbarBrand href="/">
         <img src="/favicon.png" alt="owl of minerva" />
         owlrepo
       </NavbarBrand>
+      {#if window.__TAURI__}
+        <NavItem>
+          <NavLink href="/screenshots">Screenshots</NavLink>
+        </NavItem>
+      {/if}
       {#each items as item, index}
         {#if index < breakpoint}
           <NavItem>
             <NavLink
               href={item.href}
               active={!segment ? "" == item.href : segment == item.href}
+              target={item.href.startsWith("https://") ? "_blank" : ""}
             >
               {item.text}
             </NavLink>
           </NavItem>
         {/if}
       {/each}
-      <UncontrolledDropdown>
+      <Dropdown>
         <DropdownToggle nav caret>Other</DropdownToggle>
         <DropdownMenu right>
           {#each items as item, index}
             {#if index >= breakpoint}
-              <DropdownItem href={item.href}>{item.text}</DropdownItem>
+              <DropdownItem
+                href={item.href}
+                target={item.href.startsWith("https://") ? "_blank" : ""}
+                >{item.text}</DropdownItem
+              >
             {/if}
           {/each}
         </DropdownMenu>
-      </UncontrolledDropdown>
+      </Dropdown>
       <NavItem>
         <NavLink href="https://maplelegends.com/" target="_blank">
           MapleLegends

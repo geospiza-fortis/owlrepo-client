@@ -2,7 +2,7 @@
   export let component;
   export let params;
   export let text;
-  import { Collapse } from "sveltestrap/src";
+  import { Collapse } from "sveltestrap";
 
   let open = false;
 </script>

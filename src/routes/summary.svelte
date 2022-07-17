@@ -2,7 +2,7 @@
   import ActivityHeatmap from "../components/ActivityHeatmap.svelte";
   import PriceSummary from "../components/PriceSummary/View.svelte";
   import { transform as transformPriceSummary } from "../components/PriceSummary/columns.js";
-  import { Stretch } from "svelte-loading-spinners/src";
+  import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 
   const BG_RED = "#ffaebf";
