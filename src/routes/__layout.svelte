@@ -19,7 +19,7 @@
 
 <hr />
 <footer>
-  OwlRepo __VERSION__ (
+  <a href="/version">OwlRepo __VERSION__</a> (
   <a
     href="https://github.com/geospiza-fortis/owlrepo-client/commit/__GIT_COMMIT__"
   >
