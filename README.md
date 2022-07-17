@@ -65,6 +65,18 @@ python deploy.py staging
 python deploy.py production
 ```
 
+## Building the desktop app
+
+The desktop app is built using [Tauri](https://tauri.app/). Run the following
+command to develop. This requires installing rust on your machine.
+
+```bash
+npm run tauri dev
+```
+
+Use `npm run tauri build` to create an installable that points to the production
+instance. A github action is configured to publish automatically on release.
+
 ## Other notes
 
 It's sometimes useful to debug node itself. From Windows:
