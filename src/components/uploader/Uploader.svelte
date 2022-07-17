@@ -55,7 +55,7 @@
       }
     };
 
-    if (disableExternalUpload) {
+    if (!disableExternalUpload) {
       window.ondrop = async (ev) => {
         ev.preventDefault();
         await appendToFiles(ev.dataTransfer.files);
@@ -157,7 +157,7 @@
       </div>
       <div id="upload-button-container" class="container">
         <div class="row">
-          {#if disableExternalUpload}
+          {#if !disableExternalUpload}
             <div class="col">
               <button
                 class="btn btn-primary"

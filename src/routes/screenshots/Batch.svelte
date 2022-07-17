@@ -91,6 +91,7 @@
 <Uploader
   {files}
   {batch_id}
+  disableExternalUpload={true}
   onUpload={async () => {
     $isProcessing = true;
     await listBatches();
