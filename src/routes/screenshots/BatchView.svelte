@@ -1,5 +1,6 @@
 <script>
   import { invoke } from "@tauri-apps/api/tauri";
+  import moment from "moment";
 
   export let screenshots = [];
   let imageUri;
@@ -20,7 +21,9 @@
       <ul>
         {#each screenshots as path}
           <li on:click={() => showImage(path)}>
-            <a href={"javascript:void(0)"}>{path.datetime}</a>
+            <a href={"javascript:void(0)"}
+              >{path.datetime} ({moment(path.datetime).fromNow()})</a
+            >
           </li>
         {/each}
       </ul>

@@ -84,10 +84,14 @@ async function parseFile(filename, dataUrl) {
   return { img: img, name: filename, selected: false };
 }
 
-async function updatePersonalUploads(task_id) {
+async function updatePersonalUploads(task_id, batch_id = null) {
   // This key is used in multiple places
   let uploads = (await localforage.getItem("personal-uploads")) || [];
-  uploads.push({ task_id: task_id, timestamp: moment().format() });
+  uploads.push({
+    task_id: task_id,
+    timestamp: moment().format(),
+    batch_id: batch_id,
+  });
   await localforage.setItem("personal-uploads", uploads);
 }
 

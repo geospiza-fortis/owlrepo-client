@@ -9,6 +9,7 @@
   import {
     screenshotPath,
     batchPath,
+    isProcessing,
     isProcessingBatch,
     trashOnProcessing,
     shouldPruneProcessed,
@@ -19,15 +20,15 @@
 
   let screenshots = [];
   let batchedScreenshots = [];
-  let isProcessing = true;
+  $: $isProcessing = true;
   $: $isProcessingBatch = false;
   $: $shouldPruneProcessed = false;
 
   // min date is 2016-04-01
   $: minDate = moment().subtract(52, "week").toISOString(true);
   // sets screenshots
-  $: isProcessing && listBatchScreenshots($batchPath);
-  $: isProcessing && parseScreenshots($screenshotPath, minDate);
+  $: $isProcessing && listBatchScreenshots($batchPath);
+  $: $isProcessing && parseScreenshots($screenshotPath, minDate);
   $: batchedScreenshotNames = batchedScreenshots.map((s) => extractName(s));
   $: unprocessedScreenshots = screenshots.filter(
     (s) => s.mse < 100 && !batchedScreenshotNames.includes(extractName(s))
@@ -53,7 +54,7 @@
       screenshots = [...(await getScreenshots())];
     } while (res.length > 0);
 
-    isProcessing = false;
+    $isProcessing = false;
   }
 
   async function listBatchScreenshots(batchPath) {
@@ -65,16 +66,12 @@
   }
 
   async function pruneProcessed(processedScreenshots) {
-    if (!$shouldPruneProcessed) {
-      console.log("skipping prune");
-      return;
-    }
     await invoke("trash_screenshots", {
       screenshots: processedScreenshots,
     });
     await deleteScreenshots(processedScreenshots);
     $shouldPruneProcessed = false;
-    isProcessing = true;
+    $isProcessing = true;
   }
 
   async function processBatch(unprocessedScreenshots) {
@@ -82,19 +79,22 @@
     await invoke("create_cropped_batch", {
       screenshots: unprocessedScreenshots,
       baseBatchPath: $batchPath,
-      shouldDelete: $trashOnProcessing,
     });
+    // this logic is very tricky, it should probably be made more explicit
+    if ($trashOnProcessing) {
+      await pruneProcessed(unprocessedScreenshots);
+    }
     $isProcessingBatch = false;
-    isProcessing = true;
+    $isProcessing = true;
   }
 </script>
 
 <h2>Unprocessed Owl Screenshots</h2>
 
-{#if isProcessing || $isProcessingBatch || $shouldPruneProcessed}
+{#if $isProcessing || $isProcessingBatch || $shouldPruneProcessed}
   <p>Processing images...</p>
 {:else}
-  <button class="btn btn-primary" on:click={() => (isProcessing = true)}
+  <button class="btn btn-primary" on:click={() => ($isProcessing = true)}
     >Reprocess screenshots</button
   >
   {#if unprocessedScreenshots.length > 0}

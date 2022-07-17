@@ -1,14 +1,19 @@
 <script>
   import { invoke } from "@tauri-apps/api/tauri";
-  import { batchPath, isProcessingBatch } from "./store.js";
+  import { batchPath, isProcessing, isProcessingBatch } from "./store.js";
   import Uploader from "../../components/uploader/Uploader.svelte";
   import { parseFile } from "../../components/uploader/uploader.js";
   import BatchView from ".//BatchView.svelte";
   import { extractName } from "./utils.js";
+  import localforage from "localforage";
+  import moment from "moment";
 
   let batches = [];
   let current_batch = null;
+
   let files = [];
+  let batch_id = null;
+  let uploadsWithBatch = {};
 
   $: !$isProcessingBatch && listBatches();
 
@@ -16,6 +21,12 @@
     batches = await invoke("list_batches", {
       baseBatchPath: $batchPath,
     });
+
+    // also get the uploads
+    let uploads = (await localforage.getItem("personal-uploads")) || [];
+    uploadsWithBatch = Object.fromEntries(
+      uploads.filter((u) => u.batch_id).map((u) => [u.batch_id, u])
+    );
   }
   async function triggerUpload(batch) {
     let res = [];
@@ -29,6 +40,7 @@
       console.log(item);
     }
     files = [...res];
+    batch_id = batch.datetime;
   }
 </script>
 
@@ -40,12 +52,24 @@
         <a
           href={"javascript:void(0)"}
           on:click={() => {
+            // personally not a fan of this logic
             current_batch = current_batch == batch ? null : batch;
-          }}>{batch.datetime}</a
+          }}>{batch.datetime} ({moment(batch.datetime).fromNow()})</a
         >
-        <button class="btn btn-primary" on:click={() => triggerUpload(batch)}
-          >Upload to OwlRepo</button
-        >
+        {#if uploadsWithBatch[batch.datetime]}
+          <a href={`/listing/${uploadsWithBatch[batch.datetime].task_id}`}
+            ><span class="badge badge-success"
+              >Uploaded: {uploadsWithBatch[batch.datetime].task_id}</span
+            ></a
+          >
+          <button class="btn btn-warning" on:click={() => triggerUpload(batch)}
+            >Reupload to OwlRepo</button
+          >
+        {:else}
+          <button class="btn btn-primary" on:click={() => triggerUpload(batch)}
+            >Upload to OwlRepo</button
+          >
+        {/if}
         {#if current_batch && current_batch.name == batch.name}
           <BatchView screenshots={batch.items} />
         {/if}
@@ -55,4 +79,22 @@
 {/if}
 
 <h2>Upload Screenshots</h2>
-<Uploader {files} />
+{#if uploadsWithBatch[batch_id]}
+  <div class="alert alert-warning" role="alert">
+    You have already uploaded this batch to <a
+      href={`/listing/${uploadsWithBatch[batch_id].task_id}`}
+    >
+      {uploadsWithBatch[batch_id].task_id}</a
+    >
+  </div>
+{/if}
+<Uploader
+  {files}
+  {batch_id}
+  onUpload={async () => {
+    $isProcessing = true;
+    await listBatches();
+    files = [];
+    batch_id = null;
+  }}
+/>

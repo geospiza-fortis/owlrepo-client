@@ -13,6 +13,8 @@
 
   export let files = [];
   export let disableExternalUpload = false;
+  export let batch_id = null;
+  export let onUpload = () => {};
 
   let progress = 0;
   let total = 0;
@@ -111,7 +113,8 @@
       // save a preview to local storage
       let cropped = await cropImage(preview.img, 35, 35 + 50, 10, 10 + 413);
       refreshLastUpload(cropped, data.task_id);
-      await updatePersonalUploads(data.task_id);
+      await updatePersonalUploads(data.task_id, batch_id);
+      onUpload();
     } catch (err) {
       console.log(err);
       // TODO: show an error at the top of the page
