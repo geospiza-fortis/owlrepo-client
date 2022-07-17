@@ -3,6 +3,7 @@
   import { batchPath, isProcessingBatch } from "./store.js";
   import Uploader from "../../components/uploader/Uploader.svelte";
   import { parseFile } from "../../components/uploader/uploader.js";
+  import BatchView from ".//BatchView.svelte";
 
   let batches = [];
   let current_batch = null;
@@ -43,17 +44,12 @@
         >
         <button on:click={() => triggerUpload(batch)}>Upload to OwlRepo</button>
         {#if current_batch && current_batch.name == batch.name}
-          <ul>
-            {#each batch.items as item}
-              <li>{item.datetime}</li>
-            {/each}
-          </ul>
+          <BatchView screenshots={batch.items} />
         {/if}
       </li>
     {/each}
   </ul>
 {/if}
 
-{#if files.length > 0}
-  <Uploader {files} />
-{/if}
+<h2>Upload Screenshots</h2>
+<Uploader {files} />

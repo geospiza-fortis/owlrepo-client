@@ -12,6 +12,7 @@
   import { parseFile, updatePersonalUploads } from "./uploader.js";
 
   export let files = [];
+  export let disableExternalUpload = false;
 
   let progress = 0;
   let total = 0;
@@ -42,11 +43,6 @@
       ev.preventDefault();
     };
 
-    window.ondrop = async (ev) => {
-      ev.preventDefault();
-      await appendToFiles(ev.dataTransfer.files);
-    };
-
     window.onkeydown = (ev) => {
       //   console.log(ev.key);
       if (ev.key === "Delete") {
@@ -57,10 +53,16 @@
       }
     };
 
-    let fileInput = document.getElementById("fileInput");
-    fileInput.onchange = async (ev) => {
-      await appendToFiles(fileInput.files);
-    };
+    if (disableExternalUpload) {
+      window.ondrop = async (ev) => {
+        ev.preventDefault();
+        await appendToFiles(ev.dataTransfer.files);
+      };
+      let fileInput = document.getElementById("fileInput");
+      fileInput.onchange = async (ev) => {
+        await appendToFiles(fileInput.files);
+      };
+    }
   });
 
   async function handleSubmit(event) {
@@ -152,14 +154,16 @@
       </div>
       <div id="upload-button-container" class="container">
         <div class="row">
-          <div class="col">
-            <button
-              class="btn btn-primary"
-              onclick="document.getElementById('fileInput').click();"
-            >
-              Browse...
-            </button>
-          </div>
+          {#if disableExternalUpload}
+            <div class="col">
+              <button
+                class="btn btn-primary"
+                onclick="document.getElementById('fileInput').click();"
+              >
+                Browse...
+              </button>
+            </div>
+          {/if}
           {#if files.length > 0}
             <div class="col">
               <button
