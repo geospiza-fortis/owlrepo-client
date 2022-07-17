@@ -3,7 +3,7 @@
 
   export let screenshots = [];
   let imageUri;
-  $: screenshots.length && showImage(screenshots[0]);
+  $: screenshots.length ? showImage(screenshots[0]) : (imageUri = null);
 
   async function showImage(screenshot) {
     let newUri = await invoke("get_screenshot_uri", { screenshot: screenshot });

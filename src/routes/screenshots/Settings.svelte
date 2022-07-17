@@ -21,6 +21,19 @@
     trashOnProcessing.subscribe(async (value) => {
       await localforage.setItem("screenshots:trashOnProcessing", value);
     });
+
+    $screenshotPath =
+      (await localforage.getItem("screenshots:screenshotPath")) ||
+      $screenshotPath;
+    screenshotPath.subscribe(async (value) => {
+      await localforage.setItem("screenshots:screenshotPath", value);
+    });
+
+    $batchPath =
+      (await localforage.getItem("screenshots:batchPath")) || $batchPath;
+    batchPath.subscribe(async (value) => {
+      await localforage.setItem("screenshots:batchPath", value);
+    });
   });
 </script>
 
@@ -29,6 +42,7 @@
 <div>
   <button
     id="screenshotPath"
+    class="btn btn-primary"
     on:click={() => askPath(screenshotPath, $screenshotPath)}
     >Screenshot Directory</button
   >
@@ -36,8 +50,10 @@
 </div>
 
 <div>
-  <button id="batchPath" on:click={() => askPath(batchPath, $batchPath)}
-    >Batch Directory</button
+  <button
+    class="btn btn-primary"
+    id="batchPath"
+    on:click={() => askPath(batchPath, $batchPath)}>Batch Directory</button
   >
   <label for="batchPath">{$batchPath}</label>
 </div>
@@ -48,5 +64,7 @@
     id="trashOnProcessing"
     bind:checked={$trashOnProcessing}
   />
-  <label for="trashOnProcessing">Trash on processing</label>
+  <label for="trashOnProcessing"
+    >Move processed screenshots to the recycling bin</label
+  >
 </div>

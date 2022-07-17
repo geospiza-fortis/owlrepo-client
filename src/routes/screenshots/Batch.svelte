@@ -4,6 +4,7 @@
   import Uploader from "../../components/uploader/Uploader.svelte";
   import { parseFile } from "../../components/uploader/uploader.js";
   import BatchView from ".//BatchView.svelte";
+  import { extractName } from "./utils.js";
 
   let batches = [];
   let current_batch = null;
@@ -23,8 +24,7 @@
       screenshots: batch.items,
     });
     for (let [i, screenshot] of batch.items.entries()) {
-      let name = /MapleLegends[_ ](.*).png/.exec(screenshot.name)[0];
-      let item = await parseFile(name, dataUris[i]);
+      let item = await parseFile(extractName(screenshot), dataUris[i]);
       res.push(item);
       console.log(item);
     }
@@ -43,7 +43,9 @@
             current_batch = current_batch == batch ? null : batch;
           }}>{batch.datetime}</a
         >
-        <button on:click={() => triggerUpload(batch)}>Upload to OwlRepo</button>
+        <button class="btn btn-primary" on:click={() => triggerUpload(batch)}
+          >Upload to OwlRepo</button
+        >
         {#if current_batch && current_batch.name == batch.name}
           <BatchView screenshots={batch.items} />
         {/if}

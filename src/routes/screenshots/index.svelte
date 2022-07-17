@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { browser } from "$app/env";
   import Settings from "./Settings.svelte";
-  import Listing from "./Listing.svelte";
+  import Unprocessed from "./Unprocessed.svelte";
   import Batch from "./Batch.svelte";
 
   $: tauri = browser && window.__TAURI__;
@@ -23,7 +23,7 @@
 
 {#if tauri}
   <Settings />
-  <Listing />
+  <Unprocessed />
   <Batch />
 {:else}
   <p>

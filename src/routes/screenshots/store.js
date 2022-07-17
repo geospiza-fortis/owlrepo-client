@@ -6,3 +6,4 @@ export let batchPath = writable("C://MapleLegendsHD/OwlrepoScreenshots");
 export let trashOnProcessing = writable(true);
 
 export let isProcessingBatch = writable(false);
+export let shouldPruneProcessed = writable(false);

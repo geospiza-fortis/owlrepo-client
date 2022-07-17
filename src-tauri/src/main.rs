@@ -142,6 +142,21 @@ async fn get_screenshot_uri_batch(screenshots: Vec<Screenshot>) -> Result<Vec<St
         .collect())
 }
 
+fn trash_screenshots_sync(screenshots: Vec<Screenshot>) -> Result<(), String> {
+    for s in screenshots {
+        // check if path exists
+        if Path::new(&s.name).exists() {
+            trash::delete(s.name).expect("unable to remove file");
+        }
+    }
+    Ok(())
+}
+
+#[tauri::command]
+fn trash_screenshots(screenshots: Vec<Screenshot>) -> Result<(), String> {
+    trash_screenshots_sync(screenshots)
+}
+
 #[tauri::command]
 async fn create_cropped_batch(
     screenshots: Vec<Screenshot>,
@@ -160,20 +175,26 @@ async fn create_cropped_batch(
     // crop images with the batch directory as the final location
     std::fs::create_dir_all(&batch_path)
         .expect(&format!("unable to create batch dir {}", &batch_path));
-    screenshots.into_par_iter().for_each(|s| {
-        let mut img = crop::imread(Path::new(&s.name)).expect("unable to read image");
-        let cropped = crop::crop_owl(&mut img, s.crop_x, s.crop_y).expect("unable to crop image");
-        // get the filename from the path
-        let filename = Path::new(&s.name).file_name().unwrap().to_str().unwrap();
-        let path = format!("{}/{}", batch_path, filename);
-        crop::imsave_png(Path::new(&path), &cropped)
-            .expect(&format!("unable to write image: {}", &path));
-        if let Some(should_delete) = should_delete {
-            if should_delete {
-                trash::delete(&s.name).expect("unable to delete file");
-            }
+    let res = screenshots
+        .into_par_iter()
+        .map(|s| {
+            let mut img = crop::imread(Path::new(&s.name)).expect("unable to read image");
+            let cropped =
+                crop::crop_owl(&mut img, s.crop_x, s.crop_y).expect("unable to crop image");
+            // get the filename from the path
+            let filename = Path::new(&s.name).file_name().unwrap().to_str().unwrap();
+            let path = format!("{}/{}", batch_path, filename);
+            crop::imsave_png(Path::new(&path), &cropped)
+                .expect(&format!("unable to write image: {}", &path));
+            // return the item so we can continue to use it down the line
+            s
+        })
+        .collect();
+    if let Some(should_delete) = should_delete {
+        if should_delete {
+            trash_screenshots_sync(res).expect("unable to trash screenshots")
         }
-    });
+    }
     Ok(())
 }
 
@@ -222,6 +243,7 @@ fn main() {
             get_screenshot_uri,
             get_screenshot_uri_batch,
             create_cropped_batch,
+            trash_screenshots,
             list_batches
         ])
         .run(tauri::generate_context!())
