@@ -37,7 +37,6 @@
   }
 
   async function showImage(screenshot) {
-    console.log(screenshot);
     imageUri = await invoke("get_screenshot_uri", { screenshot: screenshot });
   }
 

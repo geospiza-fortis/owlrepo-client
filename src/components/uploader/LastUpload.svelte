@@ -1,5 +1,12 @@
 <script context="module">
-  import { lastUpload } from "../store.js";
+  import { lastUpload } from "../../store.js";
+
+  function refreshStorage(key, value = null) {
+    if (value) {
+      localStorage.setItem(key, value);
+    }
+    return localStorage.getItem(key);
+  }
 
   export function refreshLastUpload(data_url = null, task_id = null) {
     lastUpload.set({
@@ -11,13 +18,6 @@
 
 <script>
   import { onMount } from "svelte";
-
-  function refreshStorage(key, value = null) {
-    if (value) {
-      localStorage.setItem(key, value);
-    }
-    return localStorage.getItem(key);
-  }
 
   onMount(() => {
     refreshLastUpload();

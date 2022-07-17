@@ -10,6 +10,9 @@ export async function GET({ params }) {
       build_time: "__BUILD_TIME__",
       tauri: import.meta.env.VITE_TAURI == "true",
       tauri_version: "__TAURI_VERSION__",
+      ...(import.meta.env.MODE == "development"
+        ? { owlrepo_api_url: import.meta.env.VITE_OWLREPO_URL }
+        : {}),
     },
     status: 200,
   };
