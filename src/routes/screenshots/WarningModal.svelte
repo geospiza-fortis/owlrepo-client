@@ -6,25 +6,26 @@
     ModalFooter,
     ModalHeader,
   } from "sveltestrap";
-  import { shouldPruneProcessed } from "./store.js";
+  export let header = "";
+  export let body = "";
+  export let onClick = () => {};
 
   let open = false;
   const toggle = () => (open = !open);
 </script>
 
-<Button color="warning" on:click={toggle}>Recycle processed owls</Button>
+<Button color="warning" on:click={toggle}>{header}</Button>
 <Modal isOpen={open} {toggle}>
-  <ModalHeader {toggle}>Recycle processed owls</ModalHeader>
+  <ModalHeader {toggle}>{header}</ModalHeader>
   <ModalBody>
-    Are you sure you want to move the original screenshots for processed owls to
-    the trash?
+    {body}
   </ModalBody>
   <ModalFooter>
     <Button
       color="primary"
       on:click={() => {
         toggle();
-        $shouldPruneProcessed = true;
+        onClick();
       }}>Yes</Button
     >
     <Button color="secondary" on:click={toggle}>Cancel</Button>

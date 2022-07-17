@@ -16,7 +16,7 @@
   } from "./store.js";
   import BatchView from "./BatchView.svelte";
   import { extractName } from "./utils.js";
-  import PruneProcessed from "./PruneProcessed.svelte";
+  import WarningModal from "./WarningModal.svelte";
 
   let screenshots = [];
   let batchedScreenshots = [];
@@ -87,6 +87,11 @@
     $isProcessingBatch = false;
     $isProcessing = true;
   }
+
+  async function clearProcessingHistory(screenshots) {
+    await deleteScreenshots(screenshots);
+    $isProcessing = true;
+  }
 </script>
 
 <h2>Unprocessed Owl Screenshots</h2>
@@ -105,7 +110,18 @@
     >
   {/if}
   {#if processedScreenshots.length > 0}
-    <PruneProcessed />
+    <WarningModal
+      header={"Recycle processed owls"}
+      body={"Are you sure you want to move the original screenshots for processed owls to the trash?"}
+      onClick={() => ($shouldPruneProcessed = true)}
+    />
+  {/if}
+  {#if screenshots.length > 0}
+    <WarningModal
+      header={"Clear processing history"}
+      body={"Are you sure you want to reprocess all screenshots again? This may take some time."}
+      onClick={() => clearProcessingHistory(screenshots)}
+    />
   {/if}
 {/if}
 
