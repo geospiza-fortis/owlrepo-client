@@ -1,15 +1,11 @@
 <script>
   import { onMount } from "svelte";
   import LastUpload, { refreshLastUpload } from "./LastUpload.svelte";
-  import {
-    cropImage,
-    dataURItoBlob,
-    readDataAsync,
-    readImageAsync,
-  } from "../../image.js";
+  import { cropImage, dataURItoBlob, readDataAsync } from "../../image.js";
   import moment from "moment";
   import { requestUploadToken } from "../../token.js";
   import { parseFile, updatePersonalUploads } from "./uploader.js";
+  import { Alert } from "sveltestrap";
 
   export let files = [];
   export let disableExternalUpload = false;
@@ -19,9 +15,11 @@
   let progress = 0;
   let total = 0;
   let error = 0;
+  let errorMessages = [];
 
   async function appendToFiles(filelist) {
     error = 0;
+    errorMessages = [];
     total = filelist.length;
     for (let i = 0; i < filelist.length; i++) {
       progress = i;
@@ -31,10 +29,12 @@
         files.push(await parseFile(file.name, dataUrl));
       } catch (e) {
         console.log(e);
+        errorMessages.push(e);
         error++;
       }
     }
     files = [...files];
+    errorMessages = [...errorMessages];
     progress = total;
   }
 
@@ -90,7 +90,7 @@
     try {
       let token = await requestUploadToken();
       if (!token) {
-        throw "got undefined upload token";
+        throw "Undefined upload token with the server";
       }
       console.log(`Got access token ${token.access_token}`);
       let resp = await fetch(
@@ -103,6 +103,9 @@
           body: formData,
         }
       );
+      if (resp.status !== 200) {
+        throw `Upload failed with status ${resp.status}: ${resp.statusText}`;
+      }
       let data = await resp.json();
 
       let preview = files[0];
@@ -115,13 +118,24 @@
       refreshLastUpload(cropped, data.task_id);
       await updatePersonalUploads(data.task_id, batch_id);
       onUpload();
-    } catch (err) {
-      console.log(err);
-      // TODO: show an error at the top of the page
+    } catch (e) {
+      console.log(e);
+      errorMessages = [e];
       button.disabled = false;
     }
   }
 </script>
+
+<!-- Display errors during upload -->
+{#if error}
+  <Alert color="danger" fade={false} dismissible={true}>
+    <ul>
+      {#each errorMessages as message}
+        <li>{message}</li>
+      {/each}
+    </ul>
+  </Alert>
+{/if}
 
 <form on:submit={handleSubmit}>
   <!-- Nice way to hide the text: https://stackoverflow.com/a/14806776 -->
