@@ -13,6 +13,10 @@
       href:
         "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/",
     },
+    {
+      text: "Desktop Client (Github)",
+      href: "https://github.com/geospiza-fortis/owlrepo-client/releases",
+    },
   ];
 </script>
 

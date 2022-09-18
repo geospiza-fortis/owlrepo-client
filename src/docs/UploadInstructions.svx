@@ -1,5 +1,13 @@
 ## Upload Instructions
 
+<div class="alert alert-info" role="alert">
+
+Consider downloading the most recent desktop client (Windows only) on the
+[Github releases page][release]. The desktop client will sort through your
+Screenshots folder and upload all the owl screenshots it finds.
+
+</div>
+
 Anyone playing MapleLegends can upload owl screenshots to OwlRepo. Screenshots
 should be taken in-game using the `Prt Sc` button. Navigate to
 `C:\MapleLegendsHD\Screenshots` and select all of the uncropped images
@@ -24,3 +32,5 @@ action.
 
 Please report any issues to [`geospiza`](https://geospiza.me/). Thank you for
 contributing and happy mapling!
+
+[release]: https://github.com/geospiza-fortis/owlrepo-client/releases
