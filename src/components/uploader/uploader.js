@@ -43,7 +43,7 @@ function validateFilenameMac(filename) {
 
 async function parseFile(filename, dataUrl) {
   if (!validateFilename(filename) && !validateFilenameMac(filename)) {
-    throw `${filename}: bad filename`;
+    throw `Bad filename for screenshot: ${filename}`;
   }
 
   let uncropped = await readImageAsync(dataUrl);
@@ -74,12 +74,12 @@ async function parseFile(filename, dataUrl) {
   } else if (uncropped.height == 902 && uncropped.width == 1136) {
     cropDim = getDim(269, 350);
   } else {
-    throw `${filename}: bad dimensions for file`;
+    throw `Bad dimensions for file: ${filename}`;
   }
 
   let img = await cropImage(dataUrl, ...cropDim);
   if (!(await validateOwl(img))) {
-    throw `${filename}: bad image`;
+    throw `Bad image: ${filename}`;
   }
   return { img: img, name: filename, selected: false };
 }
