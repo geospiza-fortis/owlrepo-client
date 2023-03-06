@@ -15,6 +15,7 @@
   export let task_id;
   let flattened = null;
   let status = null;
+  let initialFilterItem = null;
 
   let table;
   let cutoff = 3;
@@ -40,6 +41,7 @@
       return;
     }
     flattened = flatten(await resp.json());
+    initialFilterItem = flattened?.at(0)?.item;
   });
 </script>
 
@@ -78,5 +80,11 @@
     clipboard: "copy",
     clipboardCopyStyled: false,
     columns: resultColumns,
+    initialHeaderFilter: [
+      {
+        field: "item",
+        value: initialFilterItem,
+      },
+    ],
   }}
 />
