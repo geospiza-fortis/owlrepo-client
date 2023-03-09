@@ -2,6 +2,14 @@ const resultColumns = [
   {
     title: "Search Item",
     field: "item",
+    headerFilter: "select",
+    headerFilterParams: {
+      values: true,
+      elementAttributes: {
+        style:
+          "padding: 4px; width: 100%; box-sizing: border-box; cursor: pointer;",
+      },
+    },
   },
   {
     title: "Results",
