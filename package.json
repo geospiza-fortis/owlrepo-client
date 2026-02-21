@@ -12,7 +12,9 @@
     "preview": "vite preview",
     "gcp-build": "npm run build",
     "start": "node build",
-    "tauri": "cross-env VITE_TAURI=true tauri"
+    "tauri": "cross-env VITE_TAURI=true tauri",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^4.0.2",
@@ -20,6 +22,7 @@
     "@sveltejs/adapter-node": "^1.0.0-next.81",
     "@sveltejs/kit": "^1.0.0-next.377",
     "@tauri-apps/cli": "^1.0.3",
+    "@playwright/test": "^1.40.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "mdsvex": "^0.9.8",
