@@ -2,7 +2,6 @@
   export let component;
   export let params;
   export let text;
-  import { Collapse } from "sveltestrap";
 
   let open = false;
 </script>
@@ -13,9 +12,9 @@
   </button>
 </div>
 <div>
-  <Collapse isOpen={open}>
+  {#if open}
     <svelte:component this={component} bind:params />
-  </Collapse>
+  {/if}
 </div>
 
 <style>

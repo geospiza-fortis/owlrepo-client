@@ -5,7 +5,7 @@
   import moment from "moment";
   import { requestUploadToken } from "../../token.js";
   import { parseFile, updatePersonalUploads } from "./uploader.js";
-  import { Alert } from "sveltestrap";
+
 
   export let files = [];
   export let disableExternalUpload = false;
@@ -128,13 +128,14 @@
 
 <!-- Display errors during upload -->
 {#if error}
-  <Alert color="danger" fade={false} dismissible={true}>
+  <div class="alert alert-danger alert-dismissible" role="alert">
     <ul>
       {#each errorMessages as message}
         <li>{message}</li>
       {/each}
     </ul>
-  </Alert>
+    <button type="button" class="btn-close" on:click={() => { error = 0; errorMessages = []; }}></button>
+  </div>
 {/if}
 
 <form on:submit={handleSubmit}>

@@ -13,7 +13,6 @@
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
   import Changelog from "./Changelog.svelte";
-  import { Alert } from "sveltestrap";
   import moment from "moment";
   import FrontMatter from "../../docs/FrontMatter.svx";
 
@@ -74,7 +73,7 @@
 </script>
 
 {#if random_item && prompt_upload}
-  <Alert color="info" fade={false} dismissible={true}>
+  <div class="alert alert-info alert-dismissible" role="alert">
     {#if uploads.length == 0}
       Want to help out?
     {:else}
@@ -83,7 +82,8 @@
     Search for <i>{random_item.search_item}</i>
     ({random_item.days_since_update} days old) and
     <a href="/upload">make an upload</a> today!
-  </Alert>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
 {/if}
 
 <div class="container">

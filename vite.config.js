@@ -17,20 +17,21 @@ dotenv.config();
 
 let replaceVersion = () =>
   replace({
-    __VERSION__: process.env.npm_package_version,
-    __GIT_COMMIT__: child_process
-      .execSync("git rev-parse HEAD")
-      .toString()
-      .trim()
-      .slice(0, 8),
-    __BUILD_TIME__: new Date().toISOString(),
-    __TAURI_VERSION__: tauri_conf.package.version,
     preventAssignment: true,
+    values: {
+      __VERSION__: process.env.npm_package_version,
+      __GIT_COMMIT__: child_process
+        .execSync("git rev-parse HEAD")
+        .toString()
+        .trim()
+        .slice(0, 8),
+      __BUILD_TIME__: new Date().toISOString(),
+      __TAURI_VERSION__: tauri_conf.package.version,
+    },
   });
 
 const config = {
   mode: process.env.MODE || "development",
-  // https://github.com/sveltejs/kit/issues/5549
   ssr: {
     noExternal: ["@popperjs/core/**", "svelte-loading-spinners/**"],
   },

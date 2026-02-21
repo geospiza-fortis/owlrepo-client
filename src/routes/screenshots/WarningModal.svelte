@@ -1,11 +1,4 @@
 <script lang="ts">
-  import {
-    Button,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-  } from "sveltestrap";
   export let header = "";
   export let body = "";
   export let onClick = () => {};
@@ -14,20 +7,31 @@
   const toggle = () => (open = !open);
 </script>
 
-<Button color="warning" on:click={toggle}>{header}</Button>
-<Modal isOpen={open} {toggle}>
-  <ModalHeader {toggle}>{header}</ModalHeader>
-  <ModalBody>
-    {body}
-  </ModalBody>
-  <ModalFooter>
-    <Button
-      color="primary"
-      on:click={() => {
-        toggle();
-        onClick();
-      }}>Yes</Button
-    >
-    <Button color="secondary" on:click={toggle}>Cancel</Button>
-  </ModalFooter>
-</Modal>
+<button class="btn btn-warning" on:click={toggle}>{header}</button>
+
+{#if open}
+  <div class="modal d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{header}</h5>
+          <button type="button" class="btn-close" on:click={toggle}></button>
+        </div>
+        <div class="modal-body">
+          <p>{body}</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-primary"
+            on:click={() => {
+              toggle();
+              onClick();
+            }}>Yes</button
+          >
+          <button class="btn btn-secondary" on:click={toggle}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop show"></div>
+{/if}
