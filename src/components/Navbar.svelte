@@ -32,12 +32,10 @@
 </script>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-  {#if !isOpen}
-    <a class="navbar-brand" href="/">
-      <img src="/favicon.png" alt="owl of minerva" />
-      owlrepo
-    </a>
-  {/if}
+  <a class="navbar-brand d-md-none" href="/">
+    <img src="/favicon.png" alt="owl of minerva" />
+    owlrepo
+  </a>
   <button
     class="navbar-toggler ms-auto"
     type="button"
@@ -48,7 +46,7 @@
   </button>
   <div class="collapse navbar-collapse" class:show={isOpen}>
     <ul class="navbar-nav mx-auto">
-      <li class="nav-item">
+      <li class="nav-item d-none d-md-block">
         <a class="navbar-brand" href="/">
           <img src="/favicon.png" alt="owl of minerva" />
           owlrepo

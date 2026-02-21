@@ -210,6 +210,23 @@
     padding: 0 2em;
   }
 
+  /* Override BS5.3 dark theme variables so inline pastel backgrounds show through */
+  .guide :global(.card) {
+    --bs-card-bg: transparent;
+    --bs-card-cap-bg: transparent;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .guide :global(.table) {
+    --bs-table-bg: transparent;
+  }
+
+  .guide :global(.table > :not(caption) > * > *) {
+    box-shadow: none;
+  }
+
   @media (max-width: 900px) {
     .guide {
       padding: 0 0.5rem;
@@ -217,6 +234,10 @@
   }
 
   /* https://stackoverflow.com/a/43117538 */
+
+  .card-columns {
+    column-gap: 1.25rem;
+  }
 
   @media (min-width: 550px) {
     .card-columns {
