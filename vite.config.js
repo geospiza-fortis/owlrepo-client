@@ -41,7 +41,6 @@ const config = {
     inject({
       exclude: ["**/*.css", "**/*.svelte.js", "**/*.css?*"],
       moment: "moment",
-      url: "url",
     }),
     sveltekit(),
   ],

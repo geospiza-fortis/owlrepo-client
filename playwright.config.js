@@ -23,9 +23,11 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "cross-env MODE=staging VITE_TAURI=true vite build && node build",
+    command: process.env.PW_DEV
+      ? "npx cross-env MODE=staging VITE_TAURI=true vite dev --port 3000"
+      : "cross-env MODE=staging VITE_TAURI=true vite build && node build",
     url: "http://localhost:3000",
-    timeout: 120_000,
+    timeout: process.env.PW_DEV ? 30_000 : 120_000,
     reuseExistingServer: !process.env.CI,
   },
 });
