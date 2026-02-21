@@ -15,7 +15,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">{header}</h5>
-          <button type="button" class="btn-close" on:click={toggle}></button>
+          <button type="button" class="btn-close" aria-label="Close" on:click={toggle}></button>
         </div>
         <div class="modal-body">
           <p>{body}</p>

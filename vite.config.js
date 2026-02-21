@@ -39,7 +39,7 @@ const config = {
     replaceVersion(),
     // fix missing moment import inside of tabulator
     inject({
-      exclude: "**/*.css",
+      exclude: ["**/*.css", "**/*.svelte.js", "**/*.css?*"],
       moment: "moment",
       url: "url",
     }),

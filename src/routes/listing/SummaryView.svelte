@@ -13,7 +13,7 @@
   });
 </script>
 
-<div id="summary" />
+<div id="summary"></div>
 {#if grouped}
   {#each keys as key}
     <SummaryElement {key} data={grouped[key]} />

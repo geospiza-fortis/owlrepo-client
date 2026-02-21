@@ -18,9 +18,9 @@
     . Your full
     <a href="https://tools.ietf.org/html/rfc7517">JWK public key</a>
     is:
-    <code>
-      <pre>{JSON.stringify(client_public_key, null, 4)}</pre>
-    </code>
+  </p>
+  <pre><code>{JSON.stringify(client_public_key, null, 4)}</code></pre>
+  <p>
     This is a cryptographic key that can be used to prove your identity. Feel free
     to share your public key as you see fit. For the technically savvy, do not share
     your private key (available in IndexedDB) with others.

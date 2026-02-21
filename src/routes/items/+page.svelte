@@ -4,19 +4,18 @@
   import { columns, transform } from "./columns.js";
   import { onMount } from "svelte";
   import { Stretch } from "svelte-loading-spinners";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
 
-  export let data;
-  export let last_modified;
+  let listingData;
+  let last_modified;
 
   onMount(async () => {
-    last_modified;
     const fetchData = async (url) => {
       let resp = await fetch(url);
       last_modified = new Date(resp.headers.get("last-modified")).toISOString();
       return await resp.json();
     };
-    data = transform(await fetchData("/api/v2/query/search_item_listing"));
+    listingData = transform(await fetchData("/api/v2/query/search_item_listing"));
   });
 
   let is_chartable = false;
@@ -27,7 +26,7 @@
     (keyword = new URLSearchParams(window.location.search).get("keyword"));
 
   $: options = {
-    data: data,
+    data: listingData,
     layout: "fitDataFill",
     pagination: "local",
     paginationSize: 20,
@@ -56,7 +55,7 @@
 
 <h1>Items</h1>
 
-<Table {data} {options} />
+<Table data={listingData} {options} />
 {#if last_modified}
   <p style="text-align: right">
     <i>Last updated {last_modified}</i>
@@ -67,6 +66,6 @@
   </div>
 {/if}
 
-{#if data && is_chartable}
-  <PriceQuantityCharts {data} {search_item_name} />
+{#if listingData && is_chartable}
+  <PriceQuantityCharts data={listingData} {search_item_name} />
 {/if}

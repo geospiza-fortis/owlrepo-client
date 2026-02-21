@@ -21,9 +21,10 @@
 </script>
 
 <script>
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
 
-  const breakpoint = 5 - (browser && window.__TAURI__ ? 2 : 0);
+  const isTauri = browser && window.__TAURI__;
+  const breakpoint = 5 - (isTauri ? 2 : 0);
   let isOpen = false;
   let dropdownOpen = false;
 
@@ -40,6 +41,7 @@
   <button
     class="navbar-toggler ms-auto"
     type="button"
+    aria-label="Toggle navigation"
     on:click={() => (isOpen = !isOpen)}
   >
     <span class="navbar-toggler-icon"></span>
@@ -52,7 +54,7 @@
           owlrepo
         </a>
       </li>
-      {#if window.__TAURI__}
+      {#if isTauri}
         <li class="nav-item">
           <a class="nav-link" href="/screenshots">Screenshots</a>
         </li>

@@ -64,12 +64,15 @@
 
 {#if listings.length > 0}
   <table class="table table-sm table-bordered">
-    <tr>
-      <th scope="col">Submission</th>
-      <th scope="col">Search Item</th>
-      <th scope="col">Items</th>
-      <th scope="col">Pages</th>
-    </tr>
+    <thead>
+      <tr>
+        <th scope="col">Submission</th>
+        <th scope="col">Search Item</th>
+        <th scope="col">Items</th>
+        <th scope="col">Pages</th>
+      </tr>
+    </thead>
+    <tbody>
     {#each listings as entry}
       <tr>
         <td>{entry.completion_timestamp.split(".")[0]}</td>
@@ -80,6 +83,7 @@
         <td>{entry.metadata.pages}</td>
       </tr>
     {/each}
+    </tbody>
   </table>
 
   {#if offset > 0}

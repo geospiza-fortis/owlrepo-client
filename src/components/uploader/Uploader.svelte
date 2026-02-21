@@ -134,7 +134,7 @@
         <li>{message}</li>
       {/each}
     </ul>
-    <button type="button" class="btn-close" on:click={() => { error = 0; errorMessages = []; }}></button>
+    <button type="button" class="btn-close" aria-label="Close" on:click={() => { error = 0; errorMessages = []; }}></button>
   </div>
 {/if}
 
@@ -176,7 +176,7 @@
             <div class="col">
               <button
                 class="btn btn-primary"
-                onclick="document.getElementById('fileInput').click();"
+                on:click={() => document.getElementById('fileInput').click()}
               >
                 Browse...
               </button>
@@ -187,7 +187,7 @@
               <button
                 id="upload-button"
                 class="btn btn-primary"
-                onclick="document.getElementById('fileSubmit').click();"
+                on:click={() => document.getElementById('fileSubmit').click()}
               >
                 Upload
               </button>

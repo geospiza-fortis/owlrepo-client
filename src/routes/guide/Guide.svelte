@@ -82,7 +82,7 @@
     Search for <i>{random_item.search_item}</i>
     ({random_item.days_since_update} days old) and
     <a href="/upload">make an upload</a> today!
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
   </div>
 {/if}
 

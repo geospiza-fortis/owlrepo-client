@@ -1,15 +1,3 @@
-<script context="module">
-  export async function load({ fetch }) {
-    const fetchData = async (url) => {
-      let resp = await fetch(url);
-      return await resp.json();
-    };
-    const heatmap = await fetchData("/api/v2/query/heatmap");
-
-    return { props: { heatmap } };
-  }
-</script>
-
 <script>
   import Uploader from "../../components/uploader/Uploader.svelte";
   import IndexView from "../../components/IndexView.svelte";
@@ -21,11 +9,13 @@
   import localforage from "localforage";
   import { onMount } from "svelte";
 
-  export let heatmap;
+  let heatmap;
   let uploads = [];
 
   onMount(async () => {
     uploads = (await localforage.getItem("personal-uploads")) || [];
+    const resp = await fetch("/api/v2/query/heatmap");
+    heatmap = await resp.json();
   });
 </script>
 

@@ -1,6 +1,6 @@
 <script>
-  import Table from "../components/Table.svelte";
-  import { browser } from "$app/env";
+  import Table from "../../components/Table.svelte";
+  import { browser } from "$app/environment";
   let status_data = null;
   $: browser &&
     fetch("/api/v2/status")
