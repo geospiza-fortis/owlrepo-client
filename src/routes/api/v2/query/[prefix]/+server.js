@@ -6,7 +6,7 @@ export async function GET({ params, fetch }) {
   const { prefix } = params;
   const location = `https://storage.googleapis.com/${BUCKET}/v1/queries/${prefix}.json`;
 
-  if (import.meta.env.VITE_TAURI == "true") {
+  if (import.meta.env.VITE_TAURI == "true" || import.meta.env.DEV) {
     let resp = await fetch(location);
     return json(await resp.json(), { status: resp.status });
   }

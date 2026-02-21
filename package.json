@@ -6,7 +6,7 @@
   "type": "module",
   "bin": "index.js",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "cross-env MODE=staging vite dev",
     "build": "cross-env MODE=production vite build",
     "build:dev": "cross-env MODE=staging vite build",
     "preview": "vite preview",
