@@ -6,11 +6,14 @@ import fs from "fs";
 import replace from "@rollup/plugin-replace";
 
 const pkg = JSON.parse(
-  fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
+  fs.readFileSync(new URL("package.json", import.meta.url), "utf8"),
 );
 
 const tauri_conf = JSON.parse(
-  fs.readFileSync(new URL("src-tauri/tauri.conf.json", import.meta.url), "utf8")
+  fs.readFileSync(
+    new URL("src-tauri/tauri.conf.json", import.meta.url),
+    "utf8",
+  ),
 );
 
 dotenv.config();

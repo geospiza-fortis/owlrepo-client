@@ -25,7 +25,7 @@ function dropOutliers(data, cutoff = 3) {
   let filtered = data.filter((_, index) => scores[index] < cutoff);
   if (filtered.length < 1) {
     console.log(
-      "dropping outliers removes all data points, returning original values"
+      "dropping outliers removes all data points, returning original values",
     );
     return data;
   }

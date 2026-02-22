@@ -5,9 +5,7 @@ test.describe("Personal page", () => {
     await page.goto("/personal");
     await expect(page).toHaveTitle("OwlRepo | Personal");
     await expect(page.locator("h1")).toHaveText("Personal Statistics");
-    await expect(
-      page.getByText("personal history with OwlRepo")
-    ).toBeVisible();
+    await expect(page.getByText("personal history with OwlRepo")).toBeVisible();
   });
 
   test("shows upload history section", async ({ page }) => {

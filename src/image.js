@@ -123,7 +123,7 @@ async function resizeImage(dataUrl, width, height) {
     0,
     0,
     width,
-    height
+    height,
   );
   return destCanvas.toDataURL();
 }

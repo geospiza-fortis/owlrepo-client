@@ -12,7 +12,7 @@ jobs:
       release_id: ${{ steps.get-release.outputs.id }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Get release
         id: get-release
         uses: bruceadams/get-release@v1.2.3
@@ -27,17 +27,15 @@ jobs:
         platform: [windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: install Rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+        uses: dtolnay/rust-toolchain@stable
       - name: install app dependencies and build it
-        run: yarn && yarn build
+        run: npm ci && npm run build
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

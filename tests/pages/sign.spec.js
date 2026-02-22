@@ -5,8 +5,12 @@ test.describe("Sign and Verify page", () => {
     await page.goto("/sign");
     await expect(page).toHaveTitle("OwlRepo | Sign and Verify");
     await expect(page.locator("h1")).toHaveText("Sign and Verify");
-    await expect(page.getByText("Sign messages using your private key")).toBeVisible();
-    await expect(page.getByText("Verify and display the contents")).toBeVisible();
+    await expect(
+      page.getByText("Sign messages using your private key"),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Verify and display the contents"),
+    ).toBeVisible();
   });
 
   test("sign form structure exists", async ({ page }) => {

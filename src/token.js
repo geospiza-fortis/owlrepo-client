@@ -4,7 +4,7 @@ import moment from "moment";
 
 async function getOrCreateCryptoKey(
   path = "contributor-keys",
-  is_public = false
+  is_public = false,
 ) {
   let storage = await localforage.getItem(path);
   if (storage) {
@@ -17,7 +17,7 @@ async function getOrCreateCryptoKey(
       },
       true,
       // NOTE: public/private key must these specifically, kind of annoying
-      [is_public ? "verify" : "sign"]
+      [is_public ? "verify" : "sign"],
     );
     return key;
   } else {
@@ -27,7 +27,7 @@ async function getOrCreateCryptoKey(
         namedCurve: "P-256",
       },
       true,
-      ["sign", "verify"]
+      ["sign", "verify"],
     );
     let pub = await crypto.subtle.exportKey("jwk", keys.publicKey);
     let pvt = await crypto.subtle.exportKey("jwk", keys.privateKey);
@@ -57,7 +57,7 @@ async function getOrCreateJWKRaw(path = "contributor-keys", is_public = false) {
 async function getOrCreateJWK(path = "contributor-keys", is_public = false) {
   return await jose.importJWK(
     await getOrCreateJWKRaw(path, is_public),
-    "ES256"
+    "ES256",
   );
 }
 
@@ -76,7 +76,7 @@ async function requestUploadToken() {
     thumbprint: await getThumbprint(),
   };
   let sig = await new jose.GeneralSign(
-    new TextEncoder().encode(JSON.stringify(data))
+    new TextEncoder().encode(JSON.stringify(data)),
   )
     .addSignature(private_jwk)
     .setProtectedHeader({
@@ -118,7 +118,7 @@ async function signMessage(message) {
 async function verifyMessage(message) {
   const { payload, protectedHeader } = await jose.generalVerify(
     message,
-    jose.EmbeddedJWK
+    jose.EmbeddedJWK,
   );
   let data = {
     payload: new TextDecoder().decode(payload),

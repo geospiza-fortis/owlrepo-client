@@ -20,6 +20,15 @@ export default defineConfig({
     {
       name: "chromium",
       use: { browserName: "chromium" },
+      testIgnore: /service-worker.*\.spec/,
+    },
+    {
+      name: "service-worker",
+      use: {
+        browserName: "chromium",
+        serviceWorkers: "allow",
+      },
+      testMatch: /service-worker\.spec\.js$/,
     },
   ],
   webServer: {

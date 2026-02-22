@@ -26,9 +26,11 @@ test.describe("Listing page", () => {
 
     await page.goto(`/listing/${taskId}`);
     await expect(page).toHaveTitle("OwlRepo | Listing");
-    await expect(page.locator("h2").filter({ hasText: "Summary" })).toBeVisible({
-      timeout: 30_000,
-    });
+    await expect(page.locator("h2").filter({ hasText: "Summary" })).toBeVisible(
+      {
+        timeout: 30_000,
+      },
+    );
     const rows = page.locator(".tabulator-row");
     await expect(rows.first()).toBeVisible({ timeout: 30_000 });
     const count = await rows.count();
@@ -39,7 +41,9 @@ test.describe("Listing page", () => {
     await page.goto("/listing/invalid-task-id-12345");
     await expect(page).toHaveTitle("OwlRepo | Listing");
     // The Summary heading is always rendered regardless of data state
-    await expect(page.locator("h2").filter({ hasText: "Summary" })).toBeVisible();
+    await expect(
+      page.locator("h2").filter({ hasText: "Summary" }),
+    ).toBeVisible();
     // With an invalid task_id, no tabulator rows should appear
     const rows = page.locator(".tabulator-row");
     await expect(rows).toHaveCount(0, { timeout: 10_000 });
