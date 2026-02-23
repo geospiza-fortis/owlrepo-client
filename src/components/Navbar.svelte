@@ -28,14 +28,22 @@
   let isOpen = false;
   let dropdownOpen = false;
 
+  function handleWindowClick() {
+    if (dropdownOpen) dropdownOpen = false;
+  }
+
   export let segment;
 </script>
 
+<svelte:window on:click={handleWindowClick} />
+
 <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-  <a class="navbar-brand d-md-none" href="/">
-    <img src="/favicon.png" alt="owl of minerva" />
-    owlrepo
-  </a>
+  {#if !isOpen}
+    <a class="navbar-brand" href="/">
+      <img src="/favicon.png" alt="owl of minerva" />
+      owlrepo
+    </a>
+  {/if}
   <button
     class="navbar-toggler ms-auto"
     type="button"
@@ -45,8 +53,8 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" class:show={isOpen}>
-    <ul class="navbar-nav mx-auto">
-      <li class="nav-item d-none d-md-block">
+    <ul class="nav mx-auto">
+      <li class="nav-item">
         <a class="navbar-brand" href="/">
           <img src="/favicon.png" alt="owl of minerva" />
           owlrepo
@@ -76,7 +84,7 @@
           class="nav-link dropdown-toggle"
           href="#other"
           role="button"
-          on:click|preventDefault={() => (dropdownOpen = !dropdownOpen)}
+          on:click|preventDefault|stopPropagation={() => (dropdownOpen = !dropdownOpen)}
         >
           Other
         </a>

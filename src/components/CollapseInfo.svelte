@@ -1,4 +1,5 @@
 <script>
+  import { slide } from "svelte/transition";
   export let component;
   export let params;
   export let text;
@@ -13,7 +14,9 @@
 </div>
 <div>
   {#if open}
-    <svelte:component this={component} bind:params />
+    <div transition:slide>
+      <svelte:component this={component} bind:params />
+    </div>
   {/if}
 </div>
 

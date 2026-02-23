@@ -1,4 +1,5 @@
 <script>
+  import { slide } from "svelte/transition";
   import localforage from "localforage";
   export let settings;
 
@@ -44,7 +45,7 @@
 </button>
 
 {#if isOpen}
-  <div style="text-align: right">
+  <div style="text-align: right" transition:slide>
     <label>
       Items per page:
       <select bind:value={paginationSize}>

@@ -214,6 +214,7 @@
   .guide :global(.card) {
     --bs-card-bg: transparent;
     --bs-card-cap-bg: transparent;
+    --bs-body-color: #000;
     display: inline-block;
     width: 100%;
     margin-bottom: 0.75rem;

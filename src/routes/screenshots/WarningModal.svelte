@@ -4,7 +4,10 @@
   export let onClick = () => {};
 
   let open = false;
-  const toggle = () => (open = !open);
+  const toggle = () => {
+    open = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
 </script>
 
 <button class="btn btn-warning" on:click={toggle}>{header}</button>
