@@ -39,7 +39,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary">
   {#if !isOpen}
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand d-md-none" href="/">
       <img src="/favicon.png" alt="owl of minerva" />
       owlrepo
     </a>
