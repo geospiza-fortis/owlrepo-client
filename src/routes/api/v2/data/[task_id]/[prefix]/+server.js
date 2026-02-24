@@ -8,6 +8,9 @@ export async function GET({ params, fetch }) {
 
   if (import.meta.env.VITE_TAURI == "true" || import.meta.env.DEV) {
     let resp = await fetch(location);
+    if (!resp.ok) {
+      return json({ error: `GCS returned ${resp.status}` }, { status: resp.status });
+    }
     return json(await resp.json(), { status: resp.status });
   }
 

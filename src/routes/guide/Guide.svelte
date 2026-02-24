@@ -25,6 +25,7 @@
   };
 
   export let home = false;
+  let showAlert = true;
 
   export let price_data = [];
   let filtered_price_data = [];
@@ -72,7 +73,7 @@
   });
 </script>
 
-{#if random_item && prompt_upload}
+{#if random_item && prompt_upload && showAlert}
   <div class="alert alert-info alert-dismissible" role="alert">
     {#if uploads.length == 0}
       Want to help out?
@@ -82,7 +83,7 @@
     Search for <i>{random_item.search_item}</i>
     ({random_item.days_since_update} days old) and
     <a href="/upload">make an upload</a> today!
-    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
+    <button type="button" class="btn-close" aria-label="Close" on:click={() => (showAlert = false)}></button>
   </div>
 {/if}
 

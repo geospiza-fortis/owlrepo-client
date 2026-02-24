@@ -36,7 +36,7 @@ let replaceVersion = () =>
 const config = {
   mode: process.env.MODE || "development",
   ssr: {
-    noExternal: ["@popperjs/core/**", "svelte-loading-spinners/**"],
+    noExternal: ["svelte-loading-spinners/**"],
   },
   plugins: [
     replaceVersion(),
