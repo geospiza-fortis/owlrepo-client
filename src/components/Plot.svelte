@@ -43,4 +43,4 @@
     );
 </script>
 
-<div bind:this={plotElement} />
+<div bind:this={plotElement}></div>

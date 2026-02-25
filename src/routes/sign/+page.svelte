@@ -32,7 +32,7 @@
       id="message"
       rows="3"
       bind:value={plaintext}
-    />
+    ></textarea>
   </div>
   {#if signed}
     {#await signed then data}
@@ -44,7 +44,7 @@
           rows="3"
           bind:this={signedArea}
           value={JSON.stringify(data, 2)}
-        />
+        ></textarea>
       </div>
       <button
         type="button"
@@ -67,7 +67,7 @@
       id="message"
       rows="3"
       bind:value={ciphertext}
-    />
+    ></textarea>
   </div>
   {#if verified}
     {#await verified then data}
@@ -86,7 +86,7 @@
           id="verified-message"
           rows="3"
           value={data.payload}
-        />
+        ></textarea>
       </div>
     {/await}
   {/if}

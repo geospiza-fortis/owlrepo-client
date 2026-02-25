@@ -58,7 +58,7 @@ const ETC_DATA = Object.fromEntries(
       stat: "",
       ...value,
     },
-  ])
+  ]),
 );
 
 const ORES = Object.fromEntries(
@@ -77,7 +77,7 @@ const ORES = Object.fromEntries(
       category: row.toLowerCase().replace("ore", "").trim(),
       stat: "",
     },
-  ])
+  ]),
 );
 
 function chunkList(list, size) {
@@ -122,7 +122,7 @@ function transform(index, category) {
             category: row.search_item.split("]")[1].trim().toLowerCase(),
             stat: row.search_item.includes("20") ? "20" : "30",
           },
-        ])
+        ]),
     ),
     // other stuff
     ...ETC_DATA,
@@ -132,7 +132,7 @@ function transform(index, category) {
         .filter(
           (row) =>
             row.search_item.includes("Prestigious Coin") ||
-            row.search_item.includes("Mysterious Coin Pouch")
+            row.search_item.includes("Mysterious Coin Pouch"),
         )
         .map((row) => [
           row.search_item,
@@ -144,7 +144,7 @@ function transform(index, category) {
               .toLowerCase(),
             stat: (row.search_item.match(/(\d+)$/g) || [""])[0],
           },
-        ])
+        ]),
     ),
   };
 

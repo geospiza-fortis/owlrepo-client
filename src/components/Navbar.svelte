@@ -21,87 +21,97 @@
 </script>
 
 <script>
-  import {
-    Collapse,
-    Navbar,
-    NavbarBrand,
-    NavbarToggler,
-    Nav,
-    NavItem,
-    NavLink,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-  } from "sveltestrap";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
 
-  const breakpoint = 5 - (browser && window.__TAURI__ ? 2 : 0);
+  const isTauri = browser && window.__TAURI__;
+  const breakpoint = 5 - (isTauri ? 2 : 0);
   let isOpen = false;
+  let dropdownOpen = false;
+
+  function handleWindowClick() {
+    if (dropdownOpen) dropdownOpen = false;
+  }
 
   export let segment;
 </script>
 
-<Navbar class="navbar-dark bg-primary" expand="md">
+<svelte:window on:click={handleWindowClick} />
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
   {#if !isOpen}
-    <NavbarBrand href="/">
+    <a class="navbar-brand d-md-none" href="/">
       <img src="/favicon.png" alt="owl of minerva" />
       owlrepo
-    </NavbarBrand>
+    </a>
   {/if}
-  <NavbarToggler class="ml-auto" on:click={() => (isOpen = !isOpen)} />
-  <Collapse
-    {isOpen}
-    navbar
-    expand="md"
-    on:open={() => (isOpen = true)}
-    on:close={() => (isOpen = false)}
+  <button
+    class="navbar-toggler ms-auto"
+    type="button"
+    aria-label="Toggle navigation"
+    on:click={() => (isOpen = !isOpen)}
   >
-    <Nav class="mx-auto">
-      <NavbarBrand href="/">
-        <img src="/favicon.png" alt="owl of minerva" />
-        owlrepo
-      </NavbarBrand>
-      {#if window.__TAURI__}
-        <NavItem>
-          <NavLink href="/screenshots">Screenshots</NavLink>
-        </NavItem>
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" class:show={isOpen}>
+    <ul class="nav mx-auto">
+      <li class="nav-item">
+        <a class="navbar-brand" href="/">
+          <img src="/favicon.png" alt="owl of minerva" />
+          owlrepo
+        </a>
+      </li>
+      {#if isTauri}
+        <li class="nav-item">
+          <a class="nav-link" href="/screenshots">Screenshots</a>
+        </li>
       {/if}
       {#each items as item, index}
         {#if index < breakpoint}
-          <NavItem>
-            <NavLink
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              class:active={!segment ? "" == item.href : segment == item.href}
               href={item.href}
-              active={!segment ? "" == item.href : segment == item.href}
               target={item.href.startsWith("https://") ? "_blank" : ""}
             >
               {item.text}
-            </NavLink>
-          </NavItem>
+            </a>
+          </li>
         {/if}
       {/each}
-      <Dropdown>
-        <DropdownToggle nav caret>Other</DropdownToggle>
-        <DropdownMenu right>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#other"
+          role="button"
+          on:click|preventDefault|stopPropagation={() => (dropdownOpen = !dropdownOpen)}
+        >
+          Other
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" class:show={dropdownOpen}>
           {#each items as item, index}
             {#if index >= breakpoint}
-              <DropdownItem
-                href={item.href}
-                target={item.href.startsWith("https://") ? "_blank" : ""}
-                >{item.text}</DropdownItem
-              >
+              <li>
+                <a
+                  class="dropdown-item"
+                  href={item.href}
+                  target={item.href.startsWith("https://") ? "_blank" : ""}
+                >
+                  {item.text}
+                </a>
+              </li>
             {/if}
           {/each}
-        </DropdownMenu>
-      </Dropdown>
-      <NavItem>
-        <NavLink href="https://maplelegends.com/" target="_blank">
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://maplelegends.com/" target="_blank">
           MapleLegends
-        </NavLink>
-      </NavItem>
-    </Nav>
-  </Collapse>
-</Navbar>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <style>
   :global(.nav-link) {

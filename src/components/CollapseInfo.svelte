@@ -1,8 +1,8 @@
 <script>
+  import { slide } from "svelte/transition";
   export let component;
   export let params;
   export let text;
-  import { Collapse } from "sveltestrap";
 
   let open = false;
 </script>
@@ -13,9 +13,11 @@
   </button>
 </div>
 <div>
-  <Collapse isOpen={open}>
-    <svelte:component this={component} bind:params />
-  </Collapse>
+  {#if open}
+    <div transition:slide>
+      <svelte:component this={component} bind:params />
+    </div>
+  {/if}
 </div>
 
 <style>

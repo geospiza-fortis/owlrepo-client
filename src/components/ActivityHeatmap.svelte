@@ -77,4 +77,4 @@
   </div>
 {/if}
 
-<div id="cal-heatmap" />
+<div id="cal-heatmap"></div>

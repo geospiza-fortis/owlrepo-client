@@ -33,7 +33,7 @@ here:
     {#each search_item_index_columns as row}
       <tr>
         <td>{row.title}</td>
-        <td>{row.headerTooltip}
+        <td>{row.headerTooltip}</td>
       </tr>
     {/each}
   </tbody>

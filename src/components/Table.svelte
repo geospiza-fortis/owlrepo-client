@@ -18,7 +18,7 @@
     }));
 </script>
 
-<div bind:this={element} />
+<div bind:this={element}></div>
 
 <style>
   :global(.tabulator-row:nth-child(2n)) {

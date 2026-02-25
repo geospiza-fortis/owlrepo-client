@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import Settings from "./Settings.svelte";
   import Unprocessed from "./Unprocessed.svelte";
   import Batch from "./Batch.svelte";

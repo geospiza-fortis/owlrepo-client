@@ -13,3 +13,9 @@ yarn-error.log
 build/
 target/
 WixTools
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

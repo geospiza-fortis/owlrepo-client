@@ -13,7 +13,6 @@
   import SearchBox from "./SearchBox.svelte";
   import CardRow from "./CardRow.svelte";
   import Changelog from "./Changelog.svelte";
-  import { Alert } from "sveltestrap";
   import moment from "moment";
   import FrontMatter from "../../docs/FrontMatter.svx";
 
@@ -26,6 +25,7 @@
   };
 
   export let home = false;
+  let showAlert = true;
 
   export let price_data = [];
   let filtered_price_data = [];
@@ -73,8 +73,8 @@
   });
 </script>
 
-{#if random_item && prompt_upload}
-  <Alert color="info" fade={false} dismissible={true}>
+{#if random_item && prompt_upload && showAlert}
+  <div class="alert alert-info alert-dismissible" role="alert">
     {#if uploads.length == 0}
       Want to help out?
     {:else}
@@ -83,7 +83,8 @@
     Search for <i>{random_item.search_item}</i>
     ({random_item.days_since_update} days old) and
     <a href="/upload">make an upload</a> today!
-  </Alert>
+    <button type="button" class="btn-close" aria-label="Close" on:click={() => (showAlert = false)}></button>
+  </div>
 {/if}
 
 <div class="container">
@@ -210,6 +211,24 @@
     padding: 0 2em;
   }
 
+  /* Override BS5.3 dark theme variables so inline pastel backgrounds show through */
+  .guide :global(.card) {
+    --bs-card-bg: transparent;
+    --bs-card-cap-bg: transparent;
+    --bs-body-color: #000;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .guide :global(.table) {
+    --bs-table-bg: transparent;
+  }
+
+  .guide :global(.table > :not(caption) > * > *) {
+    box-shadow: none;
+  }
+
   @media (max-width: 900px) {
     .guide {
       padding: 0 0.5rem;
@@ -217,6 +236,10 @@
   }
 
   /* https://stackoverflow.com/a/43117538 */
+
+  .card-columns {
+    column-gap: 1.25rem;
+  }
 
   @media (min-width: 550px) {
     .card-columns {

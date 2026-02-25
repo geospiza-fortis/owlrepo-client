@@ -1,12 +1,12 @@
 <script>
   import { page } from "$app/stores";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import Navbar from "../components/Navbar.svelte";
 
   // bunch of css import for various modules
   import "./_assets/darkly.bootstrap.css";
 
-  export let segment;
+  $: segment = $page.url.pathname;
 
   // pageview for analytics
   $: browser && $page && gtag("config", "G-NBGZYVSFSH");

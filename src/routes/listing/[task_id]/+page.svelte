@@ -1,18 +1,13 @@
-<script context="module">
-  export async function load({ params }) {
-    return { props: params };
-  }
-</script>
-
 <script>
+  import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { Stretch } from "svelte-loading-spinners";
-  import { resultColumns } from "./columns.js";
+  import { resultColumns } from "../columns.js";
 
-  import Table from "../../components/Table.svelte";
-  import SummaryView from "./SummaryView.svelte";
+  import Table from "../../../components/Table.svelte";
+  import SummaryView from "../SummaryView.svelte";
 
-  export let task_id;
+  $: task_id = $page.params.task_id;
   let flattened = null;
   let status = null;
   let initialFilterItem = null;

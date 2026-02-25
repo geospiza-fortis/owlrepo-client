@@ -1,5 +1,5 @@
 <script>
-  import { Collapse } from "sveltestrap";
+  import { slide } from "svelte/transition";
   import localforage from "localforage";
   export let settings;
 
@@ -44,13 +44,15 @@
   Settings
 </button>
 
-<Collapse {isOpen} style="text-align: right">
-  <label>
-    Items per page:
-    <select bind:value={paginationSize}>
-      {#each [5, 10, 20, 50, 100] as size}
-        <option value={size}>{size}</option>
-      {/each}
-    </select>
-  </label>
-</Collapse>
+{#if isOpen}
+  <div style="text-align: right" transition:slide>
+    <label>
+      Items per page:
+      <select bind:value={paginationSize}>
+        {#each [5, 10, 20, 50, 100] as size}
+          <option value={size}>{size}</option>
+        {/each}
+      </select>
+    </label>
+  </div>
+{/if}
