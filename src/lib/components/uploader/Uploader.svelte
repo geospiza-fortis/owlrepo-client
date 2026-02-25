@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import LastUpload, { refreshLastUpload } from "./LastUpload.svelte";
-  import { cropImage, dataURItoBlob, readDataAsync } from "../../image.js";
+  import { cropImage, dataURItoBlob, readDataAsync } from "$lib/image.js";
   import moment from "moment";
-  import { requestUploadToken } from "../../token.js";
+  import { requestUploadToken } from "$lib/token.js";
   import { parseFile, updatePersonalUploads } from "./uploader.js";
 
 

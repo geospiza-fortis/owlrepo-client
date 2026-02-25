@@ -4,7 +4,7 @@
   import { Stretch } from "svelte-loading-spinners";
   import { resultColumns } from "../columns.js";
 
-  import Table from "../../../components/Table.svelte";
+  import Table from "$lib/components/Table.svelte";
   import SummaryView from "../SummaryView.svelte";
 
   $: task_id = $page.params.task_id;

@@ -1,7 +1,7 @@
 <script>
   import { page } from "$app/stores";
   import { browser } from "$app/environment";
-  import Navbar from "../components/Navbar.svelte";
+  import Navbar from "$lib/components/Navbar.svelte";
 
   // bunch of css import for various modules
   import "./_assets/darkly.bootstrap.css";

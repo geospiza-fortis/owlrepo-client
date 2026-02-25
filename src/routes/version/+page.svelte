@@ -1,5 +1,5 @@
 <script>
-  import Table from "../../components/Table.svelte";
+  import Table from "$lib/components/Table.svelte";
   import { browser } from "$app/environment";
   let status_data = null;
   $: browser &&

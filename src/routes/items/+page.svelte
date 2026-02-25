@@ -1,6 +1,6 @@
 <script>
-  import Table from "../../components/Table.svelte";
-  import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
+  import Table from "$lib/components/Table.svelte";
+  import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
   import { columns, transform } from "./columns.js";
   import { onMount } from "svelte";
   import { Stretch } from "svelte-loading-spinners";

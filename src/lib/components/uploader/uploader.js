@@ -4,7 +4,7 @@ import {
   resizeImage,
   validateOwl,
   readImageAsync,
-} from "../../image.js";
+} from "$lib/image.js";
 import moment from "moment";
 
 function validateFilename(filename) {

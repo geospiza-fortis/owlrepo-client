@@ -1,6 +1,6 @@
 <script>
-  import { formatPrice } from "../../utils.js";
-  import Plot from "../../components/Plot.svelte";
+  import { formatPrice } from "$lib/utils.js";
+  import Plot from "$lib/components/Plot.svelte";
   export let row;
   export let id;
   export let metric;

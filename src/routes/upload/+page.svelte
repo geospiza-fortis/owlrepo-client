@@ -1,11 +1,11 @@
 <script>
-  import Uploader from "../../components/uploader/Uploader.svelte";
-  import IndexView from "../../components/IndexView.svelte";
-  import CollapseInfo from "../../components/CollapseInfo.svelte";
-  import TopUploaders from "../../components/TopUploaders.svelte";
-  import ActivityHeatmap from "../../components/ActivityHeatmap.svelte";
-  import PublicKey from "../../docs/PublicKey.svelte";
-  import UploadInstructions from "../../docs/UploadInstructions.svx";
+  import Uploader from "$lib/components/uploader/Uploader.svelte";
+  import IndexView from "$lib/components/IndexView.svelte";
+  import CollapseInfo from "$lib/components/CollapseInfo.svelte";
+  import TopUploaders from "$lib/components/TopUploaders.svelte";
+  import ActivityHeatmap from "$lib/components/ActivityHeatmap.svelte";
+  import PublicKey from "$lib/docs/PublicKey.svelte";
+  import UploadInstructions from "$lib/docs/UploadInstructions.svx";
   import localforage from "localforage";
   import { onMount } from "svelte";
 

@@ -1,8 +1,8 @@
 <script>
   import { invoke } from "@tauri-apps/api/tauri";
   import { batchPath, isProcessing, isProcessingBatch } from "./store.js";
-  import Uploader from "../../components/uploader/Uploader.svelte";
-  import { parseFile } from "../../components/uploader/uploader.js";
+  import Uploader from "$lib/components/uploader/Uploader.svelte";
+  import { parseFile } from "$lib/components/uploader/uploader.js";
   import BatchView from ".//BatchView.svelte";
   import { extractName } from "./utils.js";
   import localforage from "localforage";

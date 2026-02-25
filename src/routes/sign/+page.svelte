@@ -1,5 +1,5 @@
 <script>
-  import { signMessage, verifyMessage } from "../../token.js";
+  import { signMessage, verifyMessage } from "$lib/token.js";
 
   let plaintext;
   let ciphertext;

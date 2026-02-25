@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getOrCreateJWKRaw, getThumbprint } from "../token.js";
+  import { getOrCreateJWKRaw, getThumbprint } from "$lib/token.js";
 
   let client_thumbprint;
   let client_public_key;
