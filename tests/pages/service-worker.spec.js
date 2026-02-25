@@ -8,6 +8,8 @@ import { test, expect } from "@playwright/test";
 // The full 302 → GCS → cache flow requires CORS from the production domain
 // and is verified via staging deploy smoke test.
 
+const isDevServer = !!process.env.PW_DEV;
+
 test.describe("Service worker lifecycle", () => {
   test("registers, activates, and caches static assets", async ({ page }) => {
     await page.goto("/");
@@ -45,7 +47,11 @@ test.describe("Service worker lifecycle", () => {
     expect(swInfo.scope).toBe("http://localhost:3000/");
     expect(swInfo.cacheNames.length).toBeGreaterThan(0);
     expect(swInfo.cachedAssetCount).toBeGreaterThan(0);
-    expect(swInfo.hasAppAssets).toBe(true);
+    // In dev mode, $service-worker's build[] is empty so only static files
+    // are cached — no /_app/ assets exist until a production build.
+    if (!isDevServer) {
+      expect(swInfo.hasAppAssets).toBe(true);
+    }
     expect(swInfo.hasStaticAssets).toBe(true);
   });
 });

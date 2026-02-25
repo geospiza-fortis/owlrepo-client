@@ -1,6 +1,7 @@
 import localforage from "localforage";
 import * as jose from "jose";
 import moment from "moment";
+import { PUBLIC_OWLREPO_URL } from "$env/static/public";
 
 async function getOrCreateCryptoKey(
   path = "contributor-keys",
@@ -84,7 +85,7 @@ async function requestUploadToken() {
       jwk: public_jwk_raw,
     })
     .sign();
-  let resp = await fetch(`${import.meta.env.VITE_OWLREPO_URL}/api/v1/token`, {
+  let resp = await fetch(`${PUBLIC_OWLREPO_URL}/api/v1/token`, {
     headers: {
       "Content-Type": "application/json",
     },

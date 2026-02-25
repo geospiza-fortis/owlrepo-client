@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "gcp-build": "npm run build",
     "start": "node build",
-    "tauri": "cross-env VITE_TAURI=true tauri",
+    "tauri": "cross-env TAURI_MODE=true tauri",
     "test:e2e": "npx playwright test",
     "test:e2e:ui": "npx playwright test --ui"
   },

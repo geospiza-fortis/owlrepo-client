@@ -5,6 +5,7 @@
   import moment from "moment";
   import { requestUploadToken } from "$lib/token.js";
   import { parseFile, updatePersonalUploads } from "./uploader.js";
+  import { PUBLIC_OWLREPO_URL } from "$env/static/public";
 
 
   export let files = [];
@@ -94,7 +95,7 @@
       }
       console.log(`Got access token ${token.access_token}`);
       let resp = await fetch(
-        `${import.meta.env.VITE_OWLREPO_URL}/api/v1/upload`,
+        `${PUBLIC_OWLREPO_URL}/api/v1/upload`,
         {
           method: "post",
           headers: new Headers({

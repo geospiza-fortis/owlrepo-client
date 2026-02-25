@@ -1,6 +1,7 @@
 <script>
   import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
+  import { PUBLIC_OWLREPO_URL } from "$env/static/public";
 
   let listings = [];
   let is_cached = true;
@@ -18,9 +19,7 @@
       return;
     }
     let cache = await caches.open("index-cache");
-    let url = `${
-      import.meta.env.VITE_OWLREPO_URL
-    }/api/v1/list?offset=${offset}&limit=${limit}`;
+    let url = `${PUBLIC_OWLREPO_URL}/api/v1/list?offset=${offset}&limit=${limit}`;
     var resp = await cache.match(url);
     if (!resp) {
       is_cached = false;
