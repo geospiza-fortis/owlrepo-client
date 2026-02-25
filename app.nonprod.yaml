@@ -1,14 +1,14 @@
-# Deploy: gcloud app deploy app.yaml --project owlrepo
+# Deploy: gcloud app deploy app.nonprod.yaml --project owlrepo-nonprod
 runtime: nodejs22
 entrypoint: node build
 
 build_env_variables:
-  VITE_PROJECT_ID: "owlrepo"
-  VITE_OWLREPO_URL: "https://api-v1-6jpxgj6jpa-uc.a.run.app"
+  VITE_PROJECT_ID: "owlrepo-nonprod"
+  VITE_OWLREPO_URL: "https://api-v1-3s5yebp5cq-uc.a.run.app"
 
 automatic_scaling:
   max_instances: 3
-  min_instances: 1
+  min_instances: 0
   target_cpu_utilization: 0.9
   target_throughput_utilization: 0.9
   max_concurrent_requests: 80
