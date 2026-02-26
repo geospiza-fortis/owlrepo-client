@@ -58,7 +58,7 @@
     <Plot
       {data}
       transform={transformPlot}
-      layout={{ title: "Price Box Plot" }}
+      layout={{ title: { text: "Price Box Plot" } }}
     />
   </div>
 </div>

@@ -129,10 +129,10 @@
     ...(showTitle ? { title: { text: `${search_item_name} over time` } } : {}),
     legend: { orientation: "h" },
     yaxis: {
-      title: "price",
+      title: { text: "price" },
     },
     yaxis2: {
-      title: "count",
+      title: { text: "count" },
     },
     grid: {
       rows: 2,
