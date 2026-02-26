@@ -1,8 +1,8 @@
 <script>
   import { dropOutliers, generateSummary } from "./stats.js";
   import { summaryColumns } from "./columns.js";
-  import Table from "../../components/Table.svelte";
-  import Plot from "../../components/Plot.svelte";
+  import Table from "$lib/components/Table.svelte";
+  import Plot from "$lib/components/Plot.svelte";
 
   export let key;
   export let data;

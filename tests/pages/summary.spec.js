@@ -29,4 +29,12 @@ test.describe("Summary page", () => {
       timeout: 30_000,
     });
   });
+
+  test("renders plotly box plots", async ({ page }) => {
+    await page.goto("/summary");
+    const plots = page.locator(".js-plotly-plot");
+    await expect(plots.first()).toBeVisible({ timeout: 30_000 });
+    const count = await plots.count();
+    expect(count).toBeGreaterThanOrEqual(1);
+  });
 });

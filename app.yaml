@@ -3,8 +3,8 @@ runtime: nodejs22
 entrypoint: node build
 
 build_env_variables:
-  VITE_PROJECT_ID: "owlrepo"
-  VITE_OWLREPO_URL: "https://api-v1-6jpxgj6jpa-uc.a.run.app"
+  PROJECT_ID: "owlrepo"
+  PUBLIC_OWLREPO_URL: "https://api-v1-6jpxgj6jpa-uc.a.run.app"
 
 automatic_scaling:
   max_instances: 3

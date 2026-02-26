@@ -1,7 +1,7 @@
 <script>
-  import Table from "../../components/Table.svelte";
-  import SearchBox from "../../components/SearchBox.svelte";
-  import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
+  import Table from "$lib/components/Table.svelte";
+  import SearchBox from "$lib/components/SearchBox.svelte";
+  import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
   import { onMount } from "svelte";
   import { chunk } from "lodash-es";
   import moment from "moment";

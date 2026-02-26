@@ -1,16 +1,22 @@
 <script>
   import { onMount } from "svelte";
   import LastUpload, { refreshLastUpload } from "./LastUpload.svelte";
-  import { cropImage, dataURItoBlob, readDataAsync } from "../../image.js";
+  import { cropImage, dataURItoBlob, readDataAsync } from "$lib/image.js";
   import moment from "moment";
-  import { requestUploadToken } from "../../token.js";
+  import { requestUploadToken } from "$lib/token.js";
   import { parseFile, updatePersonalUploads } from "./uploader.js";
+  import { PUBLIC_OWLREPO_URL } from "$env/static/public";
 
 
   export let files = [];
   export let disableExternalUpload = false;
   export let batch_id = null;
   export let onUpload = () => {};
+
+  let fileInputEl;
+  let fileSubmitEl;
+  let uploadButtonEl;
+  let screenshotsEl;
 
   let progress = 0;
   let total = 0;
@@ -60,18 +66,16 @@
         ev.preventDefault();
         await appendToFiles(ev.dataTransfer.files);
       };
-      let fileInput = document.getElementById("fileInput");
-      fileInput.onchange = async (ev) => {
-        await appendToFiles(fileInput.files);
+      fileInputEl.onchange = async (ev) => {
+        await appendToFiles(fileInputEl.files);
       };
     }
   });
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let button = document.getElementById("upload-button");
     // TODO: disable more file uploads
-    button.disabled = true;
+    uploadButtonEl.disabled = true;
     // ignore everything in the current form
     let formData = new FormData();
     // also include some other metadata
@@ -82,7 +86,7 @@
         timestamp: moment().format(),
       })
     );
-    let images = document.getElementById("screenshots").children;
+    let images = screenshotsEl.children;
     for (let i = 0; i < images.length; i++) {
       formData.append("file[]", dataURItoBlob(images[i].src), images[i].alt);
     }
@@ -94,7 +98,7 @@
       }
       console.log(`Got access token ${token.access_token}`);
       let resp = await fetch(
-        `${import.meta.env.VITE_OWLREPO_URL}/api/v1/upload`,
+        `${PUBLIC_OWLREPO_URL}/api/v1/upload`,
         {
           method: "post",
           headers: new Headers({
@@ -121,7 +125,7 @@
     } catch (e) {
       console.log(e);
       errorMessages = [e];
-      button.disabled = false;
+      uploadButtonEl.disabled = false;
     }
   }
 </script>
@@ -141,6 +145,7 @@
 <form on:submit={handleSubmit}>
   <!-- Nice way to hide the text: https://stackoverflow.com/a/14806776 -->
   <input
+    bind:this={fileInputEl}
     style="display: none;"
     type="file"
     accept="image/png"
@@ -148,7 +153,7 @@
     id="fileInput"
     multiple
   />
-  <input style="display: none;" id="fileSubmit" type="submit" value="Upload" />
+  <input bind:this={fileSubmitEl} style="display: none;" id="fileSubmit" type="submit" value="Upload" />
 </form>
 
 {#if total > 0}
@@ -176,7 +181,7 @@
             <div class="col">
               <button
                 class="btn btn-primary"
-                on:click={() => document.getElementById('fileInput').click()}
+                on:click={() => fileInputEl.click()}
               >
                 Browse...
               </button>
@@ -185,9 +190,10 @@
           {#if files.length > 0}
             <div class="col">
               <button
+                bind:this={uploadButtonEl}
                 id="upload-button"
                 class="btn btn-primary"
-                on:click={() => document.getElementById('fileSubmit').click()}
+                on:click={() => fileSubmitEl.click()}
               >
                 Upload
               </button>
@@ -197,7 +203,7 @@
       </div>
     </div>
 
-    <div id="screenshots">
+    <div bind:this={screenshotsEl} id="screenshots">
       {#each files as file, i}
         <img
           src={file.img}

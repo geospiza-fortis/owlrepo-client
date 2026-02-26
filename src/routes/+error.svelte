@@ -1,6 +1,6 @@
 <script>
   import { page } from "$app/stores";
-  const dev = import.meta.env.DEV;
+  import { dev } from "$app/environment";
 </script>
 
 <svelte:head>

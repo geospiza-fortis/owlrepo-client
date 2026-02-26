@@ -1,8 +1,8 @@
 <script>
-  import FrontMatter from "../../docs/FrontMatter.svx";
-  import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
-  import IndexDescription from "../../docs/IndexDescription.svx";
-  import References from "../../docs/References.svx";
+  import FrontMatter from "$lib/docs/FrontMatter.svx";
+  import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
+  import IndexDescription from "$lib/docs/IndexDescription.svx";
+  import References from "$lib/docs/References.svx";
   import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 

@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
 // Separate config for testing the full service worker 302 → GCS caching flow.
-// Builds WITHOUT VITE_TAURI so API endpoints issue 302 redirects to GCS.
+// Builds WITHOUT TAURI_MODE so API endpoints issue 302 redirects to GCS.
 // Uses --disable-web-security to bypass CORS (GCS only allows production domain).
 // Run with: npx playwright test --config playwright.sw-redirect.config.js
 

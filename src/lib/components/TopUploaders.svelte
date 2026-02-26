@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Table from "./Table.svelte";
-  import { getThumbprint } from "../token.js";
+  import { getThumbprint } from "$lib/token.js";
   import { Stretch } from "svelte-loading-spinners";
 
   // from the guide colors

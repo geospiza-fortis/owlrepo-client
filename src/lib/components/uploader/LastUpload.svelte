@@ -1,5 +1,5 @@
 <script context="module">
-  import { lastUpload } from "../../store.js";
+  import { lastUpload } from "$lib/store.js";
 
   function refreshStorage(key, value = null) {
     if (value) {

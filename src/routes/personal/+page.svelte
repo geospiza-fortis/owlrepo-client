@@ -1,8 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import localforage from "localforage";
-  import Table from "../../components/Table.svelte";
-  import PublicKey from "../../docs/PublicKey.svelte";
+  import Table from "$lib/components/Table.svelte";
+  import PublicKey from "$lib/docs/PublicKey.svelte";
   import { uploadColumns, curationColumns } from "./columns.js";
 
   let uploads = [];

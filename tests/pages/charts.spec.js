@@ -23,4 +23,12 @@ test.describe("Charts page", () => {
     const slider = page.locator("input[type='range']");
     await expect(slider.first()).toBeVisible({ timeout: 30_000 });
   });
+
+  test("renders plotly line charts", async ({ page }) => {
+    await page.goto("/charts");
+    const plots = page.locator(".js-plotly-plot");
+    await expect(plots.first()).toBeVisible({ timeout: 30_000 });
+    const count = await plots.count();
+    expect(count).toBeGreaterThanOrEqual(1);
+  });
 });

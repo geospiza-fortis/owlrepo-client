@@ -1,12 +1,12 @@
 import { json, redirect } from "@sveltejs/kit";
-
-const BUCKET = import.meta.env.VITE_PROJECT_ID;
+import { dev } from "$app/environment";
+import { PROJECT_ID, TAURI_MODE } from "$env/static/private";
 
 export async function GET({ params, fetch }) {
   const { prefix } = params;
-  const location = `https://storage.googleapis.com/${BUCKET}/v1/queries/${prefix}.json`;
+  const location = `https://storage.googleapis.com/${PROJECT_ID}/v1/queries/${prefix}.json`;
 
-  if (import.meta.env.VITE_TAURI == "true" || import.meta.env.DEV) {
+  if (TAURI_MODE == "true" || dev) {
     let resp = await fetch(location);
     if (!resp.ok) {
       return json({ error: `GCS returned ${resp.status}` }, { status: resp.status });

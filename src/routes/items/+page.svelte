@@ -1,10 +1,10 @@
 <script>
-  import Table from "../../components/Table.svelte";
-  import PriceQuantityCharts from "../../components/PriceQuantityCharts.svelte";
+  import Table from "$lib/components/Table.svelte";
+  import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
   import { columns, transform } from "./columns.js";
   import { onMount } from "svelte";
   import { Stretch } from "svelte-loading-spinners";
-  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
 
   let listingData;
   let last_modified;
@@ -21,9 +21,7 @@
   let is_chartable = false;
   let search_item_name;
 
-  let keyword;
-  $: browser &&
-    (keyword = new URLSearchParams(window.location.search).get("keyword"));
+  $: keyword = $page.url.searchParams.get("keyword");
 
   $: options = {
     data: listingData,

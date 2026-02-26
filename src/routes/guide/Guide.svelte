@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { formatPrice } from "../../utils.js";
+  import { formatPrice } from "$lib/utils.js";
   import { sortBy, groupBy, random } from "lodash-es";
   import localforage from "localforage";
   import {
@@ -14,7 +14,7 @@
   import CardRow from "./CardRow.svelte";
   import Changelog from "./Changelog.svelte";
   import moment from "moment";
-  import FrontMatter from "../../docs/FrontMatter.svx";
+  import FrontMatter from "$lib/docs/FrontMatter.svx";
 
   const metric_choices = ["p25", "p50", "p75", "mean"];
   const metric_names = {

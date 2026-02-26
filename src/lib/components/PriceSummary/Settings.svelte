@@ -21,7 +21,7 @@
   $: settings = {
     paginationSize: paginationSize,
   };
-  $: process.env.NODE_ENV == "development" &&
+  $: import.meta.env.DEV &&
     console.log(`search index settings ${JSON.stringify(settings)}`);
   $: loaded && localforage.setItem(key, settings).catch(console.log).then();
 

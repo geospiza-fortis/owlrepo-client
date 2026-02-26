@@ -1,5 +1,5 @@
 <script>
-  import Table from "../../components/Table.svelte";
+  import Table from "$lib/components/Table.svelte";
 
   export let predData;
   export let data;

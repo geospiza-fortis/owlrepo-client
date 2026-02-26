@@ -37,6 +37,17 @@ test.describe("Listing page", () => {
     expect(count).toBeGreaterThan(0);
   });
 
+  test("renders plotly box plots for listing", async ({ page, request }) => {
+    test.skip(!taskId, "No task_id available from staging API");
+
+    const dataRes = await request.get(`/api/v2/data/${taskId}/slim.json`);
+    test.skip(!dataRes.ok(), `slim.json not available for task_id ${taskId}`);
+
+    await page.goto(`/listing/${taskId}`);
+    const plots = page.locator(".js-plotly-plot");
+    await expect(plots.first()).toBeVisible({ timeout: 30_000 });
+  });
+
   test("shows fallback for invalid task_id", async ({ page }) => {
     await page.goto("/listing/invalid-task-id-12345");
     await expect(page).toHaveTitle("OwlRepo | Listing");
