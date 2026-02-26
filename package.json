@@ -1,6 +1,6 @@
 {
   "name": "owlrepo-client",
-  "version": "7.2.0",
+  "version": "7.2.1",
   "repository": "https://github.com/geospiza-fortis/owlrepo-client",
   "license": "MIT",
   "type": "module",
