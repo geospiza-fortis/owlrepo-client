@@ -2,6 +2,7 @@
   import Table from "$lib/components/Table.svelte";
   import SearchBox from "$lib/components/SearchBox.svelte";
   import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import { onMount } from "svelte";
   import { chunk } from "lodash-es";
   import moment from "moment";
@@ -82,9 +83,10 @@
   };
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Charts</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Charts"
+  description="Interactive price and quantity charts for MapleLegends items. Visualize market trends over time."
+/>
 
 <h1>Charts</h1>
 

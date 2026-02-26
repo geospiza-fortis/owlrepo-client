@@ -3,6 +3,7 @@
   import localforage from "localforage";
   import Table from "$lib/components/Table.svelte";
   import PublicKey from "$lib/docs/PublicKey.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import { uploadColumns, curationColumns } from "./columns.js";
 
   let uploads = [];
@@ -26,9 +27,12 @@
   });
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Personal</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Personal"
+  description="Your personal upload and curation history on OwlRepo."
+  noindex={true}
+  includeOg={false}
+/>
 
 <h1>Personal Statistics</h1>
 

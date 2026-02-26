@@ -6,6 +6,7 @@
   import ActivityHeatmap from "$lib/components/ActivityHeatmap.svelte";
   import PublicKey from "$lib/docs/PublicKey.svelte";
   import UploadInstructions from "$lib/docs/UploadInstructions.svx";
+  import Seo from "$lib/components/Seo.svelte";
   import localforage from "localforage";
   import { onMount } from "svelte";
 
@@ -19,9 +20,12 @@
   });
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Upload</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Upload"
+  description="Upload Owl of Minerva screenshots to contribute price data for MapleLegends."
+  noindex={true}
+  includeOg={false}
+/>
 
 <h1>Upload Owls</h1>
 

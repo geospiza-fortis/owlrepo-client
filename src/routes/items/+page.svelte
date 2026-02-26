@@ -1,6 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { formatPrice } from "$lib/utils.js";
+  import Seo from "$lib/components/Seo.svelte";
 
   export let data;
 
@@ -73,13 +74,11 @@
   }
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Items</title>
-  <meta
-    name="description"
-    content="Browse tracked item prices on OwlRepo. {data.totalItems} items with current market data."
-  />
-</svelte:head>
+<Seo
+  title="OwlRepo | Items"
+  description="Browse tracked item prices on OwlRepo. {data.totalItems} items with current market data."
+  canonicalPath="/items"
+/>
 
 <h1>Items</h1>
 

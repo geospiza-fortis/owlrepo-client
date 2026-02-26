@@ -1,6 +1,7 @@
 <script>
   import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
   import { formatPrice } from "$lib/utils.js";
+  import Seo from "$lib/components/Seo.svelte";
 
   export let data;
 
@@ -9,13 +10,10 @@
   }
 </script>
 
-<svelte:head>
-  <title>OwlRepo | {data.searchItemName}</title>
-  <meta
-    name="description"
-    content="Price history for {data.searchItemName} on MapleLegends. {data.listings.length} recorded owl searches."
-  />
-</svelte:head>
+<Seo
+  title="OwlRepo | {data.searchItemName}"
+  description="Price history for {data.searchItemName} on MapleLegends. {data.listings.length} recorded owl searches."
+/>
 
 <nav aria-label="breadcrumb" class="mt-3">
   <ol class="breadcrumb">

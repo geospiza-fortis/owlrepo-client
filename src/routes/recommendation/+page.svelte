@@ -3,6 +3,7 @@
   import { sortBy } from "lodash-es";
   import { onMount } from "svelte";
   import Recommendations from "./Rec.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import { Stretch } from "svelte-loading-spinners";
   import localforage from "localforage";
 
@@ -61,9 +62,10 @@
   });
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Recommendation</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Recommendation"
+  description="Recommendations for items to owl search next on MapleLegends. Find outdated prices that need updating."
+/>
 
 <h1>Recommendations</h1>
 

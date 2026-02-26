@@ -1,5 +1,6 @@
 <script>
   import { signMessage, verifyMessage } from "$lib/token.js";
+  import Seo from "$lib/components/Seo.svelte";
 
   let plaintext;
   let ciphertext;
@@ -13,9 +14,12 @@
   }
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Sign and Verify</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Sign and Verify"
+  description="Sign and verify messages using your OwlRepo cryptographic key."
+  noindex={true}
+  includeOg={false}
+/>
 
 <h1>Sign and Verify</h1>
 

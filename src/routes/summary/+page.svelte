@@ -2,6 +2,7 @@
   import ActivityHeatmap from "$lib/components/ActivityHeatmap.svelte";
   import PriceSummary from "$lib/components/PriceSummary/View.svelte";
   import { transform as transformPriceSummary } from "$lib/components/PriceSummary/columns.js";
+  import Seo from "$lib/components/Seo.svelte";
   import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 
@@ -29,9 +30,10 @@
   });
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Summary</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Summary"
+  description="Summary of recent owl search results on MapleLegends. Browse the latest prices for all tracked items."
+/>
 
 <h1>Summary</h1>
 
