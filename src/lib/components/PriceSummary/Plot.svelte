@@ -7,13 +7,13 @@
   let layout;
   $: row &&
     (layout = {
-      title: row.getData().search_item,
+      title: { text: row.getData().search_item },
       height: 150,
       margin: {
         l: 0,
         r: 0,
         b: 25,
-        t: 25,
+        t: 40,
       },
     });
   $: table && row && trackEvent(table, row);
