@@ -1,6 +1,7 @@
 import moment from "moment";
 import { pickBy } from "lodash-es";
 import { shortFormatter } from "$lib/utils.js";
+import { toSlug } from "$lib/slug.js";
 
 const columns = [
   {
@@ -8,7 +9,7 @@ const columns = [
     field: "search_item",
     formatter: "link",
     formatterParams: {
-      url: (cell) => `/items?keyword=${encodeURIComponent(cell.getValue())}`,
+      url: (cell) => `/items/${toSlug(cell.getValue())}`,
     },
     headerTooltip:
       "The name of the item that was searched using the Owl of Minerva.",
