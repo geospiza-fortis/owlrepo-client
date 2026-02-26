@@ -8,9 +8,8 @@
   $: signed = plaintext ? signMessage(plaintext) : null;
   $: verified = ciphertext ? verifyMessage(JSON.parse(ciphertext)) : null;
 
-  function copySignedArea() {
-    signedArea.select();
-    document.execCommand("copy");
+  async function copySignedArea() {
+    await navigator.clipboard.writeText(signedArea.value);
   }
 </script>
 

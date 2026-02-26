@@ -20,7 +20,7 @@
     }
     let cache = await caches.open("index-cache");
     let url = `${PUBLIC_OWLREPO_URL}/api/v1/list?offset=${offset}&limit=${limit}`;
-    var resp = await cache.match(url);
+    let resp = await cache.match(url);
     if (!resp) {
       is_cached = false;
       listings = [];

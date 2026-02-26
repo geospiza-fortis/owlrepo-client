@@ -6,6 +6,7 @@
   export let data;
   export let max_range = 14;
   let cal;
+  let heatmapEl;
   let heatmapReady = false;
   let resizeTimeout;
 
@@ -25,7 +26,7 @@
   async function loadHeatmap(range) {
     // destroy any existing heatmap
     if (cal) {
-      document.getElementById("cal-heatmap").innerHTML = "";
+      heatmapEl.innerHTML = "";
       cal.destroy();
     }
     cal = new CalHeatMap();
@@ -77,4 +78,4 @@
   </div>
 {/if}
 
-<div id="cal-heatmap"></div>
+<div bind:this={heatmapEl} id="cal-heatmap"></div>
