@@ -26,7 +26,7 @@
 
 <h1>{data.searchItemName}</h1>
 
-<PriceQuantityCharts data={data.listings} search_item_name={data.searchItemName} />
+<PriceQuantityCharts data={data.listings} search_item_name={data.searchItemName} showTitle={false} />
 
 <div class="table-responsive mt-3">
   <table class="table table-dark table-striped table-hover">
