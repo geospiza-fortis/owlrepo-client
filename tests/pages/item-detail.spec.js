@@ -23,8 +23,8 @@ test.describe("Item detail page", () => {
     const href = await firstLink.getAttribute("href");
 
     await page.goto(href);
-    const backLink = page.getByRole("link", { name: "Back to Items" });
-    await expect(backLink).toBeVisible();
+    const breadcrumbLink = page.locator(".breadcrumb a[href='/items']");
+    await expect(breadcrumbLink).toBeVisible();
   });
 
   test("unknown slug returns 404", async ({ page }) => {

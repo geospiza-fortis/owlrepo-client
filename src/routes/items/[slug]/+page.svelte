@@ -17,7 +17,12 @@
   />
 </svelte:head>
 
-<a href="/items" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Items</a>
+<nav aria-label="breadcrumb" class="mt-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/items">Items</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{data.searchItemName}</li>
+  </ol>
+</nav>
 
 <h1>{data.searchItemName}</h1>
 
