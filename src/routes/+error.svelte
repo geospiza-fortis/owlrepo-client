@@ -1,11 +1,15 @@
 <script>
   import { page } from "$app/stores";
   import { dev } from "$app/environment";
+  import Seo from "$lib/components/Seo.svelte";
 </script>
 
-<svelte:head>
-  <title>{$page.status}</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | {$page.status}"
+  description="An error occurred on OwlRepo."
+  noindex={true}
+  includeOg={false}
+/>
 
 <h1>{$page.status}</h1>
 

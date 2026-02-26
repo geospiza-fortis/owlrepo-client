@@ -9,14 +9,18 @@ test.describe("Item metadata endpoint", () => {
     expect(body.length).toBeGreaterThan(0);
   });
 
-  test("each entry has slug and search_item fields", async ({ request }) => {
+  test("each entry has slug, search_item, and search_item_timestamp fields", async ({
+    request,
+  }) => {
     const res = await request.get("/api/v2/items/metadata");
     const body = await res.json();
     for (const entry of body) {
       expect(entry).toHaveProperty("slug");
       expect(entry).toHaveProperty("search_item");
+      expect(entry).toHaveProperty("search_item_timestamp");
       expect(typeof entry.slug).toBe("string");
       expect(typeof entry.search_item).toBe("string");
+      expect(typeof entry.search_item_timestamp).toBe("string");
     }
   });
 

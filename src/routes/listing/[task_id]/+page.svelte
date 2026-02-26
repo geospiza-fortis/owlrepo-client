@@ -6,6 +6,7 @@
 
   import Table from "$lib/components/Table.svelte";
   import SummaryView from "../SummaryView.svelte";
+  import Seo from "$lib/components/Seo.svelte";
 
   $: task_id = $page.params.task_id;
   let flattened = null;
@@ -40,9 +41,12 @@
   });
 </script>
 
-<svelte:head>
-  <title>OwlRepo | Listing</title>
-</svelte:head>
+<Seo
+  title="OwlRepo | Listing"
+  description="Owl search listing details and transcription results."
+  noindex={true}
+  includeOg={false}
+/>
 
 <h2>Summary</h2>
 

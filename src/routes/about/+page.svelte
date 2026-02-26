@@ -3,6 +3,7 @@
   import PriceQuantityCharts from "$lib/components/PriceQuantityCharts.svelte";
   import IndexDescription from "$lib/docs/IndexDescription.svx";
   import References from "$lib/docs/References.svx";
+  import Seo from "$lib/components/Seo.svelte";
   import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 
@@ -17,6 +18,11 @@
     random_listing = await fetchData("/api/v2/query/random_listing");
   });
 </script>
+
+<Seo
+  title="OwlRepo | About"
+  description="Learn about OwlRepo, a community-driven price tracking tool for MapleLegends. See how owl search data is collected and visualized."
+/>
 
 <h1>About</h1>
 

@@ -25,6 +25,7 @@ export async function GET({ fetch }) {
   const metadata = items.map((item) => ({
     slug: toSlug(item.search_item),
     search_item: item.search_item,
+    search_item_timestamp: item.search_item_timestamp,
   }));
 
   cacheExpires = resp.headers.get("expires");

@@ -1,5 +1,6 @@
 <script>
   import { formatPrice } from "$lib/utils.js";
+  import { toSlug } from "$lib/slug.js";
   import Plot from "$lib/components/Plot.svelte";
   export let row;
   export let id;
@@ -14,7 +15,7 @@
   on:mouseenter={() => (showTooltip = true)}
   on:mouseleave={() => (showTooltip = false)}
   on:click={() => {
-    window.location = `/items?keyword=${encodeURIComponent(row.search_item)}`;
+    window.location = `/items/${toSlug(row.search_item)}`;
   }}
 >
   <td class="category-cell">

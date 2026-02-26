@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Home / Guide page", () => {
   test("renders page title and heading", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle("OwlRepo | Guide");
+    await expect(page).toHaveTitle("OwlRepo | MapleLegends Price Guide");
     await expect(page.locator("h1")).toHaveText("OwlRepo");
   });
 
