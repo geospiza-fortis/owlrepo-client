@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /upload
+Disallow: /personal
+Disallow: /sign
+Disallow: /api/
+
+Sitemap: https://owlrepo.com/sitemap.xml
