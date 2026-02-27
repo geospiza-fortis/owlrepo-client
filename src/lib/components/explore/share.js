@@ -2,7 +2,7 @@
  * Versioned share format for SQL Explorer URLs.
  *
  * Encoded as base64 JSON in the URL fragment: #q=<base64>
- * Schema: ./explore-share.schema.json (JSON Schema 2020-12)
+ * Schema: ./share.schema.json (JSON Schema 2020-12)
  *
  * Version history:
  *   v1 (2026-02-26) — Initial format

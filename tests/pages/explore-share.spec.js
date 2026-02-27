@@ -4,7 +4,7 @@ import { resolve } from "path";
 
 const schema = JSON.parse(
   readFileSync(
-    resolve("src/lib/explore-share.schema.json"),
+    resolve("src/lib/components/explore/share.schema.json"),
     "utf-8",
   ),
 );
@@ -18,7 +18,7 @@ test.describe("Explore share format", () => {
   test("v1 round-trip preserves sql and chart", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { encode, decode } = await import("/src/lib/explore-share.js");
+      const { encode, decode } = await import("/src/lib/components/explore/share.js");
       const state = {
         sql: "SELECT * FROM items",
         chart: { type: "bar", x: "search_item", y: "mean", color: null },
@@ -43,7 +43,7 @@ test.describe("Explore share format", () => {
   test("v1 encode without chart omits chart field", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { encode, decode } = await import("/src/lib/explore-share.js");
+      const { encode, decode } = await import("/src/lib/components/explore/share.js");
       const state = { sql: "SELECT 1" };
       const encoded = encode(state);
       const decoded = decode(`#q=${encoded}`);
@@ -59,7 +59,7 @@ test.describe("Explore share format", () => {
   test("rejects payload with missing version", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       const noVersion = btoa(
         JSON.stringify({
           sql: "SELECT * FROM listing LIMIT 5",
@@ -75,7 +75,7 @@ test.describe("Explore share format", () => {
   test("decodes future version with best-effort", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       // Simulate a v99 payload with extra fields
       const future = btoa(
         JSON.stringify({
@@ -95,7 +95,7 @@ test.describe("Explore share format", () => {
   test("rejects invalid payloads gracefully", async ({ page }) => {
     await page.goto("/explore");
     const results = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       return {
         empty: decode(""),
         noPrefix: decode("#notq=abc"),
@@ -115,7 +115,7 @@ test.describe("Explore share format", () => {
   test("validates chart type enum", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       const bad = btoa(
         JSON.stringify({
           v: 1,
@@ -142,7 +142,7 @@ test.describe("Explore share format", () => {
     await page.goto("/explore");
     const runtimeTypes = await evalInPage(page, async () => {
       // encode each type and see which ones produce a chart in the payload
-      const { encode } = await import("/src/lib/explore-share.js");
+      const { encode } = await import("/src/lib/components/explore/share.js");
       const types = ["scatter", "line", "bar", "box", "whisker", "pie", "histogram"];
       const results = {};
       for (const t of types) {
@@ -182,7 +182,7 @@ test.describe("Explore share format", () => {
   }) => {
     await page.goto("/explore");
     const raw = await evalInPage(page, async () => {
-      const { encode } = await import("/src/lib/explore-share.js");
+      const { encode } = await import("/src/lib/components/explore/share.js");
       const encoded = encode({
         sql: "SELECT * FROM items",
         chart: { type: "scatter", x: "a", y: "b", color: "c" },
@@ -204,7 +204,7 @@ test.describe("Explore share format", () => {
   test("rejects chart with empty x or y", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       const emptyX = btoa(
         JSON.stringify({ v: 1, sql: "SELECT 1", chart: { type: "bar", x: "", y: "b", color: null } }),
       );
@@ -225,7 +225,7 @@ test.describe("Explore share format", () => {
   test("rejects chart with missing x or y", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       const noY = btoa(
         JSON.stringify({ v: 1, sql: "SELECT 1", chart: { type: "bar", x: "a" } }),
       );
@@ -238,7 +238,7 @@ test.describe("Explore share format", () => {
   test("preserves unknown chart properties for forward compat", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { encode, decode } = await import("/src/lib/explore-share.js");
+      const { encode, decode } = await import("/src/lib/components/explore/share.js");
       const state = {
         sql: "SELECT 1",
         chart: { type: "bar", x: "a", y: "b", color: null, aggregation: "sum", bins: 20 },
@@ -255,7 +255,7 @@ test.describe("Explore share format", () => {
   test("preserves unknown root properties for forward compat", async ({ page }) => {
     await page.goto("/explore");
     const result = await evalInPage(page, async () => {
-      const { decode } = await import("/src/lib/explore-share.js");
+      const { decode } = await import("/src/lib/components/explore/share.js");
       const future = btoa(
         JSON.stringify({ v: 2, sql: "SELECT 1", layout: { title: "My Chart" } }),
       );
@@ -268,7 +268,7 @@ test.describe("Explore share format", () => {
   test("encode throws on missing or empty sql", async ({ page }) => {
     await page.goto("/explore");
     const results = await evalInPage(page, async () => {
-      const { encode } = await import("/src/lib/explore-share.js");
+      const { encode } = await import("/src/lib/components/explore/share.js");
       const errors = {};
       try { encode({}); } catch (e) { errors.noSql = e.message; }
       try { encode({ sql: "" }); } catch (e) { errors.empty = e.message; }
@@ -285,7 +285,7 @@ test.describe("Explore share format", () => {
   test("buildShareUrl produces valid URL", async ({ page }) => {
     await page.goto("/explore");
     const url = await evalInPage(page, async () => {
-      const { buildShareUrl } = await import("/src/lib/explore-share.js");
+      const { buildShareUrl } = await import("/src/lib/components/explore/share.js");
       return buildShareUrl("https://owlrepo.com", "/explore", {
         sql: "SELECT 1",
         chart: { type: "bar", x: "a", y: "b", color: null },

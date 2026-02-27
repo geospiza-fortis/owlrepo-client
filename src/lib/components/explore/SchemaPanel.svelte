@@ -4,6 +4,12 @@
   let expanded = false;
   let expandedTables = {};
 
+  // Only show the convenience views, not the underlying tables they alias
+  const VIEW_NAMES = new Set(["items", "listing"]);
+  $: filteredSchema = Object.entries(schema).filter(([name]) =>
+    VIEW_NAMES.has(name),
+  );
+
   function toggleTable(name) {
     expandedTables[name] = !expandedTables[name];
   }
@@ -20,7 +26,7 @@
 
   {#if expanded}
     <div class="schema-panel mt-2">
-      {#each Object.entries(schema) as [table, columns]}
+      {#each filteredSchema as [table, columns]}
         <div class="schema-table">
           <button
             class="btn btn-sm btn-link text-light text-decoration-none p-0"

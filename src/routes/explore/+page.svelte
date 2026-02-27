@@ -5,13 +5,14 @@
 <script>
   import { onMount } from "svelte";
   import { getDB, loadData, getSchema, executeQuery } from "$lib/duckdb.js";
-  import { encode, decode, buildShareUrl } from "$lib/explore-share.js";
+  import { encode, decode, buildShareUrl } from "$lib/components/explore/share.js";
   import Plot from "$lib/components/Plot.svelte";
   import SqlEditor from "$lib/components/explore/SqlEditor.svelte";
   import ResultsTable from "$lib/components/explore/ResultsTable.svelte";
   import ChartConfigurator from "$lib/components/explore/ChartConfigurator.svelte";
   import TemplateQueries from "$lib/components/explore/TemplateQueries.svelte";
   import SchemaPanel from "$lib/components/explore/SchemaPanel.svelte";
+  import PromptBuilder from "$lib/components/explore/PromptBuilder.svelte";
 
   let sql = `SELECT search_item, mean, p50, search_results
 FROM items
@@ -182,6 +183,9 @@ LIMIT 25`;
         {/if}
       </div>
     </div>
+  </div>
+  <div class="mb-3">
+    <PromptBuilder {schema} {sql} {results} {error} />
   </div>
 
   {#if isLoading}
