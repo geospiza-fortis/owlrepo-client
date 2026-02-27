@@ -185,7 +185,7 @@ LIMIT 25`;
     </div>
   </div>
   <div class="mb-3">
-    <PromptBuilder {schema} {sql} {results} {error} />
+    <PromptBuilder {schema} {sql} {results} />
   </div>
 
   {#if isLoading}

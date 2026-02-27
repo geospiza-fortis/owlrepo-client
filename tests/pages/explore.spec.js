@@ -46,14 +46,14 @@ test.describe("Explore page", () => {
   });
 
   const templateNames = [
-    "Current Prices",
-    "Price History",
-    "Most Expensive Items",
+    "Current Scroll Prices",
+    "INT Overall 60% Price History",
     "Volatile Items (High Price Spread)",
     "Most Frequent Uploaders",
     "Uploads Over Time",
-    "Price Distribution (IQR)",
-    "Stale Items (Oldest Updates)",
+    "Price vs Volume (CTE)",
+    "Latest Upload per Item (Window)",
+    "INT Overall 60% ECDF Mixture (Whisker)",
   ];
 
   for (const name of templateNames) {

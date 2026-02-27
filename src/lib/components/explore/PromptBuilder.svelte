@@ -4,7 +4,6 @@
   export let schema = {};
   export let sql = "";
   export let results = null;
-  export let error = null;
 
   let promptTooltip = false;
   let resultsTooltip = false;
@@ -40,14 +39,6 @@
   function buildPromptMarkdown() {
     let out = buildSchemaMarkdown();
     out += buildTemplatesMarkdown();
-
-    if (sql.trim()) {
-      out += `## Current Query\n\`\`\`sql\n${sql}\n\`\`\`\n\n`;
-    }
-
-    if (error) {
-      out += `## Error\n\`\`\`\n${error}\n\`\`\`\n\n`;
-    }
 
     out +=
       "## Instructions\n" +
@@ -97,7 +88,7 @@
     <button
       class="btn btn-outline-secondary btn-sm"
       on:click={copyPrompt}
-      title="Copy schema, templates, and current query as an LLM prompt"
+      title="Copy schema and templates as an LLM prompt"
     >
       Copy Prompt
     </button>
