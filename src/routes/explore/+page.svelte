@@ -168,23 +168,19 @@ LIMIT 25`;
 </script>
 
 <div class="container-fluid mt-3">
-  <div class="d-flex align-items-center justify-content-between mb-3">
-    <h1 class="mb-0">SQL Explorer</h1>
-    <div class="d-flex gap-2">
-      <TemplateQueries on:select={handleTemplateSelect} />
-      <div class="position-relative">
-        <button class="btn btn-outline-secondary btn-sm" on:click={handleShare}>
-          Share
-        </button>
-        {#if shareTooltip}
-          <span class="position-absolute top-100 start-50 translate-middle-x badge bg-success mt-1">
-            Copied!
-          </span>
-        {/if}
-      </div>
+  <h1 class="mb-3">SQL Explorer</h1>
+  <div class="d-flex gap-2 mb-3 flex-wrap">
+    <TemplateQueries on:select={handleTemplateSelect} />
+    <div class="position-relative">
+      <button class="btn btn-outline-secondary btn-sm" on:click={handleShare}>
+        Share
+      </button>
+      {#if shareTooltip}
+        <span class="position-absolute top-100 start-50 translate-middle-x badge bg-success mt-1">
+          Copied!
+        </span>
+      {/if}
     </div>
-  </div>
-  <div class="mb-3">
     <PromptBuilder {schema} {sql} {results} />
   </div>
 
