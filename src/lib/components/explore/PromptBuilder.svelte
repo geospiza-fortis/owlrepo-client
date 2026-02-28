@@ -4,6 +4,7 @@
   export let schema = {};
   export let sql = "";
   export let results = null;
+  export let error = null;
 
   let promptTooltip = false;
   let resultsTooltip = false;
@@ -50,23 +51,31 @@
   }
 
   function buildResultsMarkdown() {
-    if (!results) return "";
-    const { columns, rows } = results;
+    if (!results && !error) return "";
 
     let out = "";
     if (sql.trim()) {
-      out += `## Query\n\`\`\`sql\n${sql}\n\`\`\`\n\n## Results\n`;
+      out += `## Query\n\`\`\`sql\n${sql}\n\`\`\`\n\n`;
     }
 
-    const capped = rows.slice(0, MAX_RESULT_ROWS);
-    out += `| ${columns.join(" | ")} |\n`;
-    out += `|${columns.map(() => "---").join("|")}|\n`;
-    for (const row of capped) {
-      out += `| ${row.map((v) => (v == null ? "" : String(v))).join(" | ")} |\n`;
+    if (error) {
+      out += `## Error\n${error}\n`;
     }
-    if (rows.length > MAX_RESULT_ROWS) {
-      out += `\n(showing ${MAX_RESULT_ROWS} of ${rows.length} rows)\n`;
+
+    if (results) {
+      const { columns, rows } = results;
+      out += `## Results\n`;
+      const capped = rows.slice(0, MAX_RESULT_ROWS);
+      out += `| ${columns.join(" | ")} |\n`;
+      out += `|${columns.map(() => "---").join("|")}|\n`;
+      for (const row of capped) {
+        out += `| ${row.map((v) => (v == null ? "" : String(v))).join(" | ")} |\n`;
+      }
+      if (rows.length > MAX_RESULT_ROWS) {
+        out += `\n(showing ${MAX_RESULT_ROWS} of ${rows.length} rows)\n`;
+      }
     }
+
     return out;
   }
 
@@ -105,7 +114,7 @@
     <button
       class="btn btn-outline-secondary btn-sm"
       on:click={copyResults}
-      disabled={!results}
+      disabled={!results && !error}
       title="Copy query results as a markdown table"
     >
       Copy Results
@@ -130,7 +139,7 @@
     {promptPreview ? "Hide" : "Preview"} Prompt
   </button>
 
-  {#if results}
+  {#if results || error}
     <button
       class="btn btn-outline-secondary btn-sm"
       on:click={() => {
@@ -148,7 +157,7 @@
   <pre class="preview-block mt-2">{buildPromptMarkdown()}</pre>
 {/if}
 
-{#if resultsPreview && results}
+{#if resultsPreview && (results || error)}
   <pre class="preview-block mt-2">{buildResultsMarkdown()}</pre>
 {/if}
 

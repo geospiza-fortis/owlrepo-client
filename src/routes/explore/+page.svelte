@@ -181,7 +181,7 @@ LIMIT 25`;
         </span>
       {/if}
     </div>
-    <PromptBuilder {schema} {sql} {results} />
+    <PromptBuilder {schema} {sql} {results} {error} />
   </div>
 
   {#if isLoading}
