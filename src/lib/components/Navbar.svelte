@@ -4,6 +4,7 @@
     { text: "Items", href: "/items" },
     { text: "Upload", href: "/upload" },
     { text: "Charts", href: "/charts" },
+    { text: "Explore", href: "/explore" },
     { text: "About", href: "/about" },
     { text: "Recommendation", href: "/recommendation" },
     { text: "Personal", href: "/personal" },
@@ -24,7 +25,7 @@
   import { browser } from "$app/environment";
 
   const isTauri = browser && window.__TAURI__;
-  const breakpoint = 5 - (isTauri ? 2 : 0);
+  const breakpoint = 6 - (isTauri ? 2 : 0);
   let isOpen = false;
   let dropdownOpen = false;
 

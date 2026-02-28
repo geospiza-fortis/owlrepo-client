@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://owlrepo.com/schemas/explore-share/v1.json",
+  "title": "ExploreSharePayload",
+  "description": "Versioned payload for SQL Explorer shared URLs. Encoded as base64 JSON in the URL fragment (#q=<base64>). All payloads must include a version field.",
+  "type": "object",
+  "required": ["v", "sql"],
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version. Current version is 1. Decoders should attempt best-effort parsing of unknown future versions."
+    },
+    "sql": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The SQL query text."
+    },
+    "chart": {
+      "$ref": "#/$defs/ChartConfig"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "ChartConfig": {
+      "title": "ChartConfig",
+      "description": "Plotly chart configuration. Omit entirely when chart is hidden.",
+      "type": "object",
+      "required": ["type", "x", "y"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["scatter", "line", "bar", "box", "whisker"],
+          "description": "Plotly trace type. 'line' is rendered as scatter with mode='lines'. 'whisker' renders a box plot from pre-computed quartile columns (q1, median, q3, lowerfence, upperfence)."
+        },
+        "x": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column name for the X axis."
+        },
+        "y": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column name for the Y axis."
+        },
+        "color": {
+          "type": ["string", "null"],
+          "description": "Column name to group traces by color. Null means no grouping."
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
