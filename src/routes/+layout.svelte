@@ -61,6 +61,8 @@
 
   hr {
     max-width: 30em;
+    margin-left: auto;
+    margin-right: auto;
     border-top: 1px solid lightgray;
   }
 
