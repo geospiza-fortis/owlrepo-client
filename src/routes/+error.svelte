@@ -5,7 +5,7 @@
 </script>
 
 <Seo
-  title="OwlRepo | {$page.status}"
+  title="OwlRepo | {page.status}"
   description="An error occurred on OwlRepo."
   noindex={true}
   includeOg={false}
