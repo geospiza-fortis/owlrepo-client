@@ -1,10 +1,10 @@
 import { writable } from "svelte/store";
 
 // LastUpload component
-export let screenshotPath = writable("C://MapleLegendsHD/Screenshots");
-export let batchPath = writable("C://MapleLegendsHD/OwlrepoScreenshots");
-export let trashOnProcessing = writable(true);
+export const screenshotPath = writable("C://MapleLegendsHD/Screenshots");
+export const batchPath = writable("C://MapleLegendsHD/OwlrepoScreenshots");
+export const trashOnProcessing = writable(true);
 
-export let isProcessing = writable(false);
-export let isProcessingBatch = writable(false);
-export let shouldPruneProcessed = writable(false);
+export const isProcessing = writable(false);
+export const isProcessingBatch = writable(false);
+export const shouldPruneProcessed = writable(false);
