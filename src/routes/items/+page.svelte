@@ -3,9 +3,9 @@
   import { formatPrice } from "$lib/utils.js";
   import Seo from "$lib/components/Seo.svelte";
 
-  export let data;
+  let { data } = $props();
 
-  let searchInput = data.q;
+  let searchInput = $state(data.q);
   let debounceTimer;
 
   const columns = [
@@ -37,12 +37,17 @@
     }, 300);
   }
 
-  $: sortHrefs = Object.fromEntries(
-    columns.map((col) => {
-      const newDir =
-        data.sort === col.field && data.dir === "desc" ? "asc" : "desc";
-      return [col.field, buildHref({ q: data.q, sort: col.field, dir: newDir })];
-    }),
+  let sortHrefs = $derived(
+    Object.fromEntries(
+      columns.map((col) => {
+        const newDir =
+          data.sort === col.field && data.dir === "desc" ? "asc" : "desc";
+        return [
+          col.field,
+          buildHref({ q: data.q, sort: col.field, dir: newDir }),
+        ];
+      }),
+    ),
   );
 
   function formatDate(ts) {
@@ -88,7 +93,7 @@
     class="form-control"
     placeholder="Search items..."
     bind:value={searchInput}
-    on:input={handleSearch}
+    oninput={handleSearch}
   />
 </div>
 
@@ -102,7 +107,10 @@
     <thead>
       <tr>
         {#each columns as col}
-          <th class="{col.align || ''} sortable" class:active-sort={data.sort === col.field}>
+          <th
+            class="{col.align || ''} sortable"
+            class:active-sort={data.sort === col.field}
+          >
             <a href={sortHrefs[col.field]}>
               {col.label}
               {#if data.sort === col.field}

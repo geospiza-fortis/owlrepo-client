@@ -1,16 +1,20 @@
 <script lang="ts">
-  export let header = "";
-  export let body = "";
-  export let onClick = () => {};
+  interface Props {
+    header?: string;
+    body?: string;
+    onClick?: any;
+  }
 
-  let open = false;
+  let { header = "", body = "", onClick = () => {} }: Props = $props();
+
+  let open = $state(false);
   const toggle = () => {
     open = !open;
-    document.body.style.overflow = open ? 'hidden' : '';
+    document.body.style.overflow = open ? "hidden" : "";
   };
 </script>
 
-<button class="btn btn-warning" on:click={toggle}>{header}</button>
+<button class="btn btn-warning" onclick={toggle}>{header}</button>
 
 {#if open}
   <div class="modal d-block" tabindex="-1" role="dialog">
@@ -18,7 +22,12 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">{header}</h5>
-          <button type="button" class="btn-close" aria-label="Close" on:click={toggle}></button>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            onclick={toggle}
+          ></button>
         </div>
         <div class="modal-body">
           <p>{body}</p>
@@ -26,12 +35,12 @@
         <div class="modal-footer">
           <button
             class="btn btn-primary"
-            on:click={() => {
+            onclick={() => {
               toggle();
               onClick();
             }}>Yes</button
           >
-          <button class="btn btn-secondary" on:click={toggle}>Cancel</button>
+          <button class="btn btn-secondary" onclick={toggle}>Cancel</button>
         </div>
       </div>
     </div>

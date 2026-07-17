@@ -1,23 +1,18 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import Plot from "../Plot.svelte";
 
-  export let table = null;
-  export let row = null;
+  /**
+   * @typedef {Object} Props
+   * @property {any} [table]
+   * @property {any} [row]
+   */
 
-  let layout;
-  $: row &&
-    (layout = {
-      title: { text: row.getData().search_item },
-      height: 150,
-      margin: {
-        l: 0,
-        r: 0,
-        b: 25,
-        t: 40,
-      },
-    });
-  $: table && row && trackEvent(table, row);
-  $: data = row ? row.getData() : null;
+  /** @type {Props} */
+  let { table = null, row = null } = $props();
+
+  let layout = $state();
 
   function transformPlot(data) {
     if (!data) {
@@ -65,6 +60,23 @@
     }
     gtag("event", "boxplot_click", event_data);
   }
+  run(() => {
+    row &&
+      (layout = {
+        title: { text: row.getData().search_item },
+        height: 150,
+        margin: {
+          l: 0,
+          r: 0,
+          b: 25,
+          t: 40,
+        },
+      });
+  });
+  run(() => {
+    table && row && trackEvent(table, row);
+  });
+  let data = $derived(row ? row.getData() : null);
 </script>
 
 <Plot {data} transform={transformPlot} {layout} />

@@ -4,16 +4,22 @@
   import Table from "$lib/components/Table.svelte";
   import Plot from "$lib/components/Plot.svelte";
 
-  export let key;
-  export let data;
-  export let outlierCutoff = 3;
+  /**
+   * @typedef {Object} Props
+   * @property {any} key
+   * @property {any} data
+   * @property {number} [outlierCutoff]
+   */
+
+  /** @type {Props} */
+  let { key, data, outlierCutoff = 3 } = $props();
 
   function transformPlot(data) {
     return [
       {
         y: dropOutliers(
           data.map((row) => row.price),
-          outlierCutoff
+          outlierCutoff,
         ),
         type: "box",
         name: "prices",

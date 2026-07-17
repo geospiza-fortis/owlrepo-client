@@ -10,8 +10,8 @@
   import localforage from "localforage";
   import { onMount } from "svelte";
 
-  let heatmap;
-  let uploads = [];
+  let heatmap = $state();
+  let uploads = $state([]);
 
   onMount(async () => {
     uploads = (await localforage.getItem("personal-uploads")) || [];

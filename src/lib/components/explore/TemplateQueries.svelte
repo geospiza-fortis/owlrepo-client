@@ -1,9 +1,11 @@
 <script>
+  import { stopPropagation } from "svelte/legacy";
+
   import { createEventDispatcher } from "svelte";
   import { templates } from "./templates.js";
 
   const dispatch = createEventDispatcher();
-  let open = false;
+  let open = $state(false);
 
   function select(template) {
     dispatch("select", { sql: template.sql, chart: template.chart });
@@ -15,13 +17,13 @@
   }
 </script>
 
-<svelte:window on:click={handleWindowClick} />
+<svelte:window onclick={handleWindowClick} />
 
 <div class="dropdown">
   <button
     class="btn btn-outline-secondary btn-sm dropdown-toggle"
     type="button"
-    on:click|stopPropagation={() => (open = !open)}
+    onclick={stopPropagation(() => (open = !open))}
   >
     Templates
   </button>
@@ -30,7 +32,7 @@
       <li>
         <button
           class="dropdown-item"
-          on:click|stopPropagation={() => select(template)}
+          onclick={stopPropagation(() => select(template))}
         >
           {template.name}
         </button>

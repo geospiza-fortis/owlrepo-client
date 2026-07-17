@@ -1,17 +1,28 @@
 <script>
-  export let columns = null;
-  export let rows = null;
-  export let error = null;
+  /**
+   * @typedef {Object} Props
+   * @property {any} [columns]
+   * @property {any} [rows]
+   * @property {any} [error]
+   */
+
+  /** @type {Props} */
+  let { columns = null, rows = null, error = null } = $props();
 
   const MAX_DISPLAY_ROWS = 500;
 
-  $: displayRows = rows && rows.length > MAX_DISPLAY_ROWS ? rows.slice(0, MAX_DISPLAY_ROWS) : rows;
-  $: truncated = rows && rows.length > MAX_DISPLAY_ROWS;
+  let displayRows = $derived(
+    rows && rows.length > MAX_DISPLAY_ROWS
+      ? rows.slice(0, MAX_DISPLAY_ROWS)
+      : rows,
+  );
+  let truncated = $derived(rows && rows.length > MAX_DISPLAY_ROWS);
 </script>
 
 {#if error}
   <div class="alert alert-danger mt-2">
-    <strong>Error:</strong> {error}
+    <strong>Error:</strong>
+    {error}
   </div>
 {:else if columns && rows}
   <div class="results-info text-muted mb-1">

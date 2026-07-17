@@ -1,15 +1,21 @@
 <script>
   import { templates } from "./templates.js";
 
-  export let schema = {};
-  export let sql = "";
-  export let results = null;
-  export let error = null;
+  /**
+   * @typedef {Object} Props
+   * @property {any} [schema]
+   * @property {string} [sql]
+   * @property {any} [results]
+   * @property {any} [error]
+   */
 
-  let promptTooltip = false;
-  let resultsTooltip = false;
-  let promptPreview = false;
-  let resultsPreview = false;
+  /** @type {Props} */
+  let { schema = {}, sql = "", results = null, error = null } = $props();
+
+  let promptTooltip = $state(false);
+  let resultsTooltip = $state(false);
+  let promptPreview = $state(false);
+  let resultsPreview = $state(false);
 
   const MAX_RESULT_ROWS = 100;
   // Views that alias the underlying tables — only show these to avoid redundancy
@@ -96,7 +102,7 @@
   <div class="position-relative">
     <button
       class="btn btn-outline-secondary btn-sm"
-      on:click={copyPrompt}
+      onclick={copyPrompt}
       title="Copy schema and templates as an LLM prompt"
     >
       Copy Prompt
@@ -113,7 +119,7 @@
   <div class="position-relative">
     <button
       class="btn btn-outline-secondary btn-sm"
-      on:click={copyResults}
+      onclick={copyResults}
       disabled={!results && !error}
       title="Copy query results as a markdown table"
     >
@@ -130,7 +136,7 @@
 
   <button
     class="btn btn-outline-secondary btn-sm"
-    on:click={() => {
+    onclick={() => {
       promptPreview = !promptPreview;
       resultsPreview = false;
     }}
@@ -142,7 +148,7 @@
   {#if results || error}
     <button
       class="btn btn-outline-secondary btn-sm"
-      on:click={() => {
+      onclick={() => {
         resultsPreview = !resultsPreview;
         promptPreview = false;
       }}

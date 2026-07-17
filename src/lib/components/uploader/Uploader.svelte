@@ -7,21 +7,31 @@
   import { parseFile, updatePersonalUploads } from "./uploader.js";
   import { PUBLIC_OWLREPO_URL } from "$env/static/public";
 
+  /**
+   * @typedef {Object} Props
+   * @property {any} [files]
+   * @property {boolean} [disableExternalUpload]
+   * @property {any} [batch_id]
+   * @property {any} [onUpload]
+   */
 
-  export let files = [];
-  export let disableExternalUpload = false;
-  export let batch_id = null;
-  export let onUpload = () => {};
+  /** @type {Props} */
+  let {
+    files = $bindable([]),
+    disableExternalUpload = false,
+    batch_id = null,
+    onUpload = () => {},
+  } = $props();
 
-  let fileInputEl;
-  let fileSubmitEl;
-  let uploadButtonEl;
-  let screenshotsEl;
+  let fileInputEl = $state();
+  let fileSubmitEl = $state();
+  let uploadButtonEl = $state();
+  let screenshotsEl = $state();
 
-  let progress = 0;
-  let total = 0;
-  let error = 0;
-  let errorMessages = [];
+  let progress = $state(0);
+  let total = $state(0);
+  let error = $state(0);
+  let errorMessages = $state([]);
 
   async function appendToFiles(filelist) {
     error = 0;
@@ -84,7 +94,7 @@
       JSON.stringify({
         // current timestamp in local timezone
         timestamp: moment().format(),
-      })
+      }),
     );
     let images = screenshotsEl.children;
     for (let i = 0; i < images.length; i++) {
@@ -97,16 +107,13 @@
         throw "Undefined upload token with the server";
       }
       console.log(`Got access token ${token.access_token}`);
-      let resp = await fetch(
-        `${PUBLIC_OWLREPO_URL}/api/v1/upload`,
-        {
-          method: "post",
-          headers: new Headers({
-            Authorization: `Bearer ${token.access_token}`,
-          }),
-          body: formData,
-        }
-      );
+      let resp = await fetch(`${PUBLIC_OWLREPO_URL}/api/v1/upload`, {
+        method: "post",
+        headers: new Headers({
+          Authorization: `Bearer ${token.access_token}`,
+        }),
+        body: formData,
+      });
       if (resp.status !== 200) {
         throw `Upload failed with status ${resp.status}: ${resp.statusText}`;
       }
@@ -138,11 +145,19 @@
         <li>{message}</li>
       {/each}
     </ul>
-    <button type="button" class="btn-close" aria-label="Close" on:click={() => { error = 0; errorMessages = []; }}></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      onclick={() => {
+        error = 0;
+        errorMessages = [];
+      }}
+    ></button>
   </div>
 {/if}
 
-<form on:submit={handleSubmit}>
+<form onsubmit={handleSubmit}>
   <!-- Nice way to hide the text: https://stackoverflow.com/a/14806776 -->
   <input
     bind:this={fileInputEl}
@@ -153,7 +168,13 @@
     id="fileInput"
     multiple
   />
-  <input bind:this={fileSubmitEl} style="display: none;" id="fileSubmit" type="submit" value="Upload" />
+  <input
+    bind:this={fileSubmitEl}
+    style="display: none;"
+    id="fileSubmit"
+    type="submit"
+    value="Upload"
+  />
 </form>
 
 {#if total > 0}
@@ -181,7 +202,7 @@
             <div class="col">
               <button
                 class="btn btn-primary"
-                on:click={() => fileInputEl.click()}
+                onclick={() => fileInputEl.click()}
               >
                 Browse...
               </button>
@@ -193,7 +214,7 @@
                 bind:this={uploadButtonEl}
                 id="upload-button"
                 class="btn btn-primary"
-                on:click={() => fileSubmitEl.click()}
+                onclick={() => fileSubmitEl.click()}
               >
                 Upload
               </button>
@@ -209,7 +230,7 @@
           src={file.img}
           alt={file.name}
           class={file.selected ? "selected" : ""}
-          on:click={() => (files[i].selected = !files[i].selected)}
+          onclick={() => (files[i].selected = !files[i].selected)}
         />
       {/each}
       {#if files.length == 0}

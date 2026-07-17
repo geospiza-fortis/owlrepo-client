@@ -1,18 +1,34 @@
 <script>
   import { page } from "$app/stores";
 
-  export let title;
-  export let description;
-  export let ogImage = "/favicon.png";
-  export let ogType = "website";
-  export let canonicalPath = undefined;
-  export let noindex = false;
-  export let includeOg = true;
+  /**
+   * @typedef {Object} Props
+   * @property {any} title
+   * @property {any} description
+   * @property {string} [ogImage]
+   * @property {string} [ogType]
+   * @property {any} [canonicalPath]
+   * @property {boolean} [noindex]
+   * @property {boolean} [includeOg]
+   */
+
+  /** @type {Props} */
+  let {
+    title,
+    description,
+    ogImage = "/favicon.png",
+    ogType = "website",
+    canonicalPath = undefined,
+    noindex = false,
+    includeOg = true,
+  } = $props();
 
   const BASE_URL = "https://owlrepo.com";
 
-  $: canonical = `${BASE_URL}${canonicalPath ?? $page.url.pathname}`;
-  $: ogImageUrl = ogImage.startsWith("http") ? ogImage : `${BASE_URL}${ogImage}`;
+  let canonical = $derived(`${BASE_URL}${canonicalPath ?? $page.url.pathname}`);
+  let ogImageUrl = $derived(
+    ogImage.startsWith("http") ? ogImage : `${BASE_URL}${ogImage}`,
+  );
 </script>
 
 <svelte:head>

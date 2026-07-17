@@ -7,10 +7,10 @@
   // from the guide colors
   const BG_GREEN = "#a3c3b0";
 
-  let data;
-  let client_thumbprint;
+  let data = $state();
+  let client_thumbprint = $state();
 
-  $: options = {
+  let options = $derived({
     layout: "fitColumns",
     columns: [
       { title: "Rank", field: "rank", width: 75 },
@@ -32,7 +32,7 @@
       },
       { title: "Uploads (last 7 days)", field: "n" },
     ],
-  };
+  });
 
   onMount(async () => {
     client_thumbprint = await getThumbprint();

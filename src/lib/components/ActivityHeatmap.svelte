@@ -3,11 +3,17 @@
   import { Stretch } from "svelte-loading-spinners";
   import moment from "moment";
 
-  export let data;
-  export let max_range = 14;
+  /**
+   * @typedef {Object} Props
+   * @property {any} data
+   * @property {number} [max_range]
+   */
+
+  /** @type {Props} */
+  let { data, max_range = 14 } = $props();
   let cal;
-  let heatmapEl;
-  let heatmapReady = false;
+  let heatmapEl = $state();
+  let heatmapReady = $state(false);
   let resizeTimeout;
 
   // We implement a component that's something along these lines, where the width
@@ -70,7 +76,7 @@
   }
 </script>
 
-<svelte:window on:resize={resizeHeatmap} />
+<svelte:window onresize={resizeHeatmap} />
 
 {#if !heatmapReady}
   <div style="text-align: center;">

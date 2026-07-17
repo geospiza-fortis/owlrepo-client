@@ -1,21 +1,20 @@
 <script>
   import { slide } from "svelte/transition";
-  export let component;
-  export let params;
-  export let text;
+  let { component, params = $bindable(), text } = $props();
 
-  let open = false;
+  let open = $state(false);
 </script>
 
 <div>
-  <button class="btn btn-info" type="button" on:click={() => (open = !open)}>
+  <button class="btn btn-info" type="button" onclick={() => (open = !open)}>
     {text}
   </button>
 </div>
 <div>
   {#if open}
+    {@const SvelteComponent = component}
     <div transition:slide>
-      <svelte:component this={component} bind:params />
+      <SvelteComponent bind:params />
     </div>
   {/if}
 </div>

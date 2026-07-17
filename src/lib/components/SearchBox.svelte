@@ -2,18 +2,31 @@
   import Fuse from "fuse.js";
   import { onMount } from "svelte";
 
-  // Do I really need to provide the itemData alongside the table?
-  export let itemData;
-  export let table;
-  export let keys;
-  export let initialSort = [];
-  export let term = null;
+  /**
+   * @typedef {Object} Props
+   * @property {any} itemData - Do I really need to provide the itemData alongside the table?
+   * @property {any} table
+   * @property {any} keys
+   * @property {any} [initialSort]
+   * @property {any} [term]
+   */
 
-  $: fuse = new Fuse(itemData, {
-    includeScore: true,
-    keys: keys,
-  });
-  $: results = itemData.length;
+  /** @type {Props} */
+  let {
+    itemData,
+    table,
+    keys,
+    initialSort = [],
+    term = $bindable(null),
+  } = $props();
+
+  let fuse = $derived(
+    new Fuse(itemData, {
+      includeScore: true,
+      keys: keys,
+    }),
+  );
+  let results = $derived(itemData.length);
 
   // for our debounce callback
   let timeout = null;
@@ -67,7 +80,7 @@
   type="text"
   placeholder="Search..."
   id="search-box"
-  on:input={(e) => updateTable(e.target.value)}
-  on:keyup={(e) => debounce(e.target.value)}
+  oninput={(e) => updateTable(e.target.value)}
+  onkeyup={(e) => debounce(e.target.value)}
 />
 {results} results

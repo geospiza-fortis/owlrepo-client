@@ -1,4 +1,6 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import moment from "moment";
   import { sortBy } from "lodash-es";
   import { onMount } from "svelte";
@@ -11,28 +13,38 @@
     // Sort and concat the two fields. Somewhat of an inefficient solution.
     let a = data.filter(
       (obj) =>
-        obj.search_results > threshold_search && obj.p25 > threshold_price
+        obj.search_results > threshold_search && obj.p25 > threshold_price,
     );
     let b = data.filter((obj) => !a.includes(obj));
     return sortBy(a, [(obj) => -obj.p25]).concat(
-      sortBy(b, [(obj) => -obj.search_results])
+      sortBy(b, [(obj) => -obj.search_results]),
     );
   }
 
-  let threshold_age;
-  let threshold_price;
-  let threshold_search;
+  let threshold_age = $state();
+  let threshold_price = $state();
+  let threshold_search = $state();
 
-  let last_modified;
-  let scrolls_predict = [];
-  let search_item_index = [];
+  let last_modified = $state();
+  let scrolls_predict = $state([]);
+  let search_item_index = $state([]);
 
-  $: threshold_age && localforage.setItem("rec-age", threshold_age);
-  $: threshold_price && localforage.setItem("rec-price", threshold_price);
-  $: threshold_search && localforage.setItem("rec-search", threshold_search);
+  run(() => {
+    threshold_age && localforage.setItem("rec-age", threshold_age);
+  });
+  run(() => {
+    threshold_price && localforage.setItem("rec-price", threshold_price);
+  });
+  run(() => {
+    threshold_search && localforage.setItem("rec-search", threshold_search);
+  });
 
-  $: predData = sortData(scrolls_predict, threshold_search, threshold_price);
-  $: data = sortData(search_item_index, threshold_search, threshold_price);
+  let predData = $derived(
+    sortData(scrolls_predict, threshold_search, threshold_price),
+  );
+  let data = $derived(
+    sortData(search_item_index, threshold_search, threshold_price),
+  );
 
   onMount(async () => {
     threshold_age = (await localforage.getItem("rec-age")) || 28;
@@ -57,7 +69,7 @@
       (obj) => ({
         ...obj,
         name: obj.search_item,
-      })
+      }),
     );
   });
 </script>
@@ -83,8 +95,7 @@
 <div>
   <label>
     <input type="number" min={1} max={20} bind:value={threshold_search} />
-    <input type="range" min={1} max={20} bind:value={threshold_search} /> search
-    threshold
+    <input type="range" min={1} max={20} bind:value={threshold_search} /> search threshold
   </label>
 </div>
 <div>

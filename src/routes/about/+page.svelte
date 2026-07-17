@@ -7,7 +7,7 @@
   import { Stretch } from "svelte-loading-spinners";
   import { onMount } from "svelte";
 
-  export let random_listing;
+  let { random_listing = $bindable() } = $props();
 
   onMount(async () => {
     const fetchData = async (url) => {

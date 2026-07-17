@@ -1,4 +1,6 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import Table from "../Table.svelte";
   import SearchBox from "../SearchBox.svelte";
   import { Stretch } from "svelte-loading-spinners";
@@ -7,16 +9,17 @@
 
   import { columns } from "./columns.js";
 
-  let table;
+  let table = $state();
 
-  export let itemData;
-  export let last_modified;
+  let { itemData, last_modified } = $props();
 
-  let settings = {};
+  let settings = $state({});
   const initialSort = [{ column: "search_item_timestamp", dir: "desc" }];
 
-  let selectedRow;
-  $: table && !selectedRow && (selectedRow = table.getRows("active")[0]);
+  let selectedRow = $state();
+  run(() => {
+    table && !selectedRow && (selectedRow = table.getRows("active")[0]);
+  });
 
   const BG_RED = "#ffaebf";
   const BG_ORANGE = "#ffc6ae";
@@ -28,7 +31,7 @@
     timeout = setTimeout(() => func(), 500);
   }
 
-  $: options = {
+  let options = $derived({
     responsiveLayout: "collapse",
     clipboard: "copy",
     clipboardCopyStyled: false,
@@ -64,7 +67,7 @@
         dateElement.style.color = "#333";
       }
     },
-  };
+  });
 </script>
 
 <Plot {table} row={selectedRow} />

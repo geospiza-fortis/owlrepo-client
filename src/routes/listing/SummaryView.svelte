@@ -3,9 +3,9 @@
   import { groupBy } from "lodash-es";
   import SummaryElement from "./SummaryElement.svelte";
 
-  export let flattened;
-  let grouped;
-  let keys;
+  let { flattened } = $props();
+  let grouped = $state();
+  let keys = $state();
 
   onMount(() => {
     grouped = groupBy(flattened, "item");

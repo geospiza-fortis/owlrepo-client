@@ -1,5 +1,5 @@
 <script>
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { dev } from "$app/environment";
   import Seo from "$lib/components/Seo.svelte";
 </script>
@@ -11,12 +11,12 @@
   includeOg={false}
 />
 
-<h1>{$page.status}</h1>
+<h1>{page.status}</h1>
 
-<p>{$page.error.message}</p>
+<p>{page.error.message}</p>
 
-{#if dev && $page.error.stack}
-  <pre>{$page.error.stack}</pre>
+{#if dev && page.error.stack}
+  <pre>{page.error.stack}</pre>
 {/if}
 
 <style>
