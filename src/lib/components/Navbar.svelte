@@ -12,7 +12,7 @@
     {
       text: "Forum",
       href:
-        "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/",
+        "https://forum.legends.ml/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/",
     },
     {
       text: "Desktop Client (Github)",
@@ -106,7 +106,7 @@
         </ul>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="https://maplelegends.com/" target="_blank">
+        <a class="nav-link" href="https://legends.ml/" target="_blank">
           MapleLegends
         </a>
       </li>

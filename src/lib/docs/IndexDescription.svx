@@ -68,4 +68,4 @@ the 25th percentile or lower depending on my patience. This value tends to
 reliable in spite of wild variations in prices and errors when reading
 screenshots, as long as there are more than a few items on the market.
 
-[forum_post]: https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/
+[forum_post]: https://forum.legends.ml/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/
