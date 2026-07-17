@@ -13,7 +13,7 @@
   let status = $state(null);
   let initialFilterItem = $state(null);
 
-  let table = $state();
+  let table = $state(null);
   let cutoff = 3;
 
   function flatten(data) {

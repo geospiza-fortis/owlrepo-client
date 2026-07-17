@@ -9,7 +9,7 @@
 
   import { columns } from "./columns.js";
 
-  let table = $state();
+  let table = $state(null);
 
   let { itemData, last_modified } = $props();
 

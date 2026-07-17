@@ -10,12 +10,10 @@
   const BG_ORANGE = "#ffc6ae";
   const BG_YELLOW = "#ffefae";
 
-  let {
-    heatmap = $bindable(),
-    price_summary = $bindable(),
-    last_modified = $bindable(),
-  } = $props();
-  let random_listing;
+  let heatmap = $state();
+  let price_summary = $state();
+  let last_modified = $state();
+  let random_listing = $state();
 
   onMount(async () => {
     const fetchData = async (url) => {

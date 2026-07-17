@@ -7,7 +7,7 @@
   import { chunk } from "lodash-es";
   import moment from "moment";
 
-  let { listingData = $bindable([]) } = $props();
+  let listingData = $state([]);
 
   onMount(async () => {
     const fetchData = async (url) => {
@@ -26,7 +26,7 @@
     "Scroll for Overall Armor for INT 60%",
   ];
 
-  let table = $state();
+  let table = $state(null);
 
   let search_item_name = $state("Scroll for Gloves for ATT 60%");
   let initialSort = [{ column: "num_owls", dir: "desc" }];
