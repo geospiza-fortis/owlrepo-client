@@ -32,9 +32,7 @@ function validateChart(chart) {
   if (typeof chart.y !== "string" || !chart.y) return null;
   // color is optional — string or null
   const color =
-    chart.color != null && typeof chart.color === "string"
-      ? chart.color
-      : null;
+    chart.color != null && typeof chart.color === "string" ? chart.color : null;
   // Spread unknown properties through for forward compat
   return { ...chart, type: chart.type, x: chart.x, y: chart.y, color };
 }

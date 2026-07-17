@@ -5,8 +5,7 @@ let cache = null;
 let cacheExpires = null;
 
 export async function GET({ fetch }) {
-  const stale =
-    !cacheExpires || new Date(cacheExpires).getTime() < Date.now();
+  const stale = !cacheExpires || new Date(cacheExpires).getTime() < Date.now();
 
   if (cache && !stale) {
     return json(cache);
