@@ -11,7 +11,10 @@ import {
 // directly in the test's Node context — no dev server or browser needed.
 
 const schema = JSON.parse(
-  readFileSync(resolve("src/lib/components/explore/share.schema.json"), "utf-8"),
+  readFileSync(
+    resolve("src/lib/components/explore/share.schema.json"),
+    "utf-8",
+  ),
 );
 
 test.describe("Explore share format", () => {
@@ -103,7 +106,15 @@ test.describe("Explore share format", () => {
 
   test("schema: chart type enum matches runtime", () => {
     // encode each type and see which ones produce a chart in the payload
-    const types = ["scatter", "line", "bar", "box", "whisker", "pie", "histogram"];
+    const types = [
+      "scatter",
+      "line",
+      "bar",
+      "box",
+      "whisker",
+      "pie",
+      "histogram",
+    ];
     const runtimeTypes = {};
     for (const t of types) {
       const encoded = encode({
