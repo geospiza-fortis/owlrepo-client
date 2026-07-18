@@ -1,20 +1,31 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { page } from "$app/stores";
   import { browser } from "$app/environment";
   import Navbar from "$lib/components/Navbar.svelte";
 
   // bunch of css import for various modules
   import "./_assets/darkly.bootstrap.css";
+  /**
+   * @typedef {Object} Props
+   * @property {import('svelte').Snippet} [children]
+   */
 
-  $: segment = $page.url.pathname;
+  /** @type {Props} */
+  let { children } = $props();
+
+  let segment = $derived($page.url.pathname);
 
   // pageview for analytics
-  $: browser && $page && gtag("config", "G-NBGZYVSFSH");
+  run(() => {
+    browser && $page && gtag("config", "G-NBGZYVSFSH");
+  });
 </script>
 
 <Navbar {segment} />
 <main>
-  <slot />
+  {@render children?.()}
 </main>
 
 <hr />
@@ -38,8 +49,9 @@
     margin: 0 auto;
     max-width: 992px;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans,
+      Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   }
 
   @media (max-width: 992px) {

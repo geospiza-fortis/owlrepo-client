@@ -7,8 +7,7 @@ let cache = null;
 let cacheExpires = null;
 
 async function fetchIndex(fetch) {
-  const stale =
-    !cacheExpires || new Date(cacheExpires).getTime() < Date.now();
+  const stale = !cacheExpires || new Date(cacheExpires).getTime() < Date.now();
 
   if (cache && !stale) {
     return cache;

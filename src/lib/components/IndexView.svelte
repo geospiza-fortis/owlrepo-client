@@ -3,11 +3,17 @@
   import { onMount } from "svelte";
   import { PUBLIC_OWLREPO_URL } from "$env/static/public";
 
-  let listings = [];
-  let is_cached = true;
-  let offset = 0;
-  let max_offset = -1;
-  export let limit = 10;
+  let listings = $state([]);
+  let is_cached = $state(true);
+  let offset = $state(0);
+  let max_offset = $state(-1);
+  /**
+   * @typedef {Object} Props
+   * @property {number} [limit]
+   */
+
+  /** @type {Props} */
+  let { limit = 10 } = $props();
 
   // https://svelte.dev/tutorial/onmount
   // https://stackoverflow.com/a/38956175
@@ -72,23 +78,23 @@
       </tr>
     </thead>
     <tbody>
-    {#each listings as entry}
-      <tr>
-        <td>{entry.completion_timestamp.split(".")[0]}</td>
-        <td>
-          <a href="/listing/{entry.id}">{entry.metadata.mode}</a>
-        </td>
-        <td>{entry.metadata.items}</td>
-        <td>{entry.metadata.pages}</td>
-      </tr>
-    {/each}
+      {#each listings as entry}
+        <tr>
+          <td>{entry.completion_timestamp.split(".")[0]}</td>
+          <td>
+            <a href="/listing/{entry.id}">{entry.metadata.mode}</a>
+          </td>
+          <td>{entry.metadata.items}</td>
+          <td>{entry.metadata.pages}</td>
+        </tr>
+      {/each}
     </tbody>
   </table>
 
   {#if offset > 0}
     <button
       class="btn btn-info"
-      on:click={async () => {
+      onclick={async () => {
         offset -= listings.length;
         if (offset < 0) {
           offset = 0;
@@ -106,7 +112,7 @@
   {:else}
     <button
       class="btn btn-info"
-      on:click={async () => {
+      onclick={async () => {
         offset += limit;
         await update();
       }}

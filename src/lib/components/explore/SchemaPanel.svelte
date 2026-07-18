@@ -1,13 +1,13 @@
 <script>
-  export let schema = {};
+  let { schema = {} } = $props();
 
-  let expanded = false;
-  let expandedTables = {};
+  let expanded = $state(false);
+  let expandedTables = $state({});
 
   // Only show the convenience views, not the underlying tables they alias
   const VIEW_NAMES = new Set(["items", "listing"]);
-  $: filteredSchema = Object.entries(schema).filter(([name]) =>
-    VIEW_NAMES.has(name),
+  let filteredSchema = $derived(
+    Object.entries(schema).filter(([name]) => VIEW_NAMES.has(name)),
   );
 
   function toggleTable(name) {
@@ -18,7 +18,7 @@
 <div class="mb-3">
   <button
     class="btn btn-sm btn-outline-secondary"
-    on:click={() => (expanded = !expanded)}
+    onclick={() => (expanded = !expanded)}
   >
     {expanded ? "Hide" : "Show"} Schema
     <span class="ms-1">{expanded ? "\u25B2" : "\u25BC"}</span>
@@ -30,9 +30,11 @@
         <div class="schema-table">
           <button
             class="btn btn-sm btn-link text-light text-decoration-none p-0"
-            on:click={() => toggleTable(table)}
+            onclick={() => toggleTable(table)}
           >
-            <span class="me-1">{expandedTables[table] ? "\u25BC" : "\u25B6"}</span>
+            <span class="me-1"
+              >{expandedTables[table] ? "\u25BC" : "\u25B6"}</span
+            >
             <strong>{table}</strong>
             <span class="text-muted ms-1">({columns.length} cols)</span>
           </button>

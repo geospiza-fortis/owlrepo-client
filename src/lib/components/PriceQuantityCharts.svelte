@@ -2,16 +2,22 @@
   import Plot from "./Plot.svelte";
   import { calculateModifiedZScore } from "../../routes/listing/stats.js";
 
-  export let data = [];
-  export let search_item_name;
-  export let layout = {};
-  export let showTitle = true;
+  /**
+   * @typedef {Object} Props
+   * @property {any} [data]
+   * @property {any} search_item_name
+   * @property {any} [layout]
+   * @property {boolean} [showTitle]
+   */
 
-  let chartMode = "band";
-  let outlierCutoff = 3;
-  let showTooltip = false;
-  let totalCount = 0;
-  let filteredCount = 0;
+  /** @type {Props} */
+  let { data = [], search_item_name, layout = {}, showTitle = true } = $props();
+
+  let chartMode = $state("band");
+  let outlierCutoff = $state(3);
+  let showTooltip = $state(false);
+  let totalCount = $state(0);
+  let filteredCount = $state(0);
 
   const outlierOptions = [
     { value: 0, label: "Off" },
@@ -22,7 +28,7 @@
 
   function filterItems(data, search_item) {
     let items = data.filter(
-      (item) => item.search_item === search_item && item.percent_complete > 0.6
+      (item) => item.search_item === search_item && item.percent_complete > 0.6,
     );
     totalCount = items.length;
     filteredCount = 0;
@@ -120,12 +126,13 @@
     ];
   }
 
-  $: transformFn =
+  let transformFn = $derived(
     chartMode === "band"
       ? (d) => transformBand(d, search_item_name, outlierCutoff)
-      : (d) => transformLine(d, search_item_name, outlierCutoff);
+      : (d) => transformLine(d, search_item_name, outlierCutoff),
+  );
 
-  $: price_layout = {
+  let price_layout = $derived({
     ...(showTitle ? { title: { text: `${search_item_name} over time` } } : {}),
     legend: { orientation: "h" },
     yaxis: {
@@ -146,7 +153,7 @@
       b: 0,
       t: showTitle ? 100 : 20,
     },
-  };
+  });
 </script>
 
 <div class="d-flex align-items-center mb-2">
@@ -155,7 +162,7 @@
       class="btn"
       class:btn-primary={chartMode === "band"}
       class:btn-outline-primary={chartMode !== "band"}
-      on:click={() => (chartMode = "band")}
+      onclick={() => (chartMode = "band")}
     >
       Band
     </button>
@@ -163,14 +170,19 @@
       class="btn"
       class:btn-primary={chartMode === "line"}
       class:btn-outline-primary={chartMode !== "line"}
-      on:click={() => (chartMode = "line")}
+      onclick={() => (chartMode = "line")}
     >
       Line
     </button>
   </div>
   <div class="d-flex align-items-center ms-3" style="position: relative;">
     <label class="me-2 mb-0 small" for="outlier-filter">Filter outliers</label>
-    <select class="form-select form-select-sm" style="width: auto;" bind:value={outlierCutoff} id="outlier-filter">
+    <select
+      class="form-select form-select-sm"
+      style="width: auto;"
+      bind:value={outlierCutoff}
+      id="outlier-filter"
+    >
       {#each outlierOptions as opt}
         <option value={opt.value}>{opt.label}</option>
       {/each}
@@ -178,22 +190,28 @@
     <span
       class="ms-2 text-muted"
       style="cursor: help;"
-      on:mouseenter={() => (showTooltip = true)}
-      on:mouseleave={() => (showTooltip = false)}
-    >&#9432;</span>
+      onmouseenter={() => (showTooltip = true)}
+      onmouseleave={() => (showTooltip = false)}>&#9432;</span
+    >
     {#if showTooltip}
       <div class="tooltip-overlay">
         <div class="tooltip-content">
           Removes timestamps with anomalous median prices using
-          <a href="https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/" target="_blank" rel="noopener">
-            Median Absolute Deviation (MAD)</a>.
-          Lower values filter more aggressively.
+          <a
+            href="https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/"
+            target="_blank"
+            rel="noopener"
+          >
+            Median Absolute Deviation (MAD)</a
+          >. Lower values filter more aggressively.
         </div>
       </div>
     {/if}
   </div>
   {#if filteredCount > 0}
-    <span class="ms-3 small text-muted mb-0">{filteredCount} of {totalCount} points filtered</span>
+    <span class="ms-3 small text-muted mb-0"
+      >{filteredCount} of {totalCount} points filtered</span
+    >
   {/if}
 </div>
 

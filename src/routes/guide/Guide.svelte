@@ -1,4 +1,6 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { onMount } from "svelte";
   import { formatPrice } from "$lib/utils.js";
   import { sortBy, groupBy, random } from "lodash-es";
@@ -24,33 +26,53 @@
     mean: "mean",
   };
 
-  export let home = false;
-  let showAlert = true;
+  let showAlert = $state(true);
 
-  export let price_data = [];
-  let filtered_price_data = [];
-  let uploads = [];
+  /**
+   * @typedef {Object} Props
+   * @property {boolean} [home]
+   * @property {any} [price_data]
+   */
 
-  let age;
-  let threshold;
-  let metric;
+  /** @type {Props} */
+  let { home = false, price_data = $bindable([]) } = $props();
+  let filtered_price_data = $state([]);
+  let uploads = $state([]);
 
-  $: age && localforage.setItem("guide-age", age);
-  $: threshold && localforage.setItem("guide-threshold", threshold);
-  $: metric && localforage.setItem("guide-metric", metric);
-  $: user_filtered_price_data = price_data.filter(
-    (x) => x[metric] > threshold || ["etc", "ores"].includes(x.percent)
+  let age = $state();
+  let threshold = $state();
+  let metric = $state();
+
+  run(() => {
+    age && localforage.setItem("guide-age", age);
+  });
+  run(() => {
+    threshold && localforage.setItem("guide-threshold", threshold);
+  });
+  run(() => {
+    metric && localforage.setItem("guide-metric", metric);
+  });
+  let user_filtered_price_data = $derived(
+    price_data.filter(
+      (x) => x[metric] > threshold || ["etc", "ores"].includes(x.percent),
+    ),
   );
-  $: grouped_price_data = groupBy(filtered_price_data, (v) => v.percent);
-  $: valid_categories = CATEGORIES.filter((key) => key in grouped_price_data);
+  let grouped_price_data = $derived(
+    groupBy(filtered_price_data, (v) => v.percent),
+  );
+  let valid_categories = $derived(
+    CATEGORIES.filter((key) => key in grouped_price_data),
+  );
 
   // data for the alert
-  $: week_old = price_data.filter((x) => x.days_since_update > 7);
-  $: random_item = week_old[random(0, week_old.length)];
+  let week_old = $derived(price_data.filter((x) => x.days_since_update > 7));
+  let random_item = $derived(week_old[random(0, week_old.length)]);
 
-  $: prompt_upload =
+  let prompt_upload = $derived(
     uploads.length == 0 ||
-    moment().diff(moment(uploads[uploads.length - 1].timestamp), "hours") >= 16;
+      moment().diff(moment(uploads[uploads.length - 1].timestamp), "hours") >=
+        16,
+  );
 
   onMount(async () => {
     uploads = (await localforage.getItem("personal-uploads")) || [];
@@ -83,7 +105,12 @@
     Search for <i>{random_item.search_item}</i>
     ({random_item.days_since_update} days old) and
     <a href="/upload">make an upload</a> today!
-    <button type="button" class="btn-close" aria-label="Close" on:click={() => (showAlert = false)}></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      onclick={() => (showAlert = false)}
+    ></button>
   </div>
 {/if}
 
@@ -149,10 +176,7 @@
   <div class="guide-container">
     <div class="card-columns guide">
       {#each valid_categories as key}
-        {#each chunkList(sortBy(grouped_price_data[key], [
-            "category",
-            "stat",
-          ]), 15) as chunk, i}
+        {#each chunkList(sortBy( grouped_price_data[key], ["category", "stat"], ), 15) as chunk, i}
           <div
             class="card"
             style="background-color: {getBackgroundColor(key)};"

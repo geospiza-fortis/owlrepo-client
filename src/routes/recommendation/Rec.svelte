@@ -1,9 +1,15 @@
 <script>
   import Table from "$lib/components/Table.svelte";
 
-  export let predData;
-  export let data;
-  export let threshold_age = 28;
+  /**
+   * @typedef {Object} Props
+   * @property {any} predData
+   * @property {any} data
+   * @property {number} [threshold_age]
+   */
+
+  /** @type {Props} */
+  let { predData, data, threshold_age = 28 } = $props();
 
   const core_scrolls = [
     "Dark scroll for Claw for ATT 30%",
@@ -14,25 +20,6 @@
     "Scroll for Overall Armor for INT 60%",
   ];
   let core_scroll_update = 4;
-  // this one is weird since we have some conditional text based on this
-
-  // NOTE: I'm not sure if the names in scrolls_predict will line up exactly
-  // with the names in the search item index, but we can be sure etc will
-  // be fine
-  $: scroll_names = predData.map((obj) => obj.name);
-  $: coreData = data.filter((obj) => core_scrolls.includes(obj.name));
-  $: staleData = data.filter((obj) => scroll_names.includes(obj.name));
-  $: etcData = data.filter((obj) => !scroll_names.includes(obj.name));
-
-  $: coreOptions = createOptions([
-    { field: "search_item_timestamp", type: "!=", value: null },
-    { field: "days_since_update", type: ">=", value: core_scroll_update },
-  ]);
-  $: staleOptions = createOptions([
-    { field: "search_item_timestamp", type: "!=", value: null },
-    { field: "days_since_update", type: ">", value: threshold_age },
-  ]);
-  $: etcOptions = staleOptions;
 
   function createOptions(initialFilter) {
     return {
@@ -81,6 +68,34 @@
     pagination: "local",
     paginationSize: 8,
   };
+  // this one is weird since we have some conditional text based on this
+
+  // NOTE: I'm not sure if the names in scrolls_predict will line up exactly
+  // with the names in the search item index, but we can be sure etc will
+  // be fine
+  let scroll_names = $derived(predData.map((obj) => obj.name));
+  let coreData = $derived(
+    data.filter((obj) => core_scrolls.includes(obj.name)),
+  );
+  let staleData = $derived(
+    data.filter((obj) => scroll_names.includes(obj.name)),
+  );
+  let etcData = $derived(
+    data.filter((obj) => !scroll_names.includes(obj.name)),
+  );
+  let coreOptions = $derived(
+    createOptions([
+      { field: "search_item_timestamp", type: "!=", value: null },
+      { field: "days_since_update", type: ">=", value: core_scroll_update },
+    ]),
+  );
+  let staleOptions = $derived(
+    createOptions([
+      { field: "search_item_timestamp", type: "!=", value: null },
+      { field: "days_since_update", type: ">", value: threshold_age },
+    ]),
+  );
+  let etcOptions = $derived(staleOptions);
 </script>
 
 <h2>Core Scrolls</h2>

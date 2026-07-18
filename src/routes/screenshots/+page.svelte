@@ -5,7 +5,7 @@
   import Unprocessed from "./Unprocessed.svelte";
   import Batch from "./Batch.svelte";
 
-  $: tauri = browser && window.__TAURI__;
+  let tauri = $derived(browser && window.__TAURI__);
 
   onMount(async () => {
     // check the window for tauri, otherwise redirect

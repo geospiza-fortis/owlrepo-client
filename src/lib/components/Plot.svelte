@@ -1,9 +1,9 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { merge } from "lodash-es";
-  export let data;
-  export let transform = (res) => res;
-  export let layout = {};
-  let plotElement;
+  let { data, transform = (res) => res, layout = {} } = $props();
+  let plotElement = $state();
 
   let darkStyle = {
     font: {
@@ -22,25 +22,27 @@
     },
   };
 
-  $: plotElement &&
-    data &&
-    layout &&
-    Plotly.newPlot(
-      plotElement,
-      transform(data),
-      merge(
-        {
-          margin: {
-            l: 50,
-            r: 0,
-            b: 50,
+  run(() => {
+    plotElement &&
+      data &&
+      layout &&
+      Plotly.newPlot(
+        plotElement,
+        transform(data),
+        merge(
+          {
+            margin: {
+              l: 50,
+              r: 0,
+              b: 50,
+            },
           },
-        },
-        darkStyle,
-        layout
-      ),
-      { responsive: true }
-    );
+          darkStyle,
+          layout,
+        ),
+        { responsive: true },
+      );
+  });
 </script>
 
 <div bind:this={plotElement}></div>

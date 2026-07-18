@@ -6,7 +6,10 @@ export async function GET({ params, fetch }) {
   const url = `https://storage.googleapis.com/${PROJECT_ID}/v1/uploads/${task_id}/${prefix}`;
   const resp = await fetch(url);
   if (!resp.ok) {
-    return json({ error: `GCS returned ${resp.status}` }, { status: resp.status });
+    return json(
+      { error: `GCS returned ${resp.status}` },
+      { status: resp.status },
+    );
   }
   return json(await resp.json(), { status: resp.status });
 }

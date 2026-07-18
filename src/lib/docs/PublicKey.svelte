@@ -2,8 +2,8 @@
   import { onMount } from "svelte";
   import { getOrCreateJWKRaw, getThumbprint } from "$lib/token.js";
 
-  let client_thumbprint;
-  let client_public_key;
+  let client_thumbprint = $state();
+  let client_public_key = $state();
 
   onMount(async () => {
     client_thumbprint = await getThumbprint();
@@ -21,8 +21,8 @@
   </p>
   <pre><code>{JSON.stringify(client_public_key, null, 4)}</code></pre>
   <p>
-    This is a cryptographic key that can be used to prove your identity. Feel free
-    to share your public key as you see fit. For the technically savvy, do not share
-    your private key (available in IndexedDB) with others.
+    This is a cryptographic key that can be used to prove your identity. Feel
+    free to share your public key as you see fit. For the technically savvy, do
+    not share your private key (available in IndexedDB) with others.
   </p>
 {/if}

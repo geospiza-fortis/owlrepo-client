@@ -7,7 +7,7 @@
   import { chunk } from "lodash-es";
   import moment from "moment";
 
-  export let listingData = [];
+  let listingData = $state([]);
 
   onMount(async () => {
     const fetchData = async (url) => {
@@ -25,13 +25,11 @@
     "Scroll for Helmet for DEX 60%",
     "Scroll for Overall Armor for INT 60%",
   ];
-  $: chunked_scrolls = chunk(core_scrolls, 3);
 
-  let table;
+  let table = $state(null);
 
-  let search_item_name = "Scroll for Gloves for ATT 60%";
+  let search_item_name = $state("Scroll for Gloves for ATT 60%");
   let initialSort = [{ column: "num_owls", dir: "desc" }];
-  $: itemData = transform(listingData);
 
   // Get a count of how many time each item appears in the listing so we can
   // show a small table for sorting the charts.
@@ -70,9 +68,11 @@
   };
 
   let max_months = moment().diff(moment("2020-04-01"), "months");
-  let months = 6;
-  $: range = 28 * months;
-  $: core_layout = {
+  let months = $state(6);
+  let chunked_scrolls = $derived(chunk(core_scrolls, 3));
+  let itemData = $derived(transform(listingData));
+  let range = $derived(28 * months);
+  let core_layout = $derived({
     xaxis: {
       range: [
         moment().utc().subtract(range, "days").format(),
@@ -80,7 +80,7 @@
       ],
       type: "date",
     },
-  };
+  });
 </script>
 
 <Seo

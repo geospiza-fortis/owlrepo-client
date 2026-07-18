@@ -1,29 +1,16 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { slide } from "svelte/transition";
   import localforage from "localforage";
-  export let settings;
+  let { settings = $bindable() } = $props();
 
   // Added to make sure there aren't any weird race conditions...
-  let loaded = false;
-  let isOpen = false;
+  let loaded = $state(false);
+  let isOpen = $state(false);
   const key = "search-item-index-settings";
 
-  let paginationSize = 10;
-
-  $: getSettings(key)
-    .catch(console.log)
-    .then((obj) => {
-      if (obj) {
-        ({ paginationSize } = obj);
-      }
-      loaded = true;
-    });
-  $: settings = {
-    paginationSize: paginationSize,
-  };
-  $: import.meta.env.DEV &&
-    console.log(`search index settings ${JSON.stringify(settings)}`);
-  $: loaded && localforage.setItem(key, settings).catch(console.log).then();
+  let paginationSize = $state(10);
 
   async function getSettings(key) {
     let storedItem = await localforage.getItem(key);
@@ -34,12 +21,34 @@
       return storedItem;
     }
   }
+  run(() => {
+    getSettings(key)
+      .catch(console.log)
+      .then((obj) => {
+        if (obj) {
+          ({ paginationSize } = obj);
+        }
+        loaded = true;
+      });
+  });
+  run(() => {
+    settings = {
+      paginationSize: paginationSize,
+    };
+  });
+  run(() => {
+    import.meta.env.DEV &&
+      console.log(`search index settings ${JSON.stringify(settings)}`);
+  });
+  run(() => {
+    loaded && localforage.setItem(key, settings).catch(console.log).then();
+  });
 </script>
 
 <button
   class="btn btn-primary"
   type="button"
-  on:click={() => (isOpen = !isOpen)}
+  onclick={() => (isOpen = !isOpen)}
 >
   Settings
 </button>

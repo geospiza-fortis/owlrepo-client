@@ -1,4 +1,6 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { invoke } from "@tauri-apps/api/tauri";
   import { batchPath, isProcessing, isProcessingBatch } from "./store.js";
   import Uploader from "$lib/components/uploader/Uploader.svelte";
@@ -8,14 +10,12 @@
   import localforage from "localforage";
   import moment from "moment";
 
-  let batches = [];
-  let current_batch = null;
+  let batches = $state([]);
+  let current_batch = $state(null);
 
-  let files = [];
-  let batch_id = null;
-  let uploadsWithBatch = {};
-
-  $: !$isProcessingBatch && listBatches();
+  let files = $state([]);
+  let batch_id = $state(null);
+  let uploadsWithBatch = $state({});
 
   async function listBatches() {
     batches = await invoke("list_batches", {
@@ -25,7 +25,7 @@
     // also get the uploads
     let uploads = (await localforage.getItem("personal-uploads")) || [];
     uploadsWithBatch = Object.fromEntries(
-      uploads.filter((u) => u.batch_id).map((u) => [u.batch_id, u])
+      uploads.filter((u) => u.batch_id).map((u) => [u.batch_id, u]),
     );
   }
   async function triggerUpload(batch) {
@@ -42,6 +42,9 @@
     files = [...res];
     batch_id = batch.datetime;
   }
+  run(() => {
+    !$isProcessingBatch && listBatches();
+  });
 </script>
 
 <h2>Processed Screenshot Batches</h2>
@@ -51,7 +54,7 @@
       <li>
         <a
           href={"javascript:void(0)"}
-          on:click={() => {
+          onclick={() => {
             // personally not a fan of this logic
             current_batch = current_batch == batch ? null : batch;
           }}>{batch.datetime} ({moment(batch.datetime).fromNow()})</a
@@ -62,11 +65,11 @@
               >Uploaded: {uploadsWithBatch[batch.datetime].task_id}</span
             ></a
           >
-          <button class="btn btn-warning" on:click={() => triggerUpload(batch)}
+          <button class="btn btn-warning" onclick={() => triggerUpload(batch)}
             >Reupload to OwlRepo</button
           >
         {:else}
-          <button class="btn btn-primary" on:click={() => triggerUpload(batch)}
+          <button class="btn btn-primary" onclick={() => triggerUpload(batch)}
             >Upload to OwlRepo</button
           >
         {/if}

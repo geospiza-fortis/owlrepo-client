@@ -6,9 +6,9 @@
   import Seo from "$lib/components/Seo.svelte";
   import { uploadColumns, curationColumns } from "./columns.js";
 
-  let uploads = [];
-  let curations = [];
-  let contributor_id;
+  let uploads = $state([]);
+  let curations = $state([]);
+  let contributor_id = $state();
 
   const uploadOptions = {
     initialSort: [{ column: "timestamp", dir: "desc" }],

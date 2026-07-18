@@ -1,18 +1,22 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import Table from "$lib/components/Table.svelte";
   import { browser } from "$app/environment";
-  let status_data = null;
-  $: browser &&
-    fetch("/api/v2/status")
-      .then((resp) => resp.json())
-      .then((data) => {
-        status_data = Object.entries(data).map(([key, value]) => {
-          return {
-            key: key,
-            value: value,
-          };
+  let status_data = $state(null);
+  run(() => {
+    browser &&
+      fetch("/api/v2/status")
+        .then((resp) => resp.json())
+        .then((data) => {
+          status_data = Object.entries(data).map(([key, value]) => {
+            return {
+              key: key,
+              value: value,
+            };
+          });
         });
-      });
+  });
 </script>
 
 <h1>Version</h1>

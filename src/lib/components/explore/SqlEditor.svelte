@@ -1,11 +1,17 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher } from "svelte";
 
-  export let value = "";
-  export let schema = {};
+  /**
+   * @typedef {Object} Props
+   * @property {string} [value]
+   * @property {any} [schema]
+   */
+
+  /** @type {Props} */
+  let { value = $bindable(""), schema = {} } = $props();
 
   const dispatch = createEventDispatcher();
-  let editorElement;
+  let editorElement = $state();
   let view;
 
   export function setValue(newValue) {
@@ -19,7 +25,13 @@
   onMount(async () => {
     // Dynamic imports to avoid SSR issues
     const [
-      { EditorView, keymap, lineNumbers, highlightActiveLine, highlightSpecialChars },
+      {
+        EditorView,
+        keymap,
+        lineNumbers,
+        highlightActiveLine,
+        highlightSpecialChars,
+      },
       { EditorState },
       { sql, SQLDialect },
       { autocompletion },

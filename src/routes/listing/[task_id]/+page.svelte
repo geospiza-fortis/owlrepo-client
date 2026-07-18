@@ -8,12 +8,12 @@
   import SummaryView from "../SummaryView.svelte";
   import Seo from "$lib/components/Seo.svelte";
 
-  $: task_id = $page.params.task_id;
-  let flattened = null;
-  let status = null;
-  let initialFilterItem = null;
+  let task_id = $derived($page.params.task_id);
+  let flattened = $state(null);
+  let status = $state(null);
+  let initialFilterItem = $state(null);
 
-  let table;
+  let table = $state(null);
   let cutoff = 3;
 
   function flatten(data) {
@@ -61,7 +61,7 @@
 {#if flattened}
   <SummaryView {flattened} {cutoff} />
   <h2>Results</h2>
-  <button class="btn btn-info" on:click={table.copyToClipboard("active", true)}>
+  <button class="btn btn-info" onclick={table.copyToClipboard("active", true)}>
     Copy to Clipboard
   </button>
 {:else if status == 404}

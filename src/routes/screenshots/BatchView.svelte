@@ -1,10 +1,11 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { invoke } from "@tauri-apps/api/tauri";
   import moment from "moment";
 
-  export let screenshots = [];
-  let imageUri;
-  $: screenshots.length ? showImage(screenshots[0]) : (imageUri = null);
+  let { screenshots = [] } = $props();
+  let imageUri = $state();
 
   async function showImage(screenshot) {
     let newUri = await invoke("get_screenshot_uri", { screenshot: screenshot });
@@ -13,6 +14,9 @@
     }
     imageUri = newUri;
   }
+  run(() => {
+    screenshots.length ? showImage(screenshots[0]) : (imageUri = null);
+  });
 </script>
 
 <div class="container">
@@ -20,7 +24,7 @@
     <div class="col">
       <ul>
         {#each screenshots as path}
-          <li on:click={() => showImage(path)}>
+          <li onclick={() => showImage(path)}>
             <a href={"javascript:void(0)"}
               >{path.datetime} ({moment(path.datetime).fromNow()})</a
             >

@@ -1,21 +1,31 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import Tabulator from "tabulator-tables";
   import "tabulator-tables/dist/css/tabulator_midnight.min.css";
 
-  export let table = null;
-  export let data;
-  export let options = {};
+  /**
+   * @typedef {Object} Props
+   * @property {any} [table]
+   * @property {any} data
+   * @property {any} [options]
+   */
 
-  let element;
+  /** @type {Props} */
+  let { table = $bindable(null), data, options = {} } = $props();
 
-  $: element &&
-    data &&
-    options &&
-    (table = new Tabulator(element, {
-      data: data,
-      layout: "fitDataFill",
-      ...options,
-    }));
+  let element = $state();
+
+  run(() => {
+    element &&
+      data &&
+      options &&
+      (table = new Tabulator(element, {
+        data: data,
+        layout: "fitDataFill",
+        ...options,
+      }));
+  });
 </script>
 
 <div bind:this={element}></div>

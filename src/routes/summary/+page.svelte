@@ -10,10 +10,10 @@
   const BG_ORANGE = "#ffc6ae";
   const BG_YELLOW = "#ffefae";
 
-  export let heatmap;
-  export let price_summary;
-  export let last_modified;
-  let random_listing;
+  let heatmap = $state();
+  let price_summary = $state();
+  let last_modified = $state();
+  let random_listing = $state();
 
   onMount(async () => {
     const fetchData = async (url) => {
@@ -23,7 +23,7 @@
     };
 
     price_summary = transformPriceSummary(
-      await fetchData("/api/v2/query/search_item_index")
+      await fetchData("/api/v2/query/search_item_index"),
     );
     random_listing = await fetchData("/api/v2/query/random_listing");
     heatmap = await fetchData("/api/v2/query/heatmap");
@@ -38,9 +38,9 @@
 <h1>Summary</h1>
 
 <p>
-  The most recent <a href="/upload">upload</a> for each item is summarized here.
-  Click on the item name to see its history and plots. Click on a row to update the
-  box plot above the table.
+  The most recent <a href="/upload">upload</a> for each item is summarized here. Click
+  on the item name to see its history and plots. Click on a row to update the box
+  plot above the table.
 </p>
 
 <PriceSummary itemData={price_summary} {last_modified} />

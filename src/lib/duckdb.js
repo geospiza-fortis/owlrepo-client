@@ -60,9 +60,7 @@ export async function loadData(conn) {
   `);
 
   // Convenience views (short aliases)
-  await conn.query(
-    `CREATE OR REPLACE VIEW items AS SELECT * FROM item_index`,
-  );
+  await conn.query(`CREATE OR REPLACE VIEW items AS SELECT * FROM item_index`);
   await conn.query(
     `CREATE OR REPLACE VIEW listing AS SELECT * FROM item_listing`,
   );

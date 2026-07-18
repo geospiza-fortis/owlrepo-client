@@ -43,7 +43,7 @@
   <button
     id="screenshotPath"
     class="btn btn-primary"
-    on:click={() => askPath(screenshotPath, $screenshotPath)}
+    onclick={() => askPath(screenshotPath, $screenshotPath)}
     >Screenshot Directory</button
   >
   <label for="screenshotPath">{$screenshotPath}</label>
@@ -53,7 +53,7 @@
   <button
     class="btn btn-primary"
     id="batchPath"
-    on:click={() => askPath(batchPath, $batchPath)}>Batch Directory</button
+    onclick={() => askPath(batchPath, $batchPath)}>Batch Directory</button
   >
   <label for="batchPath">{$batchPath}</label>
 </div>

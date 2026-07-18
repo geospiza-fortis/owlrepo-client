@@ -1,11 +1,11 @@
-<svelte:head>
-  <title>OwlRepo | SQL Explorer</title>
-</svelte:head>
-
 <script>
   import { onMount } from "svelte";
   import { getDB, loadData, getSchema, executeQuery } from "$lib/duckdb.js";
-  import { encode, decode, buildShareUrl } from "$lib/components/explore/share.js";
+  import {
+    encode,
+    decode,
+    buildShareUrl,
+  } from "$lib/components/explore/share.js";
   import Plot from "$lib/components/Plot.svelte";
   import SqlEditor from "$lib/components/explore/SqlEditor.svelte";
   import ResultsTable from "$lib/components/explore/ResultsTable.svelte";
@@ -14,25 +14,26 @@
   import SchemaPanel from "$lib/components/explore/SchemaPanel.svelte";
   import PromptBuilder from "$lib/components/explore/PromptBuilder.svelte";
 
-  let sql = `SELECT search_item, mean, p50, search_results
+  let sql = $state(`SELECT search_item, mean, p50, search_results
 FROM items
 WHERE mean IS NOT NULL
 ORDER BY mean DESC
-LIMIT 25`;
-  let results = null; // {columns, rows}
-  let error = null;
-  let isRunning = false;
-  let isLoading = true;
-  let loadError = null;
-  let schema = {};
+LIMIT 25`);
+  let results = $state(null); // {columns, rows}
+  let error = $state(null);
+  let isRunning = $state(false);
+  let isLoading = $state(true);
+  let loadError = $state(null);
+  let schema = $state({});
   let conn = null;
-  let chartVisible = true;
-  let chartConfig = { type: "bar", x: "search_item", y: "mean", color: null };
-  let editor;
-
-  // Chart data derived from results + config
-  $: plotData = chartVisible && results ? buildPlotData(results, chartConfig) : null;
-  $: plotLayout = chartVisible ? buildPlotLayout(chartConfig) : {};
+  let chartVisible = $state(true);
+  let chartConfig = $state({
+    type: "bar",
+    x: "search_item",
+    y: "mean",
+    color: null,
+  });
+  let editor = $state();
 
   function colVals(results, colName) {
     const i = results.columns.indexOf(colName);
@@ -50,7 +51,8 @@ LIMIT 25`;
       const median = colVals(results, config.median || "median");
       const q3 = colVals(results, config.q3 || "q3");
       const upperfence = colVals(results, config.upperfence || "upperfence");
-      if (!x || !lowerfence || !q1 || !median || !q3 || !upperfence) return null;
+      if (!x || !lowerfence || !q1 || !median || !q3 || !upperfence)
+        return null;
       return [{ type: "box", x, lowerfence, q1, median, q3, upperfence }];
     }
 
@@ -77,7 +79,12 @@ LIMIT 25`;
           y: vals.y,
           name,
           type: config.type === "line" ? "scatter" : config.type,
-          mode: config.type === "line" ? "lines" : config.type === "scatter" ? "markers" : undefined,
+          mode:
+            config.type === "line"
+              ? "lines"
+              : config.type === "scatter"
+                ? "markers"
+                : undefined,
         }));
       }
     }
@@ -87,7 +94,12 @@ LIMIT 25`;
         x: xVals,
         y: yVals,
         type: config.type === "line" ? "scatter" : config.type,
-        mode: config.type === "line" ? "lines" : config.type === "scatter" ? "markers" : undefined,
+        mode:
+          config.type === "line"
+            ? "lines"
+            : config.type === "scatter"
+              ? "markers"
+              : undefined,
       },
     ];
   }
@@ -147,13 +159,17 @@ LIMIT 25`;
   function handleShare() {
     const state = { sql };
     if (chartVisible) state.chart = chartConfig;
-    const url = buildShareUrl(window.location.origin, window.location.pathname, state);
+    const url = buildShareUrl(
+      window.location.origin,
+      window.location.pathname,
+      state,
+    );
     navigator.clipboard.writeText(url);
     shareTooltip = true;
     setTimeout(() => (shareTooltip = false), 2000);
   }
 
-  let shareTooltip = false;
+  let shareTooltip = $state(false);
 
   async function handleTemplateSelect(e) {
     const { sql: templateSql, chart } = e.detail;
@@ -165,18 +181,29 @@ LIMIT 25`;
     }
     await runQuery();
   }
+  // Chart data derived from results + config
+  let plotData = $derived(
+    chartVisible && results ? buildPlotData(results, chartConfig) : null,
+  );
+  let plotLayout = $derived(chartVisible ? buildPlotLayout(chartConfig) : {});
 </script>
+
+<svelte:head>
+  <title>OwlRepo | SQL Explorer</title>
+</svelte:head>
 
 <div class="container-fluid mt-3">
   <h1 class="mb-3">SQL Explorer</h1>
   <div class="d-flex gap-2 mb-3 flex-wrap">
     <TemplateQueries on:select={handleTemplateSelect} />
     <div class="position-relative">
-      <button class="btn btn-outline-secondary btn-sm" on:click={handleShare}>
+      <button class="btn btn-outline-secondary btn-sm" onclick={handleShare}>
         Share
       </button>
       {#if shareTooltip}
-        <span class="position-absolute top-100 start-50 translate-middle-x badge bg-success mt-1">
+        <span
+          class="position-absolute top-100 start-50 translate-middle-x badge bg-success mt-1"
+        >
           Copied!
         </span>
       {/if}
@@ -199,16 +226,22 @@ LIMIT 25`;
       <div class="col-lg-6 mb-3">
         <SchemaPanel {schema} />
 
-        <SqlEditor bind:value={sql} {schema} on:run={runQuery} bind:this={editor} />
+        <SqlEditor
+          bind:value={sql}
+          {schema}
+          on:run={runQuery}
+          bind:this={editor}
+        />
 
         <div class="d-flex gap-2 mt-2 mb-3">
           <button
             class="btn btn-primary btn-sm"
-            on:click={runQuery}
+            onclick={runQuery}
             disabled={isRunning}
           >
             {#if isRunning}
-              <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+              <span class="spinner-border spinner-border-sm me-1" role="status"
+              ></span>
               Running...
             {:else}
               &#9654; Run (Ctrl+Enter)
@@ -216,17 +249,13 @@ LIMIT 25`;
           </button>
           <button
             class="btn btn-outline-secondary btn-sm"
-            on:click={() => (chartVisible = !chartVisible)}
+            onclick={() => (chartVisible = !chartVisible)}
           >
             {chartVisible ? "Hide Chart" : "Show Chart"}
           </button>
         </div>
 
-        <ResultsTable
-          columns={results?.columns}
-          rows={results?.rows}
-          {error}
-        />
+        <ResultsTable columns={results?.columns} rows={results?.rows} {error} />
       </div>
 
       <!-- Right column: chart config + plot -->

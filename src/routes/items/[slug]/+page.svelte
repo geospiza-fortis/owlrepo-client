@@ -3,7 +3,7 @@
   import { formatPrice } from "$lib/utils.js";
   import Seo from "$lib/components/Seo.svelte";
 
-  export let data;
+  let { data } = $props();
 
   function formatDate(ts) {
     return ts ? ts.slice(0, 10) : "";
@@ -12,19 +12,26 @@
 
 <Seo
   title="OwlRepo | {data.searchItemName}"
-  description="Price history for {data.searchItemName} on MapleLegends. {data.listings.length} recorded owl searches."
+  description="Price history for {data.searchItemName} on MapleLegends. {data
+    .listings.length} recorded owl searches."
 />
 
 <nav aria-label="breadcrumb" class="mt-3">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/items">Items</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{data.searchItemName}</li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {data.searchItemName}
+    </li>
   </ol>
 </nav>
 
 <h1>{data.searchItemName}</h1>
 
-<PriceQuantityCharts data={data.listings} search_item_name={data.searchItemName} showTitle={false} />
+<PriceQuantityCharts
+  data={data.listings}
+  search_item_name={data.searchItemName}
+  showTitle={false}
+/>
 
 <div class="table-responsive mt-3">
   <table class="table table-dark table-striped table-hover">

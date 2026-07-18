@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
   const items = [
     { text: "Summary", href: "/summary" },
     { text: "Items", href: "/items" },
@@ -11,8 +11,7 @@
     { text: "Sign and Verify", href: "/sign" },
     {
       text: "Forum",
-      href:
-        "https://forum.maplelegends.com/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/",
+      href: "https://forum.legends.ml/index.php?threads/owlrepo-a-repository-of-transcribed-owl-searches.32316/",
     },
     {
       text: "Desktop Client (Github)",
@@ -22,21 +21,23 @@
 </script>
 
 <script>
+  import { preventDefault, stopPropagation } from "svelte/legacy";
+
   import { browser } from "$app/environment";
 
   const isTauri = browser && window.__TAURI__;
   const breakpoint = 6 - (isTauri ? 2 : 0);
-  let isOpen = false;
-  let dropdownOpen = false;
+  let isOpen = $state(false);
+  let dropdownOpen = $state(false);
 
   function handleWindowClick() {
     if (dropdownOpen) dropdownOpen = false;
   }
 
-  export let segment;
+  let { segment } = $props();
 </script>
 
-<svelte:window on:click={handleWindowClick} />
+<svelte:window onclick={handleWindowClick} />
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary">
   {#if !isOpen}
@@ -49,7 +50,7 @@
     class="navbar-toggler ms-auto"
     type="button"
     aria-label="Toggle navigation"
-    on:click={() => (isOpen = !isOpen)}
+    onclick={() => (isOpen = !isOpen)}
   >
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -85,7 +86,9 @@
           class="nav-link dropdown-toggle"
           href="#other"
           role="button"
-          on:click|preventDefault|stopPropagation={() => (dropdownOpen = !dropdownOpen)}
+          onclick={stopPropagation(
+            preventDefault(() => (dropdownOpen = !dropdownOpen)),
+          )}
         >
           Other
         </a>
@@ -106,7 +109,7 @@
         </ul>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="https://maplelegends.com/" target="_blank">
+        <a class="nav-link" href="https://legends.ml/" target="_blank">
           MapleLegends
         </a>
       </li>

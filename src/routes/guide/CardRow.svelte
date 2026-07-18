@@ -2,19 +2,25 @@
   import { formatPrice } from "$lib/utils.js";
   import { toSlug } from "$lib/slug.js";
   import Plot from "$lib/components/Plot.svelte";
-  export let row;
-  export let id;
-  export let metric;
-  export let age = 28;
+  /**
+   * @typedef {Object} Props
+   * @property {any} row
+   * @property {any} id
+   * @property {any} metric
+   * @property {number} [age]
+   */
 
-  let showTooltip = false;
+  /** @type {Props} */
+  let { row, id, metric, age = 28 } = $props();
+
+  let showTooltip = $state(false);
 </script>
 
 <tr
   {id}
-  on:mouseenter={() => (showTooltip = true)}
-  on:mouseleave={() => (showTooltip = false)}
-  on:click={() => {
+  onmouseenter={() => (showTooltip = true)}
+  onmouseleave={() => (showTooltip = false)}
+  onclick={() => {
     window.location = `/items/${toSlug(row.search_item)}`;
   }}
 >
@@ -55,7 +61,7 @@
           <div>
             Updated {row.days_since_update} days ago ({row.search_item_timestamp.slice(
               0,
-              10
+              10,
             )}) with {row.search_results} results and history of {row.n_owled} owls.
           </div>
         </div>

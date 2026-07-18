@@ -1,4 +1,6 @@
 <script>
+  import { run } from "svelte/legacy";
+
   import { invoke } from "@tauri-apps/api/tauri";
   import moment from "moment";
   import {
@@ -18,25 +20,8 @@
   import { extractName } from "./utils.js";
   import WarningModal from "./WarningModal.svelte";
 
-  let screenshots = [];
-  let batchedScreenshots = [];
-  $: $isProcessing = true;
-  $: $isProcessingBatch = false;
-  $: $shouldPruneProcessed = false;
-
-  // min date is 2016-04-01
-  $: minDate = moment().subtract(52, "week").toISOString(true);
-  // sets screenshots
-  $: $isProcessing && listBatchScreenshots($batchPath);
-  $: $isProcessing && parseScreenshots($screenshotPath, minDate);
-  $: batchedScreenshotNames = batchedScreenshots.map((s) => extractName(s));
-  $: unprocessedScreenshots = screenshots.filter(
-    (s) => s.mse < 100 && !batchedScreenshotNames.includes(extractName(s))
-  );
-  $: processedScreenshots = screenshots.filter(
-    (s) => s.mse < 100 && batchedScreenshotNames.includes(extractName(s))
-  );
-  $: $shouldPruneProcessed && pruneProcessed(processedScreenshots);
+  let screenshots = $state([]);
+  let batchedScreenshots = $state([]);
 
   /// parse the screenshots in a large loop, to provide incremental progress and
   /// to avoid extra computation
@@ -92,6 +77,40 @@
     await deleteScreenshots(screenshots);
     $isProcessing = true;
   }
+  run(() => {
+    $isProcessing = true;
+  });
+  run(() => {
+    $isProcessingBatch = false;
+  });
+  run(() => {
+    $shouldPruneProcessed = false;
+  });
+  // min date is 2016-04-01
+  let minDate = $derived(moment().subtract(52, "week").toISOString(true));
+  // sets screenshots
+  run(() => {
+    $isProcessing && listBatchScreenshots($batchPath);
+  });
+  run(() => {
+    $isProcessing && parseScreenshots($screenshotPath, minDate);
+  });
+  let batchedScreenshotNames = $derived(
+    batchedScreenshots.map((s) => extractName(s)),
+  );
+  let unprocessedScreenshots = $derived(
+    screenshots.filter(
+      (s) => s.mse < 100 && !batchedScreenshotNames.includes(extractName(s)),
+    ),
+  );
+  let processedScreenshots = $derived(
+    screenshots.filter(
+      (s) => s.mse < 100 && batchedScreenshotNames.includes(extractName(s)),
+    ),
+  );
+  run(() => {
+    $shouldPruneProcessed && pruneProcessed(processedScreenshots);
+  });
 </script>
 
 <h2>Unprocessed Owl Screenshots</h2>
@@ -99,14 +118,13 @@
 {#if $isProcessing || $isProcessingBatch || $shouldPruneProcessed}
   <p>Processing images...</p>
 {:else}
-  <button class="btn btn-primary" on:click={() => ($isProcessing = true)}
+  <button class="btn btn-primary" onclick={() => ($isProcessing = true)}
     >Reprocess screenshots</button
   >
   {#if unprocessedScreenshots.length > 0}
     <button
       class="btn btn-primary"
-      on:click={() => processBatch(unprocessedScreenshots)}
-      >Process Batch</button
+      onclick={() => processBatch(unprocessedScreenshots)}>Process Batch</button
     >
   {/if}
   {#if processedScreenshots.length > 0}

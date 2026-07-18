@@ -1,13 +1,17 @@
 <script>
+  import { preventDefault } from "svelte/legacy";
+
   import { signMessage, verifyMessage } from "$lib/token.js";
   import Seo from "$lib/components/Seo.svelte";
 
-  let plaintext;
-  let ciphertext;
-  let signedArea;
+  let plaintext = $state();
+  let ciphertext = $state();
+  let signedArea = $state();
 
-  $: signed = plaintext ? signMessage(plaintext) : null;
-  $: verified = ciphertext ? verifyMessage(JSON.parse(ciphertext)) : null;
+  let signed = $derived(plaintext ? signMessage(plaintext) : null);
+  let verified = $derived(
+    ciphertext ? verifyMessage(JSON.parse(ciphertext)) : null,
+  );
 
   async function copySignedArea() {
     await navigator.clipboard.writeText(signedArea.value);
@@ -30,11 +34,7 @@
 <form>
   <div class="form-group">
     <label for="message">Message</label>
-    <textarea
-      class="form-control"
-      id="message"
-      rows="3"
-      bind:value={plaintext}
+    <textarea class="form-control" id="message" rows="3" bind:value={plaintext}
     ></textarea>
   </div>
   {#if signed}
@@ -52,7 +52,7 @@
       <button
         type="button"
         class="btn btn-primary"
-        on:click|preventDefault={copySignedArea}>Copy to Clipboard</button
+        onclick={preventDefault(copySignedArea)}>Copy to Clipboard</button
       >
     {/await}
   {/if}
@@ -65,11 +65,7 @@
 <form>
   <div class="form-group">
     <label for="message">Signed Message</label>
-    <textarea
-      class="form-control"
-      id="message"
-      rows="3"
-      bind:value={ciphertext}
+    <textarea class="form-control" id="message" rows="3" bind:value={ciphertext}
     ></textarea>
   </div>
   {#if verified}

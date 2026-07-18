@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
   import { lastUpload } from "$lib/store.js";
 
   function refreshStorage(key, value = null) {
